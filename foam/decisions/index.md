@@ -9,3 +9,4 @@
 | [[ADR-005-auth-model\|ADR-005]] | Auth model for multi-user instances (MVP) | accepted | 2026-10-13 |
 | [[ADR-006-mvp-stats-surface\|ADR-006]] | MVP stats and analytics surface | accepted | 2026-10-13 |
 | [[ADR-007-block-ttl-model\|ADR-007]] | Temporary vs permanent personal blocks (MVP) | accepted | 2026-10-13 |
+| [[ADR-008-distribution-channels\|ADR-008]] | Distribution channels for MVP | accepted | 2026-10-13 |
