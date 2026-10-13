@@ -1,6 +1,6 @@
 # PRD-1 — nomorecallcenter MVP + vision
 
-- **Status**: review
+- **Status**: approved
 - **GitHub**: [#1](https://github.com/chatondearu/nomorecallcenter/issues/1)
 - **Date**: 2026-10-13
 - **Tags**: #product #mvp #android #self-host

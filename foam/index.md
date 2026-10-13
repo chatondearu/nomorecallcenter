@@ -40,7 +40,8 @@ Index: [[decisions/index|All ADRs]]
 
 | PRD | Status |
 | --- | ------ |
-| [[../prd/PRD-1-mvp-and-vision\|PRD-1]] MVP + vision | review |
+| [[../prd/PRD-1-mvp-and-vision\|PRD-1]] MVP + vision | approved |
+| [[../plans/PLAN-1-mvp-and-vision\|PLAN-1]] MVP + vision | draft |
 
 - PRD template: `prd/template.md`
 - Plan template: `plans/template.md`
