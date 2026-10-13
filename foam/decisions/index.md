@@ -1,0 +1,5 @@
+# Architecture Decision Records
+
+| ADR | Title | Status | Date |
+| --- | ----- | ------ | ---- |
+| [[ADR-001-mvp-product-constraints\|ADR-001]] | MVP product constraints (explore grilling) | accepted | 2026-10-13 |
