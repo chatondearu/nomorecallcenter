@@ -31,6 +31,7 @@ Index: [[decisions/index|All ADRs]]
 - [[decisions/ADR-002-default-list-sources|ADR-002]] — Default FR list sources (accepted)
 - [[decisions/ADR-003-android-client-stack|ADR-003]] — Android client stack (accepted)
 - [[decisions/ADR-004-backend-stack|ADR-004]] — Backend stack BAJO-shaped (accepted)
+- [[decisions/ADR-005-auth-model|ADR-005]] — Auth model MVP (accepted)
 
 ## PRDs & plans
 
