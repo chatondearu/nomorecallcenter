@@ -33,6 +33,7 @@ Index: [[decisions/index|All ADRs]]
 - [[decisions/ADR-004-backend-stack|ADR-004]] — Backend stack BAJO-shaped (accepted)
 - [[decisions/ADR-005-auth-model|ADR-005]] — Auth model MVP (accepted)
 - [[decisions/ADR-006-mvp-stats-surface|ADR-006]] — MVP stats surface (accepted)
+- [[decisions/ADR-007-block-ttl-model|ADR-007]] — Personal block TTL model (accepted)
 
 ## PRDs & plans
 
