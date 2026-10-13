@@ -7,3 +7,4 @@
 | [[ADR-003-android-client-stack\|ADR-003]] | Android client stack for MVP | accepted | 2026-10-13 |
 | [[ADR-004-backend-stack\|ADR-004]] | Self-host backend stack (BAJO-shaped) | accepted | 2026-10-13 |
 | [[ADR-005-auth-model\|ADR-005]] | Auth model for multi-user instances (MVP) | accepted | 2026-10-13 |
+| [[ADR-006-mvp-stats-surface\|ADR-006]] | MVP stats and analytics surface | accepted | 2026-10-13 |
