@@ -29,6 +29,7 @@ Index: [[decisions/index|All ADRs]]
 
 - [[decisions/ADR-001-mvp-product-constraints|ADR-001]] — MVP product constraints (accepted)
 - [[decisions/ADR-002-default-list-sources|ADR-002]] — Default FR list sources (accepted)
+- [[decisions/ADR-003-android-client-stack|ADR-003]] — Android client stack (accepted)
 
 ## PRDs & plans
 
