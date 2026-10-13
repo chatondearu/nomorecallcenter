@@ -28,6 +28,7 @@ Map of Content (MOC). Start here before product or architecture decisions.
 Index: [[decisions/index|All ADRs]]
 
 - [[decisions/ADR-001-mvp-product-constraints|ADR-001]] — MVP product constraints (accepted)
+- [[decisions/ADR-002-default-list-sources|ADR-002]] — Default FR list sources (accepted)
 
 ## PRDs & plans
 
