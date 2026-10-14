@@ -104,10 +104,10 @@ Tracer-bullet order: **slice 0** runnable compose + empty Nitro health; then **a
 
 ### Slice 6 — Admin UI
 
-- [ ] **Admin auth**: staff/admin session required for moderation pages.
-- [ ] **Proposals queue**: list pending; approve/reject actions.
-- [ ] **Stats + live feed**: show funnel + near-live events for admin.
-- [ ] **Acceptance**: admin completes propose→approve without using raw SQL.
+- [x] **Admin auth**: staff/admin session required for moderation pages.
+- [x] **Proposals queue**: list pending; approve/reject actions.
+- [x] **Stats + live feed**: show funnel + near-live events for admin.
+- [x] **Acceptance**: admin completes propose→approve without using raw SQL.
 
 ### Slice 7 — Packaging & docs
 
