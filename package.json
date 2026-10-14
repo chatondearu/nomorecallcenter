@@ -1,0 +1,37 @@
+{
+  "name": "nomorecallcenter",
+  "type": "module",
+  "version": "0.0.0",
+  "private": true,
+  "packageManager": "pnpm@10.15.0",
+  "engines": {
+    "node": ">=22",
+    "pnpm": ">=10"
+  },
+  "description": "Self-hosted call screening platform (Android + Nuxt/Nitro/Postgres)",
+  "license": "AGPL-3.0-only",
+  "scripts": {
+    "dev:api": "pnpm --filter @nmcc/app dev",
+    "dev:admin": "pnpm --filter @nmcc/admin dev",
+    "build": "pnpm --filter @nmcc/shared --filter @nmcc/app --filter @nmcc/admin --filter @nmcc/db run build",
+    "typecheck": "pnpm -r --if-present run typecheck",
+    "lint": "pnpm -r --if-present run lint",
+    "test": "pnpm -r --if-present run test",
+    "db:generate": "pnpm --filter @nmcc/db drizzle:generate",
+    "db:migrate": "pnpm --filter @nmcc/db drizzle:migrate",
+    "compose:up": "docker compose up -d --build",
+    "compose:down": "docker compose down",
+    "compose:logs": "docker compose logs -f",
+    "smoke": "bash scripts/smoke.sh"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "@parcel/watcher"
+    ]
+  }
+}

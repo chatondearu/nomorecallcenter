@@ -1,0 +1,31 @@
+{
+  "name": "@nmcc/shared",
+  "type": "module",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    ".": "./nuxt.config.ts",
+    "./nuxt.config": "./nuxt.config.ts",
+    "./uno.config": "./uno.config.ts",
+    "./unocss/theme": "./unocss/theme.ts"
+  },
+  "scripts": {
+    "build": "nuxt prepare",
+    "typecheck": "nuxt prepare && vue-tsc --noEmit",
+    "postinstall": "nuxt prepare",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@material/material-color-utilities": "catalog:",
+    "@unocss/nuxt": "catalog:",
+    "nuxt": "catalog:",
+    "unocss": "catalog:",
+    "vue": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "3.2.1",
+    "vue-tsc": "catalog:"
+  }
+}
