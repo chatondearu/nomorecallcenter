@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-surface" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>nomorecallcenter · Instance Admin - File de modération</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-secondary-fixed": "#0a1f19",
+            "on-background": "#181c1a",
+            "tertiary-fixed-dim": "#a6cce0",
+            "error": "#ba1a1a",
+            "on-error-container": "#93000a",
+            "on-tertiary-fixed-variant": "#254b5c",
+            "on-tertiary-fixed": "#001f2a",
+            "surface": "#f7faf6",
+            "on-primary-fixed": "#002019",
+            "surface-container-high": "#e6e9e5",
+            "on-tertiary-container": "#aed5e8",
+            "on-secondary-fixed-variant": "#364b44",
+            "on-primary-container": "#97dcc7",
+            "on-secondary-container": "#51675f",
+            "primary-container": "#1a6352",
+            "on-tertiary": "#ffffff",
+            "surface-dim": "#d8dbd7",
+            "surface-container-lowest": "#ffffff",
+            "inverse-surface": "#2d312f",
+            "surface-tint": "#226958",
+            "inverse-on-surface": "#eef2ed",
+            "primary": "#004a3c",
+            "tertiary": "#1f4556",
+            "surface-container": "#ecefeb",
+            "tertiary-container": "#385d6e",
+            "surface-container-highest": "#e0e3df",
+            "surface-bright": "#f7faf6",
+            "surface-variant": "#e0e3df",
+            "tertiary-fixed": "#c2e8fc",
+            "secondary-fixed": "#d0e8de",
+            "outline-variant": "#bfc9c4",
+            "error-container": "#ffdad6",
+            "on-surface": "#181c1a",
+            "on-primary-fixed-variant": "#005141",
+            "surface-container-low": "#f1f4f0",
+            "on-surface-variant": "#3f4945",
+            "background": "#f7faf6",
+            "primary-fixed": "#abf0da",
+            "secondary": "#4d635b",
+            "primary-fixed-dim": "#8fd4bf",
+            "outline": "#6f7975",
+            "on-secondary": "#ffffff",
+            "inverse-primary": "#8fd4bf",
+            "secondary-fixed-dim": "#b4ccc2",
+            "on-error": "#ffffff",
+            "secondary-container": "#cde5db",
+            "on-primary": "#ffffff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "gutter-desktop": "1.5rem",
+            "space-xs": "0.25rem",
+            "margin": "1rem",
+            "space-xl": "2rem",
+            "space-lg": "1.5rem",
+            "margin-desktop": "3rem",
+            "space-sm": "0.5rem",
+            "gutter": "1rem",
+            "space-md": "1rem",
+            "gutter-tablet": "1.5rem",
+            "margin-tablet": "2rem"
+          },
+          "fontFamily": {
+            "title-md": ["Inter"],
+            "headline-sm": ["Inter"],
+            "title-lg": ["Inter"],
+            "body-lg": ["Inter"],
+            "title-sm": ["Inter"],
+            "label-md": ["Inter"],
+            "display-lg": ["Inter"],
+            "body-sm": ["Inter"],
+            "headline-lg": ["Inter"],
+            "body-md": ["Inter"],
+            "label-sm": ["Inter"],
+            "headline-md": ["Inter"],
+            "label-lg": ["Inter"],
+            "headline-lg-mobile": ["Inter"],
+            "mono": ["JetBrains Mono", "monospace"]
+          },
+          "fontSize": {
+            "title-md": ["16px", { "lineHeight": "24px", "letterSpacing": "0.15px", "fontWeight": "500" }],
+            "headline-sm": ["24px", { "lineHeight": "32px", "letterSpacing": "0px", "fontWeight": "400" }],
+            "title-lg": ["22px", { "lineHeight": "28px", "letterSpacing": "0px", "fontWeight": "400" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "0.5px", "fontWeight": "400" }],
+            "title-sm": ["14px", { "lineHeight": "20px", "letterSpacing": "0.1px", "fontWeight": "500" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500" }],
+            "display-lg": ["57px", { "lineHeight": "64px", "letterSpacing": "-0.25px", "fontWeight": "400" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.4px", "fontWeight": "400" }],
+            "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "0px", "fontWeight": "400" }],
+            "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.25px", "fontWeight": "400" }],
+            "label-sm": ["11px", { "lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500" }],
+            "headline-md": ["28px", { "lineHeight": "36px", "letterSpacing": "0px", "fontWeight": "400" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.1px", "fontWeight": "500" }],
+            "headline-lg-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "0px", "fontWeight": "500" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      font-size: 20px;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+  </style>
+</head>
+<body class="h-full bg-surface text-on-surface antialiased flex flex-col overflow-hidden">
+<!-- TopNavBar (Shared Component JSON Blueprint) -->
+<header class="bg-surface-container-lowest border-b border-outline-variant/20 docked full-width top-0 sticky z-40 flex justify-between items-center w-full px-space-lg h-16 shrink-0">
+<div class="flex items-center gap-space-lg">
+<div class="flex items-center gap-space-sm">
+<span class="flex items-center justify-center w-8 h-8 rounded-lg bg-surface-container text-primary font-mono font-bold text-title-sm">
+<span class="material-symbols-outlined" data-icon="shield">shield</span>
+</span>
+<span class="text-title-md font-title-md font-bold text-on-surface tracking-tight">nomorecallcenter · Instance Admin</span>
+</div>
+<!-- Search bar on left as dictated by JSON -->
+<div class="hidden lg:flex items-center relative w-72">
+<span class="material-symbols-outlined absolute left-3 text-outline pointer-events-none" data-icon="search">search</span>
+<input class="w-full pl-9 pr-3 py-1.5 bg-surface-container-low text-body-md font-body-md rounded-lg border border-outline-variant/20 focus:outline-none focus:border-primary text-on-surface placeholder:text-outline" placeholder="Rechercher préfixe, règle SIP..." type="text"/>
+</div>
+</div>
+<!-- Trailing Actions from JSON -->
+<div class="flex items-center gap-space-md">
+<!-- Sync P2P Active badge -->
+<div class="flex items-center gap-space-xs px-2.5 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label-md text-label-md">
+<span class="w-2 h-2 rounded-full bg-primary inline-block"></span>
+<span>Sync P2P Active</span>
+</div>
+<!-- Version label -->
+<span class="text-label-md font-label-md text-on-surface-variant font-mono px-2 py-0.5 rounded bg-surface-container">v1.4.2</span>
+<div class="h-4 w-px bg-outline-variant/30"></div>
+<!-- Trailing icon actions -->
+<div class="flex items-center gap-1">
+<button class="p-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors duration-150" title="Synchroniser l'anneau P2P">
+<span class="material-symbols-outlined" data-icon="sync">sync</span>
+</button>
+<button class="p-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors duration-150" title="Console d'instance">
+<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
+</button>
+<button class="p-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors duration-150 relative" title="Notifications">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-primary"></span>
+</button>
+</div>
+<!-- Profile Avatar -->
+<div class="flex items-center gap-2 pl-2 border-l border-outline-variant/20">
+<img class="w-8 h-8 rounded-full border border-outline-variant/40 object-cover bg-surface-container-high" data-alt="A clean, minimalist monochrome portrait representing an IT systems administrator in a softly lit, subdued Scandinavian office environment. The subject displays calm confidence with muted tones of slate, pine green, and architectural grays, emphasizing sovereign decentralized computing and technical privacy." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCN4-msWLSHxsmR3dAs8FglcRo9F5KBNdEIm2Q6SOLdrI48-pl9_YYYtIruEfgdvjM7wtcK3Ulhdx6_BvwVYdL4-Nrk2TXt3tk19t6F70WkcdVrkSqcqEP_TXU08kW_65M2C8TWWyQJv0_trK5f2WsW6k4JrO-M0_oL9M7ii3L42q_bKwzYbkd590mNX4u1FBEXAFP0CpDCYUohOXYhlh_zL3d5OtBGnLbgtm4mEr6yJt1skOVUEboE"/>
+</div>
+</div>
+</header>
+<div class="flex flex-1 w-full overflow-hidden">
+<!-- SideNavBar (Shared Component JSON Blueprint) -->
+<aside class="w-72 h-full flex flex-col justify-between p-space-md bg-surface-container-low border-r border-outline-variant/20 shrink-0 select-none">
+<div class="flex flex-col gap-space-sm">
+<!-- Instance Header from JSON -->
+<div class="p-space-sm mb-space-xs flex items-center justify-between rounded-lg bg-surface-container/60 border border-outline-variant/10">
+<div class="flex items-center gap-space-sm">
+<div class="w-7 h-7 rounded-md bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined" data-icon="lock">lock</span>
+</div>
+<div>
+<div class="text-title-sm font-title-sm font-semibold text-on-surface leading-tight">Instance Principale</div>
+<div class="text-body-sm font-body-sm text-on-surface-variant">En ligne · v1.4 · 12ms</div>
+</div>
+</div>
+<span class="w-2 h-2 rounded-full bg-primary" title="Nœud souverain opérationnel"></span>
+</div>
+<!-- Emergency Interception CTA -->
+<button class="mb-space-sm w-full py-2 px-3 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-error font-title-sm text-title-sm flex items-center justify-center gap-2 border border-outline-variant/20 transition-colors">
+<span class="material-symbols-outlined text-error" data-icon="block">block</span>
+<span>Interception d'urgence</span>
+</button>
+<!-- Navigation items: File de modération is strictly mapped as active -->
+<nav class="flex flex-col gap-1">
+<!-- 1. Vue d'ensemble -->
+<a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-body-md text-body-md transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Vue d'ensemble</span>
+</a>
+<!-- 2. File de modération (ACTIVE - with Badge 3) -->
+<a class="flex items-center justify-between px-space-md py-2.5 rounded-lg bg-secondary-container text-on-secondary-container font-title-sm text-title-sm" href="#">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined" data-icon="rule">rule</span>
+<span>File de modération</span>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-primary text-on-primary text-label-sm font-label-sm font-bold">3</span>
+</a>
+<!-- 3. Liste partagée ARCEP -->
+<a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-body-md text-body-md transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="verified_user">verified_user</span>
+<span>Liste partagée ARCEP</span>
+</a>
+<!-- 4. Membres & Invitations -->
+<a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-body-md text-body-md transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span>Membres &amp; Invitations</span>
+</a>
+<!-- 5. Flux d'événements -->
+<a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-body-md text-body-md transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="code">code</span>
+<span>Flux d'événements</span>
+</a>
+<!-- 6. Paramètres de rétention -->
+<a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-body-md text-body-md transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="database">database</span>
+<span>Paramètres de rétention</span>
+</a>
+</nav>
+</div>
+<!-- Footer from JSON -->
+<div class="flex flex-col gap-1 pt-space-sm border-t border-outline-variant/20">
+<a class="flex items-center gap-space-sm px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-body-sm text-body-sm transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span>Documentation locale</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-md py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-body-sm text-body-sm transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span>Déconnexion</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas (Operational Moderation Center) -->
+<main class="flex-1 overflow-y-auto px-space-xl py-space-lg flex flex-col gap-space-lg">
+<!-- 1. En-tête de page -->
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-space-md border-b border-outline-variant/15 pb-space-lg">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="px-2 py-0.5 rounded text-label-sm font-label-sm bg-surface-container-high text-on-surface-variant">Souveraineté P2P</span>
+<span class="text-label-sm font-label-sm text-outline">·</span>
+<span class="text-label-sm font-label-sm text-outline">Synchronisation SQLite locale</span>
+</div>
+<h1 class="text-headline-sm font-headline-sm text-on-surface tracking-tight font-semibold">File de modération des propositions</h1>
+<p class="text-body-md font-body-md text-on-surface-variant mt-1">
+            Revue communautaire des signalements émis par les membres avant diffusion dans la liste partagée de l'instance.
+          </p>
+</div>
+<!-- Quick Summary Mini-card -->
+<div class="flex items-center gap-3 bg-surface-container-low p-2.5 rounded-xl border border-outline-variant/20">
+<div class="p-2 rounded-lg bg-surface-container-lowest text-primary">
+<span class="material-symbols-outlined" data-icon="verified">verified</span>
+</div>
+<div class="text-right">
+<div class="text-body-sm font-body-sm text-on-surface-variant">Taux de consensus</div>
+<div class="text-title-sm font-title-sm font-bold text-on-surface">94.8% d'approbation</div>
+</div>
+</div>
+</div>
+<!-- 2. Filtres rapides & Recherche -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<!-- MD3 Filter Chips Cluster -->
+<div class="flex flex-wrap items-center gap-space-xs">
+<!-- Active filter: En attente -->
+<button class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary-container text-on-secondary-container text-label-lg font-label-lg transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="hourglass_top">hourglass_top</span>
+<span>En attente</span>
+<span class="ml-1 px-1.5 py-0.2 rounded-full bg-primary text-on-primary text-label-sm font-label-sm">3</span>
+</button>
+<!-- Approuvées -->
+<button class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container text-on-surface-variant hover:bg-surface-container-high text-label-lg font-label-lg transition-colors">
+<span>Approuvées</span>
+<span class="text-label-sm font-label-sm text-outline font-mono">142</span>
+</button>
+<!-- Rejetées -->
+<button class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container text-on-surface-variant hover:bg-surface-container-high text-label-lg font-label-lg transition-colors">
+<span>Rejetées</span>
+<span class="text-label-sm font-label-sm text-outline font-mono">18</span>
+</button>
+<div class="h-5 w-px bg-outline-variant/30 mx-1"></div>
+<!-- Type filter dropdown button -->
+<button class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-outline-variant/30 text-on-surface-variant hover:bg-surface-container-low text-label-lg font-label-lg transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="filter_list">filter_list</span>
+<span>Type : Tous (Préfixe &amp; SHA-256)</span>
+<span class="material-symbols-outlined text-[16px]" data-icon="arrow_drop_down">arrow_drop_down</span>
+</button>
+</div>
+<!-- Barre de recherche préfixe/règle -->
+<div class="relative w-full md:w-80">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none" data-icon="manage_search">manage_search</span>
+<input class="w-full pl-9 pr-8 py-2 bg-surface-container-low text-body-md font-body-md rounded-lg border border-outline-variant/20 focus:outline-none focus:border-primary text-on-surface placeholder:text-outline font-mono text-sm" placeholder="Filtrer préfixe (+33...) ou hash..." type="text"/>
+<button class="absolute right-2.5 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface">
+<span class="material-symbols-outlined text-[16px]" data-icon="close">close</span>
+</button>
+</div>
+</div>
+<!-- Main Layout: Moderation Queue + Side Governance Policy -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-space-lg items-start">
+<!-- Queue Items List / Cards (8 cols on XL) -->
+<div class="xl:col-span-8 flex flex-col gap-space-md">
+<div class="flex items-center justify-between px-1">
+<span class="text-title-sm font-title-sm text-on-surface-variant">3 propositions requièrent un arbitrage</span>
+<span class="text-body-sm font-body-sm text-outline">Tri par récurrence descendante</span>
+</div>
+<!-- ITEM 1: High Recurrence Spam Prefix -->
+<div class="bg-surface-container-lowest border border-outline-variant/20 rounded-xl p-space-md transition-all">
+<div class="flex flex-col sm:flex-row sm:items-start justify-between gap-space-sm pb-space-sm border-b border-outline-variant/10">
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 rounded-xl bg-secondary-container text-on-secondary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" data-icon="call_end">call_end</span>
+</div>
+<div>
+<div class="flex items-center gap-2 flex-wrap">
+<span class="font-mono text-title-md font-title-md font-bold text-on-surface tracking-wide">+33 9 48 12 **</span>
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container text-label-sm font-label-sm">Plage VoIP suspecte</span>
+<span class="inline-flex items-center gap-1 text-label-sm font-label-sm font-semibold text-primary">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                      Récurrence élevée
+                    </span>
+</div>
+<div class="text-body-md font-body-md font-medium text-on-surface mt-0.5">
+                    « Démarchage CPF / Rénovation énergétique »
+                  </div>
+</div>
+</div>
+<!-- Metadata metrics -->
+<div class="flex items-center gap-4 text-body-sm font-body-sm text-on-surface-variant bg-surface-container-low px-3 py-1.5 rounded-lg shrink-0">
+<div class="flex items-center gap-1" title="Signalements vérifiés sur ce nœud">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="group">group</span>
+<span class="font-semibold text-on-surface">6</span> membres
+                </div>
+<div class="w-px h-3 bg-outline-variant/40"></div>
+<div class="flex items-center gap-1" title="Rétention conseillée">
+<span class="material-symbols-outlined text-[16px]" data-icon="schedule">schedule</span>
+<span>Durée : <strong class="text-on-surface">30 jours</strong></span>
+</div>
+</div>
+</div>
+<!-- Details & Actions Footer -->
+<div class="pt-space-sm flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="flex items-center gap-3 text-body-sm font-body-sm text-on-surface-variant">
+<span class="font-mono text-xs text-outline bg-surface-container px-2 py-0.5 rounded">Règle: REGEX(^(\+33|0)94812[0-9]{4}$)</span>
+<span class="hidden sm:inline text-outline">·</span>
+<span class="text-xs text-on-surface-variant">Détecté il y a 22 min</span>
+</div>
+<div class="flex items-center gap-space-xs shrink-0">
+<!-- Dropdown / secondary setup -->
+<button class="p-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low border border-outline-variant/20 transition-colors" title="Ajuster durée et portée">
+<span class="material-symbols-outlined" data-icon="tune">tune</span>
+</button>
+<!-- Rejeter (Sobriété MD3) -->
+<button class="px-3.5 py-2 rounded-lg border border-outline-variant/30 text-on-surface-variant hover:bg-surface-container-low hover:text-error text-label-lg font-label-lg transition-colors">
+                  Rejeter
+                </button>
+<!-- Bouton primaire 'Approuver & Diffuser dans la liste' -->
+<button class="px-4 py-2 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-title-sm text-title-sm flex items-center gap-1.5 transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]" data-icon="share">share</span>
+<span>Approuver &amp; Diffuser</span>
+</button>
+</div>
+</div>
+</div>
+<!-- ITEM 2: Verified SHA-256 Insurance Prefix -->
+<div class="bg-surface-container-lowest border border-outline-variant/20 rounded-xl p-space-md transition-all">
+<div class="flex flex-col sm:flex-row sm:items-start justify-between gap-space-sm pb-space-sm border-b border-outline-variant/10">
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 rounded-xl bg-surface-container text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" data-icon="call_log">call_log</span>
+</div>
+<div>
+<div class="flex items-center gap-2 flex-wrap">
+<span class="font-mono text-title-md font-title-md font-bold text-on-surface tracking-wide">+33 4 24 88 **</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant text-label-sm font-label-sm font-mono text-xs">Empreinte SHA-256 certifiée</span>
+</div>
+<div class="text-body-md font-body-md font-medium text-on-surface mt-0.5">
+                    « Courtage assurance insistant »
+                  </div>
+</div>
+</div>
+<!-- Metadata metrics -->
+<div class="flex items-center gap-4 text-body-sm font-body-sm text-on-surface-variant bg-surface-container-low px-3 py-1.5 rounded-lg shrink-0">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="group">group</span>
+<span class="font-semibold text-on-surface">3</span> membres
+                </div>
+<div class="w-px h-3 bg-outline-variant/40"></div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="fingerprint">fingerprint</span>
+<span class="text-xs font-mono">b5a1...88c2</span>
+</div>
+</div>
+</div>
+<!-- Details & Actions Footer -->
+<div class="pt-space-sm flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="flex items-center gap-2 text-body-sm font-body-sm text-on-surface-variant">
+<span class="text-xs text-outline">Plage régionale Sud-Est · Signalé il y a 1h14</span>
+</div>
+<div class="flex items-center gap-space-xs shrink-0">
+<button class="px-3.5 py-2 rounded-lg border border-outline-variant/30 text-on-surface-variant hover:bg-surface-container-low hover:text-error text-label-lg font-label-lg transition-colors">
+                  Rejeter
+                </button>
+<button class="px-4 py-2 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-title-sm text-title-sm flex items-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="check">check</span>
+<span>Approuver</span>
+</button>
+</div>
+</div>
+</div>
+<!-- ITEM 3: Ambiguous Case (Single isolated member report, SHA-256 Hash) -->
+<div class="bg-surface-container-lowest border-2 border-outline-variant/30 rounded-xl p-space-md transition-all relative overflow-hidden">
+<!-- Tonal left accent bar for alert -->
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-outline-variant"></div>
+<div class="flex flex-col sm:flex-row sm:items-start justify-between gap-space-sm pb-space-sm border-b border-outline-variant/10">
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 rounded-xl bg-surface-container-high text-on-surface-variant flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" data-icon="tag">tag</span>
+</div>
+<div>
+<div class="flex items-center gap-2 flex-wrap">
+<span class="font-mono text-title-md font-title-md font-medium text-on-surface">SHA-256 (b7e2...94a1)</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface text-label-sm font-label-sm">Numéro unique</span>
+<span class="px-2 py-0.5 rounded-full bg-error-container text-on-error-container text-label-sm font-label-sm font-medium">Cas ambigu</span>
+</div>
+<div class="text-body-md font-body-md font-medium text-on-surface mt-0.5">
+                    « Numéro unique harcèlement »
+                  </div>
+</div>
+</div>
+<!-- Metadata metrics -->
+<div class="flex items-center gap-3 text-body-sm font-body-sm text-on-surface-variant bg-surface-container-low px-3 py-1.5 rounded-lg shrink-0">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-outline" data-icon="person">person</span>
+<span><strong>1</strong> seul membre émetteur</span>
+</div>
+</div>
+</div>
+<!-- Moderation Warning Banner -->
+<div class="mt-3 p-3 rounded-lg bg-surface-container-low border border-outline-variant/20 flex items-start gap-2.5">
+<span class="material-symbols-outlined text-outline mt-0.5 text-[18px]" data-icon="info">info</span>
+<p class="text-body-sm font-body-sm text-on-surface-variant leading-relaxed">
+<strong class="text-on-surface">Attention :</strong> Signalement individuel isolé (risque élevé de faux positif ou différend privé). Recommandation du système : isoler en quarantaine locale plutôt que fédérer dans la liste partagée.
+              </p>
+</div>
+<!-- Actions Footer -->
+<div class="pt-space-sm flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="flex items-center gap-2 text-body-sm font-body-sm text-on-surface-variant">
+<span class="text-xs font-mono text-outline">Poids de réputation membre : 0.62 / 1.0</span>
+</div>
+<div class="flex items-center gap-space-xs shrink-0">
+<!-- Rejeter le partage -->
+<button class="px-3.5 py-2 rounded-lg border border-outline-variant/30 text-on-surface-variant hover:bg-surface-container-low hover:text-error text-label-lg font-label-lg transition-colors">
+                  Rejeter le partage
+                </button>
+<!-- Quarantaine locale recommandée -->
+<button class="px-4 py-2 rounded-lg bg-secondary text-on-secondary hover:bg-secondary/90 font-title-sm text-title-sm flex items-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="shield_with_heart">shield_with_heart</span>
+<span>Mettre en quarantaine</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Bottom Status Feed / Audit Footnote -->
+<div class="p-3 bg-surface-container-low rounded-xl border border-outline-variant/15 flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span>Fil d'arbitrage synchronisé avec les pairs locaux autorisés (3 instances connectées)</span>
+</div>
+<button class="text-label-md font-label-md text-primary font-semibold hover:underline">
+              Historique des rejets
+            </button>
+</div>
+</div>
+<!-- 4. Panneau latéral : Règles de gouvernance & Déontologie ARCEP (4 cols on XL) -->
+<div class="xl:col-span-4 flex flex-col gap-space-md">
+<!-- Governance Card -->
+<div class="bg-surface-container-lowest border border-outline-variant/20 rounded-xl p-space-md shadow-none">
+<div class="flex items-center gap-2.5 pb-3 border-b border-outline-variant/15">
+<div class="w-8 h-8 rounded-lg bg-secondary-container text-on-secondary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" data-icon="policy">policy</span>
+</div>
+<h2 class="text-title-md font-title-md font-bold text-on-surface">Gouvernance &amp; Déontologie ARCEP</h2>
+</div>
+<div class="mt-4 flex flex-col gap-3.5 text-body-sm font-body-sm text-on-surface-variant leading-relaxed">
+<div class="p-2.5 rounded-lg bg-surface-container-low border border-outline-variant/10">
+<div class="font-semibold text-on-surface flex items-center gap-1.5 mb-1">
+<span class="material-symbols-outlined text-primary text-[16px]" data-icon="auto_awesome">auto_awesome</span>
+                  Auto-validation des plages ARCEP
+                </div>
+<p class="text-xs">
+                  Les plages légales de prospection (ex: 0162, 0163, 0270, 0948...) sont régies directement par la loi et validées automatiquement par les tables internes.
+                </p>
+</div>
+<div>
+<strong class="text-on-surface block mb-1">Seuils de consensus fédéral :</strong>
+<ul class="list-disc list-inside space-y-1 text-xs text-on-surface-variant pl-1">
+<li>Minimum de <strong>3 signalements distincts</strong> pour propager un préfixe suspect hors-ARCEP.</li>
+<li>Les numéros individuels ne doivent être fédérés qu'en cas de récurrence multilatérale avérée.</li>
+<li>Protection absolue contre les faux positifs : ne bloquez jamais un numéro unitaire sans quarantaine préalable.</li>
+</ul>
+</div>
+<div class="border-t border-outline-variant/15 pt-3">
+<strong class="text-on-surface block mb-1">Durée par défaut :</strong>
+<p class="text-xs">
+                  Une proposition approuvée entre pour une durée standard de <strong>30 jours renouvelables</strong> dans la base SQLite locale des abonnés.
+                </p>
+</div>
+</div>
+<!-- Footer Link -->
+<div class="mt-4 pt-3 border-t border-outline-variant/15 flex items-center justify-between text-xs">
+<span class="text-outline">Charte d'administration v2.1</span>
+<a class="text-primary font-medium hover:underline inline-flex items-center gap-0.5" href="#">
+<span>Lire la convention</span>
+<span class="material-symbols-outlined text-[14px]" data-icon="open_in_new">open_in_new</span>
+</a>
+</div>
+</div>
+<!-- Instance Health & Sovereign Sync Info Card -->
+<div class="bg-surface-container-lowest border border-outline-variant/20 rounded-xl p-space-md">
+<div class="flex items-center justify-between mb-3">
+<span class="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider">État du bouclier local</span>
+<span class="px-2 py-0.5 rounded text-label-sm font-label-sm bg-secondary-container text-on-secondary-container">100% hors-ligne</span>
+</div>
+<div class="space-y-2.5">
+<div class="flex justify-between items-center text-body-sm font-body-sm">
+<span class="text-on-surface-variant">Base SQLite résidente</span>
+<span class="font-mono text-on-surface font-medium">18.4 Mo (optimisée)</span>
+</div>
+<div class="flex justify-between items-center text-body-sm font-body-sm">
+<span class="text-on-surface-variant">Préfixes actifs bloqués</span>
+<span class="font-mono text-on-surface font-medium">1,249</span>
+</div>
+<div class="flex justify-between items-center text-body-sm font-body-sm">
+<span class="text-on-surface-variant">Dernier hash ARCEP</span>
+<span class="font-mono text-on-surface font-medium">08/03/2025 04:00</span>
+</div>
+</div>
+<button class="mt-4 w-full py-2 px-3 rounded-lg border border-outline-variant/30 text-on-surface-variant hover:bg-surface-container-low text-label-md font-label-md font-medium flex items-center justify-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-[16px]" data-icon="database">database</span>
+<span>Exporter la base locale</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+</div>
+<script>
+    // Lightweight interaction script for UI buttons
+    document.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        // Soft click feedback without interfering with navigation
+        this.classList.add('opacity-80');
+        setTimeout(() => this.classList.remove('opacity-80'), 150);
+      });
+    });
+  </script>
+</body></html>

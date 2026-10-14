@@ -1,0 +1,32 @@
+---
+description: MD3 design system — UnoCSS, Reka, tokens; no Stitch HTML copy
+globs:
+  - "modules/**/*.{vue,ts,css}"
+  - "android/**/*.{kt,kts,xml}"
+  - "DESIGN.md"
+  - "design/**/*"
+alwaysApply: false
+---
+
+# Design system (nomorecallcenter)
+
+Read root `DESIGN.md` and `design/tokens/md3-colors.json` before UI work.
+
+## Must
+
+- Material Design 3 **role tokens** only (primary, onSurface, surfaceContainer*, outline*, error*, …).
+- Web: **UnoCSS** aliases/shortcuts/attributes — no new ad-hoc CSS files.
+- Web: **Reka UI** primitives first; custom only if Reka cannot express the pattern.
+- Android: **Compose Material 3** `ColorScheme` / typography aligned to the same role names.
+- French UI copy; PRD terminology (rejet silencieux, liste globale, proposition).
+
+## Must not
+
+- Copy Stitch `code.html` as production UI (page-to-page drift).
+- Use **Inter** (Stitch default) — web **Roboto Flex/Roboto**; Android platform Roboto.
+- Invent product claims: 100% offline, SQLite-as-backend, P2P/federation, open signup.
+- Hardcode random hex in templates — extend tokens instead.
+
+## Shared layer
+
+App + admin extend the Nuxt shared layer (BAJO-shaped). Histoire documents components; keep Histoire out of consumer `nuxt.config`.
