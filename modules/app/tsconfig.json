@@ -1,14 +1,3 @@
 {
-  "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
-    "jsx": "preserve",
-    "lib": ["ES2022", "DOM"],
-    "types": ["node"]
-  },
-  "include": [
-    "nuxt.config.ts",
-    "app/**/*",
-    "server/**/*",
-    ".nuxt/nuxt.d.ts"
-  ]
+  "extends": "./.nuxt/tsconfig.json"
 }

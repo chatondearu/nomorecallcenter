@@ -3,7 +3,7 @@
 Open-source Android call-screening client with a self-hosted multi-user backend
 (Nuxt/Nitro + Postgres + Drizzle). AGPL-3.0.
 
-Status: Slice 0 scaffold (compose + API health + Drizzle migrate + MD3/UnoCSS tokens).
+Status: Slice 1 auth (Better Auth email/password, bootstrap admin, invite-only signup).
 
 Product docs: [`prd/PRD-1-mvp-and-vision.md`](prd/PRD-1-mvp-and-vision.md) ·
 [`plans/PLAN-1-mvp-and-vision.md`](plans/PLAN-1-mvp-and-vision.md) ·
@@ -40,16 +40,24 @@ curl -fsS http://127.0.0.1:3000/api/health
 DATABASE_URL=postgresql://nmcc:nmcc@localhost:5432/nmcc pnpm db:migrate
 ```
 
-Or run the bundled script:
+Or run the bundled scripts:
 
 ```bash
 pnpm install
-pnpm smoke
+pnpm smoke              # compose up → health → migrate
+pnpm auth:acceptance    # wipe volumes → admin → invite → second user → reject open signup
 ```
+
+### Auth bootstrap (Slice 1)
+
+1. First successful `POST /api/auth/sign-up/email` on an empty instance becomes **admin**.
+2. Optional harden: set `BOOTSTRAP_ADMIN_EMAIL` so only that address may register first.
+3. After bootstrap, signup requires a valid `inviteToken` (admin: `POST /api/invites`).
+4. Session check: `GET /api/me` (cookie session from Better Auth).
 
 Stop the stack: `pnpm compose:down` (add `-v` to wipe the Postgres volume).
 
-Default credentials match [`.env.example`](.env.example) (`nmcc` / `nmcc`). Change them before any real deployment.
+Default credentials match [`.env.example`](.env.example) (`nmcc` / `nmcc`). Change Postgres password and `BETTER_AUTH_SECRET` before any real deployment.
 
 ## Local web (optional)
 
