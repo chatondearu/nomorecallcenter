@@ -1,8 +1,11 @@
+export * from './auth'
+export * from './invites'
+
 import { pgTable, text, timestamp } from 'drizzle-orm/pg-core'
 
 /**
  * Bootstrap table so Slice 0 can migrate a fresh DB.
- * Domain tables (auth, lists, rules, events) land in later slices.
+ * Domain tables beyond auth land in later slices.
  */
 export const schemaMeta = pgTable('schema_meta', {
   key: text('key').primaryKey(),

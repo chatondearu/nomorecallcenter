@@ -62,10 +62,10 @@ Tracer-bullet order: **slice 0** runnable compose + empty Nitro health; then **a
 
 ### Slice 1 — Auth
 
-- [ ] **Better Auth wired**: email/password sign-up/sign-in against Postgres auth tables; session usable from Nitro route guards.
-- [ ] **Bootstrap admin**: on empty user table, first successful registration becomes admin (honor optional bootstrap email env if set).
-- [ ] **Invites**: admin can create invite; registration without valid invite fails after bootstrap; invite marks used.
-- [ ] **Acceptance**: compose stack → register admin → create invite → second user joins → non-invite sign-up rejected.
+- [x] **Better Auth wired**: email/password sign-up/sign-in against Postgres auth tables; session usable from Nitro route guards.
+- [x] **Bootstrap admin**: on empty user table, first successful registration becomes admin (honor optional bootstrap email env if set).
+- [x] **Invites**: admin can create invite; registration without valid invite fails after bootstrap; invite marks used.
+- [x] **Acceptance**: compose stack → register admin → create invite → second user joins → non-invite sign-up rejected.
 
 ### Slice 2 — Lists
 

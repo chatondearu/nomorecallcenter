@@ -32,6 +32,9 @@ services:
       HOST: 0.0.0.0
       PORT: '3000'
       DATABASE_URL: postgresql://${POSTGRES_USER:-nmcc}:${POSTGRES_PASSWORD:-nmcc}@postgres:5432/${POSTGRES_DB:-nmcc}
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:-dev-only-better-auth-secret-change-me}
+      BETTER_AUTH_URL: ${BETTER_AUTH_URL:-http://localhost:3000}
+      BOOTSTRAP_ADMIN_EMAIL: ${BOOTSTRAP_ADMIN_EMAIL:-}
     ports:
       - '${API_PORT:-3000}:3000'
     healthcheck:
