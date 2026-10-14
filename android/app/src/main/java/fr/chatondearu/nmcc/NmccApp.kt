@@ -1,7 +1,7 @@
 package fr.chatondearu.nmcc
 
 import android.app.Application
-import fr.chatondearu.nmcc.data.LocalRuleStore
+import fr.chatondearu.nmcc.store.LocalRuleStore
 import fr.chatondearu.nmcc.network.ApiClient
 import fr.chatondearu.nmcc.prefs.AppPrefs
 import fr.chatondearu.nmcc.sync.EventReporter
