@@ -10,3 +10,4 @@
 | [[ADR-006-mvp-stats-surface\|ADR-006]] | MVP stats and analytics surface | accepted | 2026-10-13 |
 | [[ADR-007-block-ttl-model\|ADR-007]] | Temporary vs permanent personal blocks (MVP) | accepted | 2026-10-13 |
 | [[ADR-008-distribution-channels\|ADR-008]] | Distribution channels for MVP | accepted | 2026-10-13 |
+| [[ADR-009-design-system\|ADR-009]] | Design system MD3 web + Android | accepted | 2026-10-14 |

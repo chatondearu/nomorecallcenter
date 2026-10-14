@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>nomorecallcenter - Nouvelle règle de rejet</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary-fixed-dim": "#a6cce0",
+            "inverse-primary": "#8fd4bf",
+            "on-surface-variant": "#3f4945",
+            "on-secondary": "#ffffff",
+            "on-tertiary-fixed": "#001f2a",
+            "tertiary-fixed": "#c2e8fc",
+            "surface-container-high": "#e6e9e5",
+            "error-container": "#ffdad6",
+            "primary-fixed": "#abf0da",
+            "surface-variant": "#e0e3df",
+            "secondary": "#4d635b",
+            "on-tertiary": "#ffffff",
+            "on-error-container": "#93000a",
+            "primary": "#004a3c",
+            "on-primary-container": "#97dcc7",
+            "on-secondary-fixed": "#0a1f19",
+            "secondary-container": "#cde5db",
+            "tertiary": "#1f4556",
+            "on-background": "#181c1a",
+            "error": "#ba1a1a",
+            "on-secondary-fixed-variant": "#364b44",
+            "surface-container-lowest": "#ffffff",
+            "on-tertiary-fixed-variant": "#254b5c",
+            "surface-tint": "#226958",
+            "inverse-surface": "#2d312f",
+            "on-error": "#ffffff",
+            "surface": "#f7faf6",
+            "surface-dim": "#d8dbd7",
+            "inverse-on-surface": "#eef2ed",
+            "secondary-fixed": "#d0e8de",
+            "surface-container-highest": "#e0e3df",
+            "on-surface": "#181c1a",
+            "outline": "#6f7975",
+            "primary-container": "#1a6352",
+            "on-tertiary-container": "#aed5e8",
+            "background": "#f7faf6",
+            "on-primary-fixed": "#002019",
+            "tertiary-container": "#385d6e",
+            "secondary-fixed-dim": "#b4ccc2",
+            "surface-container-low": "#f1f4f0",
+            "surface-container": "#ecefeb",
+            "primary-fixed-dim": "#8fd4bf",
+            "surface-bright": "#f7faf6",
+            "on-secondary-container": "#51675f",
+            "outline-variant": "#bfc9c4",
+            "on-primary": "#ffffff",
+            "on-primary-fixed-variant": "#005141"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xl": "2rem",
+            "space-xs": "0.25rem",
+            "margin-tablet": "2rem",
+            "gutter-desktop": "1.5rem",
+            "gutter-tablet": "1.5rem",
+            "space-sm": "0.5rem",
+            "margin": "1rem",
+            "margin-desktop": "3rem",
+            "space-lg": "1.5rem",
+            "gutter": "1rem",
+            "space-md": "1rem"
+          },
+          "fontFamily": {
+            "body-lg": ["Inter"],
+            "body-md": ["Inter"],
+            "headline-lg": ["Inter"],
+            "title-lg": ["Inter"],
+            "body-sm": ["Inter"],
+            "headline-lg-mobile": ["Inter"],
+            "label-sm": ["Inter"],
+            "title-md": ["Inter"],
+            "label-lg": ["Inter"],
+            "title-sm": ["Inter"],
+            "display-lg": ["Inter"],
+            "headline-sm": ["Inter"],
+            "headline-md": ["Inter"],
+            "label-md": ["Inter"]
+          },
+          "fontSize": {
+            "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "0.5px", "fontWeight": "400" }],
+            "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.25px", "fontWeight": "400" }],
+            "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "0px", "fontWeight": "400" }],
+            "title-lg": ["22px", { "lineHeight": "28px", "letterSpacing": "0px", "fontWeight": "400" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.4px", "fontWeight": "400" }],
+            "headline-lg-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "0px", "fontWeight": "500" }],
+            "label-sm": ["11px", { "lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500" }],
+            "title-md": ["16px", { "lineHeight": "24px", "letterSpacing": "0.15px", "fontWeight": "500" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.1px", "fontWeight": "500" }],
+            "title-sm": ["14px", { "lineHeight": "20px", "letterSpacing": "0.1px", "fontWeight": "500" }],
+            "display-lg": ["57px", { "lineHeight": "64px", "letterSpacing": "-0.25px", "fontWeight": "400" }],
+            "headline-sm": ["24px", { "lineHeight": "32px", "letterSpacing": "0px", "fontWeight": "400" }],
+            "headline-md": ["28px", { "lineHeight": "36px", "letterSpacing": "0px", "fontWeight": "400" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500" }]
+          }
+        }
+      }
+    };
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 24px;
+      line-height: 1;
+      display: inline-block;
+      text-transform: none;
+      letter-spacing: normal;
+      word-wrap: normal;
+      white-space: nowrap;
+      direction: ltr;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface antialiased min-h-screen flex flex-col items-center justify-start p-0 selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- Mobile View Container -->
+<div class="w-full max-w-md bg-surface min-h-screen flex flex-col shadow-sm relative">
+<!-- Top App Bar (Task-Focused: Suppresses standard bottom navigation shell) -->
+<header class="sticky top-0 z-40 bg-surface/90 backdrop-blur-md px-margin h-16 flex items-center justify-between border-b border-outline-variant/15">
+<div class="flex items-center gap-space-sm">
+<button aria-label="Retour" class="flex items-center gap-1 text-on-surface hover:bg-surface-container-high p-2 rounded-full active:opacity-80 transition-opacity" type="button">
+<span class="material-symbols-outlined text-primary">arrow_back</span>
+<span class="font-label-lg text-label-lg text-on-surface-variant font-medium">Retour</span>
+</button>
+</div>
+<h1 class="font-title-md text-title-md font-bold text-on-surface tracking-tight truncate max-w-[200px]">
+        Nouvelle règle de rejet
+      </h1>
+<div class="flex items-center">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container text-[11px] font-medium tracking-wide">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">lock</span>
+          Local
+        </span>
+</div>
+</header>
+<!-- Main Content Form -->
+<main class="flex-1 px-margin pt-space-lg pb-space-xl flex flex-col gap-space-lg">
+<!-- Form Card / Primary Input Section -->
+<section class="bg-surface-container-lowest rounded-xl p-space-md border border-outline-variant/15 flex flex-col gap-space-md">
+<!-- Field 1: Numéro ou préfixe -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md font-semibold text-on-surface flex items-center justify-between" for="prefix-input">
+<span>Numéro ou préfixe</span>
+<span class="font-label-sm text-label-sm text-primary font-mono bg-primary-fixed/30 px-1.5 py-0.5 rounded">Regex / Format E.164</span>
+</label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-outline pointer-events-none">call_end</span>
+<input class="w-full pl-10 pr-10 py-3 bg-surface-container-low border border-outline-variant rounded-lg font-mono text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" id="prefix-input" placeholder="+33 X XX XX XX" type="text" value="+33 1 62 89 **"/>
+<button aria-label="Effacer le champ" class="absolute right-2 text-outline hover:text-on-surface p-1" type="button">
+<span class="material-symbols-outlined text-[20px]">cancel</span>
+</button>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex items-start gap-1.5 mt-0.5">
+<span class="material-symbols-outlined text-[16px] text-secondary shrink-0 mt-0.5">info</span>
+<span>Ex: +33 1 62 ou un numéro complet (sera haché localement avant synchronisation).</span>
+</p>
+</div>
+<!-- Field 2: Libellé ou motif -->
+<div class="flex flex-col gap-1.5 pt-1">
+<label class="font-label-md text-label-md font-semibold text-on-surface flex items-center justify-between" for="reason-input">
+<span>Libellé ou motif (optionnel)</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Usage personnel</span>
+</label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-outline pointer-events-none">label</span>
+<input class="w-full pl-10 pr-3 py-3 bg-surface-container-low border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" id="reason-input" placeholder="Ex: Robot d'appel, isolation..." type="text" value="Démarchage panneaux solaires agressif"/>
+</div>
+</div>
+</section>
+<!-- TTL Duration Chips -->
+<section class="flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<h2 class="font-label-lg text-label-lg font-semibold text-on-surface">Durée de validité (TTL)</h2>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Expiration auto</span>
+</div>
+<div aria-label="Durée de validité" class="flex flex-wrap gap-2 pt-1" role="radiogroup">
+<!-- 1 heure -->
+<button aria-checked="false" class="h-9 px-3.5 rounded-full border border-outline-variant bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md flex items-center hover:bg-surface-container transition-colors" role="radio" type="button">
+            1 heure
+          </button>
+<!-- 24 heures -->
+<button aria-checked="false" class="h-9 px-3.5 rounded-full border border-outline-variant bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md flex items-center hover:bg-surface-container transition-colors" role="radio" type="button">
+            24 heures
+          </button>
+<!-- 7 jours (Selected) -->
+<button aria-checked="true" class="h-9 px-3.5 rounded-full bg-secondary-container text-on-secondary-container border border-primary/20 font-label-md text-label-md flex items-center gap-1.5 shadow-sm" role="radio" type="button">
+<span class="material-symbols-outlined text-[18px]">check</span>
+<span>7 jours</span>
+</button>
+<!-- 30 jours -->
+<button aria-checked="false" class="h-9 px-3.5 rounded-full border border-outline-variant bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md flex items-center hover:bg-surface-container transition-colors" role="radio" type="button">
+            30 jours
+          </button>
+<!-- Permanent -->
+<button aria-checked="false" class="h-9 px-3.5 rounded-full border border-outline-variant bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md flex items-center hover:bg-surface-container transition-colors" role="radio" type="button">
+            Permanent
+          </button>
+</div>
+</section>
+<!-- Toggle Switch: Rejet silencieux immédiat -->
+<section class="bg-surface-container-low rounded-xl p-space-md flex items-center justify-between gap-space-sm border border-outline-variant/10">
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-fixed/40 flex items-center justify-center shrink-0 text-primary mt-0.5">
+<span class="material-symbols-outlined text-[20px]">notifications_off</span>
+</div>
+<div class="flex flex-col">
+<span class="font-title-sm text-title-sm font-semibold text-on-surface">Rejet silencieux immédiat</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Aucune sonnerie ni notification intrusive</span>
+</div>
+</div>
+<!-- Material Design 3 Styled Switch (Checked) -->
+<label class="relative inline-flex items-center cursor-pointer shrink-0">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-12 h-7 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:bg-primary transition-colors duration-200 after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-on-surface-variant peer-checked:after:bg-on-primary after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5"></div>
+</label>
+</section>
+<!-- Propose to Global Community Card -->
+<section class="bg-surface-container-lowest rounded-xl p-space-md border border-outline-variant/20 flex flex-col gap-space-sm relative overflow-hidden">
+<div class="flex items-start gap-3">
+<div class="pt-0.5">
+<input checked="" class="w-5 h-5 rounded text-primary focus:ring-primary border-outline-variant cursor-pointer" id="global-share-checkbox" type="checkbox"/>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-title-sm text-title-sm font-semibold text-on-surface cursor-pointer" for="global-share-checkbox">
+              Proposer l'ajout à la liste globale partagée
+            </label>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              Soumis aux modérateurs de votre instance. Seul le préfixe sera partagé, jamais votre identifiant ou numéro complet.
+            </p>
+</div>
+</div>
+<div class="mt-1 pt-2 border-t border-outline-variant/15 flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px] text-secondary">verified_user</span>
+            Instance souveraine fédérée
+          </span>
+<span class="font-mono text-[11px] text-secondary">v1.4-local</span>
+</div>
+</section>
+<!-- Privacy & Verification Banner -->
+<div class="bg-surface-container-high/60 rounded-lg p-3 flex items-center gap-2.5 border border-outline-variant/10">
+<span class="material-symbols-outlined text-[20px] text-primary shrink-0" style="font-variation-settings: 'FILL' 1;">fingerprint</span>
+<div class="font-body-sm text-body-sm text-on-surface-variant truncate">
+          Empreinte générée : <span class="font-mono text-on-surface font-medium">SHA-256 (3b8f...a91c)</span> vérifiable localement.
+        </div>
+</div>
+<!-- Action Buttons -->
+<div class="flex flex-col gap-space-sm mt-auto pt-space-md">
+<!-- Primary Filled MD3 Button -->
+<button class="w-full h-12 bg-primary-container text-on-primary rounded-full font-label-lg text-label-lg font-semibold flex items-center justify-center gap-2 shadow-sm hover:brightness-105 active:scale-[0.98] transition-all" type="button">
+<span class="material-symbols-outlined text-[20px]">shield_with_heart</span>
+<span>Enregistrer la règle</span>
+</button>
+<!-- Secondary Tonal Button -->
+<button class="w-full h-12 bg-surface-container-high text-primary rounded-full font-label-lg text-label-lg font-medium flex items-center justify-center hover:bg-surface-variant active:scale-[0.98] transition-all" type="button">
+          Annuler
+        </button>
+</div>
+</main>
+</div>
+</body></html>

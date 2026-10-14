@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-surface" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>nomorecallcenter - Accueil</title>
+<!-- Inter Google Font -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with custom Design Tokens -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary-fixed-dim": "#a6cce0",
+            "inverse-primary": "#8fd4bf",
+            "on-surface-variant": "#3f4945",
+            "on-secondary": "#ffffff",
+            "on-tertiary-fixed": "#001f2a",
+            "tertiary-fixed": "#c2e8fc",
+            "surface-container-high": "#e6e9e5",
+            "error-container": "#ffdad6",
+            "primary-fixed": "#abf0da",
+            "surface-variant": "#e0e3df",
+            "secondary": "#4d635b",
+            "on-tertiary": "#ffffff",
+            "on-error-container": "#93000a",
+            "primary": "#004a3c",
+            "on-primary-container": "#97dcc7",
+            "on-secondary-fixed": "#0a1f19",
+            "secondary-container": "#cde5db",
+            "tertiary": "#1f4556",
+            "on-background": "#181c1a",
+            "error": "#ba1a1a",
+            "on-secondary-fixed-variant": "#364b44",
+            "surface-container-lowest": "#ffffff",
+            "on-tertiary-fixed-variant": "#254b5c",
+            "surface-tint": "#226958",
+            "inverse-surface": "#2d312f",
+            "on-error": "#ffffff",
+            "surface": "#f7faf6",
+            "surface-dim": "#d8dbd7",
+            "inverse-on-surface": "#eef2ed",
+            "secondary-fixed": "#d0e8de",
+            "surface-container-highest": "#e0e3df",
+            "on-surface": "#181c1a",
+            "outline": "#6f7975",
+            "primary-container": "#1a6352",
+            "on-tertiary-container": "#aed5e8",
+            "background": "#f7faf6",
+            "on-primary-fixed": "#002019",
+            "tertiary-container": "#385d6e",
+            "secondary-fixed-dim": "#b4ccc2",
+            "surface-container-low": "#f1f4f0",
+            "surface-container": "#ecefeb",
+            "primary-fixed-dim": "#8fd4bf",
+            "surface-bright": "#f7faf6",
+            "on-secondary-container": "#51675f",
+            "outline-variant": "#bfc9c4",
+            "on-primary": "#ffffff",
+            "on-primary-fixed-variant": "#005141"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xl": "2rem",
+            "space-xs": "0.25rem",
+            "margin-tablet": "2rem",
+            "gutter-desktop": "1.5rem",
+            "gutter-tablet": "1.5rem",
+            "space-sm": "0.5rem",
+            "margin": "1rem",
+            "margin-desktop": "3rem",
+            "space-lg": "1.5rem",
+            "gutter": "1rem",
+            "space-md": "1rem"
+          },
+          "fontFamily": {
+            "body-lg": ["Inter"],
+            "body-md": ["Inter"],
+            "headline-lg": ["Inter"],
+            "title-lg": ["Inter"],
+            "body-sm": ["Inter"],
+            "headline-lg-mobile": ["Inter"],
+            "label-sm": ["Inter"],
+            "title-md": ["Inter"],
+            "label-lg": ["Inter"],
+            "title-sm": ["Inter"],
+            "display-lg": ["Inter"],
+            "headline-sm": ["Inter"],
+            "headline-md": ["Inter"],
+            "label-md": ["Inter"]
+          },
+          "fontSize": {
+            "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "0.5px", "fontWeight": "400" }],
+            "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.25px", "fontWeight": "400" }],
+            "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "0px", "fontWeight": "400" }],
+            "title-lg": ["22px", { "lineHeight": "28px", "letterSpacing": "0px", "fontWeight": "400" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.4px", "fontWeight": "400" }],
+            "headline-lg-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "0px", "fontWeight": "500" }],
+            "label-sm": ["11px", { "lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500" }],
+            "title-md": ["16px", { "lineHeight": "24px", "letterSpacing": "0.15px", "fontWeight": "500" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.1px", "fontWeight": "500" }],
+            "title-sm": ["14px", { "lineHeight": "20px", "letterSpacing": "0.1px", "fontWeight": "500" }],
+            "display-lg": ["57px", { "lineHeight": "64px", "letterSpacing": "-0.25px", "fontWeight": "400" }],
+            "headline-sm": ["24px", { "lineHeight": "32px", "letterSpacing": "0px", "fontWeight": "400" }],
+            "headline-md": ["28px", { "lineHeight": "36px", "letterSpacing": "0px", "fontWeight": "400" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="min-h-full bg-surface text-on-surface antialiased flex flex-col font-body-md text-body-md select-none pb-28">
+<!-- TOP APP BAR (Shared Components: small_center_aligned) -->
+<header class="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-margin h-16 max-w-full bg-surface dark:bg-surface border-b border-outline-variant/15">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-2xl" data-icon="shield">shield</span>
+<div class="flex flex-col">
+<span class="text-title-lg font-title-lg font-bold text-on-surface tracking-tight">nomorecallcenter</span>
+<!-- Server & Offline Status Badge -->
+<div class="flex items-center gap-1.5">
+<span class="inline-block w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">callcenter.sans-spam.fr</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-space-xs">
+<!-- 100% Hors-ligne chip & Cloud Off icon -->
+<div class="hidden sm:flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container-high border border-outline-variant/20">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="cloud_off">cloud_off</span>
+<span class="font-label-sm text-label-sm text-primary font-medium">100% hors-ligne</span>
+</div>
+<button aria-label="État de synchronisation" class="p-2 rounded-full text-on-surface-variant hover:bg-surface-container-high active:opacity-80 transition-opacity">
+<span class="material-symbols-outlined" data-icon="cloud_off">cloud_off</span>
+</button>
+</div>
+</header>
+<!-- MAIN SCROLLABLE CONTENT CANVAS -->
+<main class="w-full max-w-md mx-auto px-margin pt-20 flex flex-col gap-space-md">
+<!-- HERO STATUS CARD: Tactile Protection Shield -->
+<section class="rounded-xl bg-primary-container text-on-primary-container p-5 flex flex-col gap-4 shadow-sm relative overflow-hidden transition-all duration-200">
+<div class="flex items-start justify-between relative z-10">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full bg-on-primary-container/15 flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined text-3xl" data-icon="volume_off" style="font-variation-settings: 'FILL' 1;">volume_off</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h1 class="font-title-md text-title-md font-bold text-white tracking-wide">Protection active</h1>
+<span class="bg-primary px-2 py-0.5 rounded-full font-label-sm text-label-sm text-primary-fixed uppercase tracking-wider font-semibold">Local</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-primary-container/90 mt-0.5">Rejet silencieux sans sonnerie</p>
+</div>
+</div>
+<!-- Android MD3 Tactile Toggle Switch -->
+<label class="relative inline-flex items-center cursor-pointer p-1">
+<input checked="" class="sr-only peer" id="shieldToggle" type="checkbox"/>
+<div class="w-14 h-8 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[6px] after:left-[6px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary-fixed-dim"></div>
+</label>
+</div>
+<!-- Live Heuristics sub-bar -->
+<div class="relative z-10 pt-2 border-t border-on-primary-container/20 flex items-center justify-between font-label-sm text-label-sm text-on-primary-container/85">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="terminal">terminal</span>
+          Base SQLite v4.19 (48 290 règles)
+        </span>
+<span class="font-mono">Latence: 0.8ms</span>
+</div>
+<!-- Subdued aesthetic background element -->
+<div class="absolute -right-6 -bottom-8 opacity-10 pointer-events-none text-white">
+<span class="material-symbols-outlined text-[140px]" data-icon="shield">shield</span>
+</div>
+</section>
+<!-- CALL SCREENING SERVICE NOTICE CARD -->
+<section class="rounded-xl bg-surface-container-low border border-outline-variant/20 p-3.5 flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-lg" data-icon="verified_user">verified_user</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex-1 leading-tight">
+        Mode silencieux natif <span class="font-medium text-on-surface">Android CallScreeningService</span> activé.
+      </p>
+<span class="material-symbols-outlined text-outline text-base" data-icon="info">info</span>
+</section>
+<!-- QUICK METRIC CARDS ROW (Today vs 7 Days + Last Event) -->
+<section class="grid grid-cols-2 gap-space-sm">
+<!-- Card 1: Today -->
+<div class="bg-surface-container rounded-xl p-4 flex flex-col justify-between border border-outline-variant/15">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface-variant font-medium">Aujourd'hui</span>
+<span class="material-symbols-outlined text-primary text-base" data-icon="phone_missed">phone_missed</span>
+</div>
+<div class="mt-2">
+<span class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-on-surface">32</span>
+<p class="font-body-sm text-body-sm text-secondary leading-none mt-1">appels rejetés</p>
+</div>
+</div>
+<!-- Card 2: 7 Days -->
+<div class="bg-surface-container rounded-xl p-4 flex flex-col justify-between border border-outline-variant/15">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface-variant font-medium">7 derniers jours</span>
+<span class="material-symbols-outlined text-tertiary text-base" data-icon="stacked_line_chart">stacked_line_chart</span>
+</div>
+<div class="mt-2">
+<span class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-on-surface">147</span>
+<p class="font-body-sm text-body-sm text-secondary leading-none mt-1">cette semaine</p>
+</div>
+</div>
+<!-- Full-width Sub-card: Last Block Event -->
+<div class="col-span-2 bg-surface-container-low rounded-xl p-3.5 border border-outline-variant/20 flex items-center justify-between gap-3">
+<div class="flex items-center gap-2.5 min-w-0">
+<span class="w-2.5 h-2.5 rounded-full bg-error shrink-0"></span>
+<div class="truncate">
+<div class="flex items-center gap-1.5">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Dernier rejet à 14h23 :</span>
+<span class="font-body-sm text-body-sm font-semibold font-mono text-on-surface">+33 1 62 ** **</span>
+</div>
+<p class="font-body-sm text-body-sm text-secondary truncate">Démarchage énergie (Blocage auto)</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant text-base shrink-0" data-icon="chevron_right">chevron_right</span>
+</div>
+</section>
+<!-- RECENT ACTIVITY SECTION -->
+<section class="flex flex-col gap-space-sm mt-1">
+<div class="flex items-center justify-between">
+<h2 class="font-title-md text-title-md font-semibold text-on-surface">Activité récente</h2>
+<a class="font-label-lg text-label-lg text-primary hover:underline font-medium" href="#tout-voir">Tout voir</a>
+</div>
+<!-- Activity Items (M3 List Tiles) -->
+<div class="flex flex-col gap-2">
+<!-- Activity 1: ARCEP Telemarketing -->
+<div class="bg-surface-container rounded-xl p-3.5 flex items-center justify-between gap-3 border border-outline-variant/10 hover:bg-surface-container-high transition-colors">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-10 h-10 rounded-full bg-surface-container-high text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-xl" data-icon="call_log">call_log</span>
+</div>
+<div class="truncate">
+<span class="font-body-md text-body-md font-semibold font-mono text-on-surface tracking-wide">+33 9 48 ** **</span>
+<div class="flex items-center gap-2 mt-0.5">
+<span class="px-2 py-0.5 rounded-full font-label-sm text-label-sm bg-secondary-container text-on-secondary-container font-medium">Plage ARCEP</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Télémarketing présumé</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-end shrink-0">
+<span class="font-body-sm text-body-sm font-mono text-on-surface-variant">14:23</span>
+<span class="font-label-sm text-label-sm text-secondary">Silencieux</span>
+</div>
+</div>
+<!-- Activity 2: Custom Local SHA-256 Rule -->
+<div class="bg-surface-container rounded-xl p-3.5 flex items-center justify-between gap-3 border border-outline-variant/10 hover:bg-surface-container-high transition-colors">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-10 h-10 rounded-full bg-surface-container-high text-tertiary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-xl" data-icon="fingerprint">fingerprint</span>
+</div>
+<div class="truncate">
+<span class="font-body-md text-body-md font-semibold font-mono text-on-surface tracking-wide">SHA-256 e4a1…c890</span>
+<div class="flex items-center gap-2 mt-0.5">
+<span class="px-2 py-0.5 rounded-full font-label-sm text-label-sm bg-tertiary-fixed text-on-tertiary-fixed font-medium">Règle perso</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Heuristique locale 24h</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-end shrink-0">
+<span class="font-body-sm text-body-sm font-mono text-on-surface-variant">13:08</span>
+<span class="font-label-sm text-label-sm text-secondary">Rejeté</span>
+</div>
+</div>
+<!-- Activity 3: Moderated National List -->
+<div class="bg-surface-container rounded-xl p-3.5 flex items-center justify-between gap-3 border border-outline-variant/10 hover:bg-surface-container-high transition-colors">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-10 h-10 rounded-full bg-surface-container-high text-secondary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-xl" data-icon="rule">rule</span>
+</div>
+<div class="truncate">
+<span class="font-body-md text-body-md font-semibold font-mono text-on-surface tracking-wide">01 62 ** **</span>
+<div class="flex items-center gap-2 mt-0.5">
+<span class="px-2 py-0.5 rounded-full font-label-sm text-label-sm bg-surface-variant text-on-surface-variant font-medium">Liste FR</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Courtage non sollicité</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-end shrink-0">
+<span class="font-body-sm text-body-sm font-mono text-on-surface-variant">11:45</span>
+<span class="font-label-sm text-label-sm text-secondary">Silencieux</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- FLOATING ACTION BUTTON (M3 FAB: + Ajouter un numéro) -->
+<aside class="fixed bottom-24 right-4 z-40">
+<button aria-label="Ajouter un numéro à la liste" class="flex items-center gap-2 bg-primary text-on-primary h-14 pl-4 pr-5 rounded-full shadow-lg shadow-primary/20 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-2xl" data-icon="add">add</span>
+<span class="font-label-lg text-label-lg font-medium tracking-wide">Ajouter un numéro</span>
+</button>
+</aside>
+<!-- BOTTOM NAVIGATION BAR (Shared Components JSON Compliant) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex items-center justify-around h-20 px-space-xs bg-surface-container dark:bg-surface-container border-t border-outline-variant/15">
+<!-- Item 1: Accueil (Active) -->
+<a class="flex flex-col items-center justify-center gap-1 bg-secondary-container dark:bg-secondary-container text-on-secondary-container dark:text-on-secondary-container rounded-full px-5 py-1 active:scale-95 transition-transform duration-150" href="#accueil">
+<span class="material-symbols-outlined text-2xl" data-icon="call_log" style="font-variation-settings: 'FILL' 1;">call_log</span>
+<span class="text-label-md font-label-md">Accueil</span>
+</a>
+<!-- Item 2: Règles (Inactive) -->
+<a class="flex flex-col items-center justify-center gap-1 text-on-surface-variant dark:text-on-surface-variant px-5 py-1 hover:bg-surface-container-high dark:hover:bg-surface-container-high rounded-full active:scale-95 transition-transform duration-150" href="#regles">
+<span class="material-symbols-outlined text-2xl" data-icon="shield_with_heart">shield_with_heart</span>
+<span class="text-label-md font-label-md">Règles</span>
+</a>
+<!-- Item 3: Statistiques (Inactive) -->
+<a class="flex flex-col items-center justify-center gap-1 text-on-surface-variant dark:text-on-surface-variant px-5 py-1 hover:bg-surface-container-high dark:hover:bg-surface-container-high rounded-full active:scale-95 transition-transform duration-150" href="#statistiques">
+<span class="material-symbols-outlined text-2xl" data-icon="insights">insights</span>
+<span class="text-label-md font-label-md">Statistiques</span>
+</a>
+<!-- Item 4: Paramètres (Inactive) -->
+<a class="flex flex-col items-center justify-center gap-1 text-on-surface-variant dark:text-on-surface-variant px-5 py-1 hover:bg-surface-container-high dark:hover:bg-surface-container-high rounded-full active:scale-95 transition-transform duration-150" href="#parametres">
+<span class="material-symbols-outlined text-2xl" data-icon="settings">settings</span>
+<span class="text-label-md font-label-md">Paramètres</span>
+</a>
+</nav>
+<!-- Interactive script for tactile shield toggle -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const shieldToggle = document.getElementById('shieldToggle');
+      if (shieldToggle) {
+        shieldToggle.addEventListener('change', (e) => {
+          const card = e.target.closest('section');
+          if (e.target.checked) {
+            card.classList.remove('opacity-60', 'grayscale');
+          } else {
+            card.classList.add('opacity-60', 'grayscale');
+          }
+        });
+      }
+    });
+  </script>
+</body></html>

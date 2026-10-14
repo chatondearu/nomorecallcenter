@@ -35,6 +35,7 @@ Index: [[decisions/index|All ADRs]]
 - [[decisions/ADR-006-mvp-stats-surface|ADR-006]] — MVP stats surface (accepted)
 - [[decisions/ADR-007-block-ttl-model|ADR-007]] — Personal block TTL model (accepted)
 - [[decisions/ADR-008-distribution-channels|ADR-008]] — Distribution channels MVP (accepted)
+- [[decisions/ADR-009-design-system|ADR-009]] — Design system MD3 (accepted)
 
 ## PRDs & plans
 

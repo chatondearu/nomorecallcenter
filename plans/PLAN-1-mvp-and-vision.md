@@ -55,6 +55,7 @@ Tracer-bullet order: **slice 0** runnable compose + empty Nitro health; then **a
 
 ### Slice 0 — Skeleton
 
+- [ ] **Design system foundation** (ADR-009): keep `DESIGN.md` + `design/tokens` as source of truth; shared layer must load MD3/UnoCSS tokens before real UI screens (Histoire can land with first components).
 - [ ] **Monorepo bootstrap**: pnpm workspace with `db`, `shared`, Nuxt API (or app), `admin`, and an Android project root; root scripts for typecheck/lint placeholders; AGPL license file present.
 - [ ] **Compose skeleton**: `docker compose` brings up Postgres + API container; `GET` health returns 200; volume persists Postgres data.
 - [ ] **Drizzle module**: schema package exports client + migrate command; empty migration applies on fresh DB.

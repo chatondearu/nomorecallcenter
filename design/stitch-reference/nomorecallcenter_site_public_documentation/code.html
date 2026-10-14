@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>nomorecallcenter — Filtrage souverain &amp; anti-démarchage téléphonique</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with Forms and Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration verbatim as mandated -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-primary-fixed": "#002019",
+            "on-error": "#ffffff",
+            "on-tertiary-fixed-variant": "#254b5c",
+            "on-tertiary-container": "#aed5e8",
+            "on-secondary-container": "#51675f",
+            "surface-dim": "#d8dbd7",
+            "surface": "#f7faf6",
+            "surface-bright": "#f7faf6",
+            "on-primary-fixed-variant": "#005141",
+            "error-container": "#ffdad6",
+            "primary-fixed": "#abf0da",
+            "tertiary-fixed-dim": "#a6cce0",
+            "surface-container": "#ecefeb",
+            "on-surface": "#181c1a",
+            "on-tertiary-fixed": "#001f2a",
+            "primary-fixed-dim": "#8fd4bf",
+            "outline-variant": "#bfc9c4",
+            "primary": "#004a3c",
+            "inverse-on-surface": "#eef2ed",
+            "on-tertiary": "#ffffff",
+            "error": "#ba1a1a",
+            "on-primary": "#ffffff",
+            "surface-container-high": "#e6e9e5",
+            "on-background": "#181c1a",
+            "on-secondary-fixed": "#0a1f19",
+            "secondary-fixed-dim": "#b4ccc2",
+            "inverse-primary": "#8fd4bf",
+            "on-secondary": "#ffffff",
+            "on-primary-container": "#97dcc7",
+            "surface-container-lowest": "#ffffff",
+            "surface-variant": "#e0e3df",
+            "secondary-fixed": "#d0e8de",
+            "tertiary": "#1f4556",
+            "surface-container-highest": "#e0e3df",
+            "background": "#f7faf6",
+            "surface-container-low": "#f1f4f0",
+            "inverse-surface": "#2d312f",
+            "outline": "#6f7975",
+            "on-error-container": "#93000a",
+            "on-secondary-fixed-variant": "#364b44",
+            "secondary-container": "#cde5db",
+            "on-surface-variant": "#3f4945",
+            "secondary": "#4d635b",
+            "tertiary-container": "#385d6e",
+            "tertiary-fixed": "#c2e8fc",
+            "surface-tint": "#226958",
+            "primary-container": "#1a6352"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xs": "0.25rem",
+            "margin": "1rem",
+            "gutter": "1rem",
+            "space-xl": "2rem",
+            "space-lg": "1.5rem",
+            "margin-tablet": "2rem",
+            "gutter-desktop": "1.5rem",
+            "gutter-tablet": "1.5rem",
+            "space-md": "1rem",
+            "margin-desktop": "3rem",
+            "space-sm": "0.5rem"
+          },
+          "fontFamily": {
+            "headline-md": ["Inter"],
+            "headline-lg-mobile": ["Inter"],
+            "body-sm": ["Inter"],
+            "title-lg": ["Inter"],
+            "headline-sm": ["Inter"],
+            "display-lg": ["Inter"],
+            "label-lg": ["Inter"],
+            "label-md": ["Inter"],
+            "label-sm": ["Inter"],
+            "body-md": ["Inter"],
+            "title-sm": ["Inter"],
+            "body-lg": ["Inter"],
+            "title-md": ["Inter"],
+            "headline-lg": ["Inter"],
+            "mono": ["JetBrains Mono", "monospace"]
+          },
+          "fontSize": {
+            "headline-md": ["28px", { "lineHeight": "36px", "letterSpacing": "0px", "fontWeight": "400" }],
+            "headline-lg-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "0px", "fontWeight": "500" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.4px", "fontWeight": "400" }],
+            "title-lg": ["22px", { "lineHeight": "28px", "letterSpacing": "0px", "fontWeight": "400" }],
+            "headline-sm": ["24px", { "lineHeight": "32px", "letterSpacing": "0px", "fontWeight": "400" }],
+            "display-lg": ["57px", { "lineHeight": "64px", "letterSpacing": "-0.25px", "fontWeight": "400" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.1px", "fontWeight": "500" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500" }],
+            "label-sm": ["11px", { "lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500" }],
+            "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.25px", "fontWeight": "400" }],
+            "title-sm": ["14px", { "lineHeight": "20px", "letterSpacing": "0.1px", "fontWeight": "500" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "0.5px", "fontWeight": "400" }],
+            "title-md": ["16px", { "lineHeight": "24px", "letterSpacing": "0.15px", "fontWeight": "500" }],
+            "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "0px", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    ::selection {
+      background-color: #abf0da;
+      color: #002019;
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface antialiased font-body-md text-body-md selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- 1. En-tête (TopNavBar) - Injected style keys strictly executed -->
+<header class="bg-surface/90 dark:bg-inverse-surface/90 backdrop-blur-md docked full-width top-0 sticky z-50 border-b border-outline-variant/20 dark:border-outline-variant/10 flat no shadows">
+<div class="w-full px-margin-tablet md:px-margin-desktop py-space-sm max-w-[1200px] mx-auto flex items-center justify-between">
+<!-- Logo Bouclier & Identity -->
+<a class="font-title-lg text-title-lg font-headline-md tracking-tight text-primary dark:text-inverse-primary flex items-center gap-2 group" href="#">
+<span class="w-9 h-9 rounded-full bg-primary-container text-on-primary flex items-center justify-center transition-transform duration-200 group-hover:scale-105" data-icon="shield">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">shield</span>
+</span>
+<span class="font-title-lg text-title-lg font-bold tracking-tight text-primary">nomorecallcenter</span>
+<span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-secondary-container text-on-secondary-container border border-outline-variant/30">
+          v1.4 - Open Source
+        </span>
+</a>
+<!-- Desktop Navigation Links -->
+<nav class="hidden md:flex items-center gap-space-lg">
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-label-lg text-label-lg py-2 hover:text-primary dark:hover:text-inverse-primary transition-colors duration-150" href="#fonctionnement">Fonctionnement</a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-label-lg text-label-lg py-2 hover:text-primary dark:hover:text-inverse-primary transition-colors duration-150" href="#auto-hebergement">Auto-hébergement</a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-label-lg text-label-lg py-2 hover:text-primary dark:hover:text-inverse-primary transition-colors duration-150" href="#vie-privee">Vie privée &amp; ARCEP</a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-label-lg text-label-lg py-2 hover:text-primary dark:hover:text-inverse-primary transition-colors duration-150" href="#documentation">Documentation</a>
+</nav>
+<!-- Trailing Action Buttons -->
+<div class="flex items-center gap-space-sm">
+<a class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-outline-variant text-primary font-label-md text-label-md hover:bg-surface-container-high transition-colors duration-200 active:scale-[0.98]" href="https://github.com" rel="noopener noreferrer" target="_blank">
+<span class="material-symbols-outlined text-[18px]" data-icon="code">code</span>
+<span>GitHub</span>
+</a>
+<a class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-primary-container text-on-primary font-label-md text-label-md hover:opacity-95 transition-all duration-200 active:scale-[0.98] shadow-sm" href="#telecharger">
+<span class="material-symbols-outlined text-[18px]" data-icon="shield">shield</span>
+<span>F-Droid</span>
+</a>
+</div>
+</div>
+</header>
+<main>
+<!-- 2. Hero Section -->
+<section class="relative overflow-hidden pt-12 pb-20 md:pt-20 md:pb-28">
+<!-- Ambient gentle tint background -->
+<div class="absolute inset-0 bg-gradient-to-b from-surface-container-low/70 via-surface to-surface pointer-events-none -z-10"></div>
+<div class="w-full max-w-[1200px] mx-auto px-margin-tablet md:px-margin-desktop">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+<!-- Hero Text -->
+<div class="lg:col-span-7 flex flex-col gap-6">
+<div class="inline-flex items-center gap-2 self-start px-3 py-1 rounded-full bg-secondary-container/70 border border-outline-variant/30 text-on-secondary-container">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="font-label-sm text-label-sm">Bouclier actif local · Zéro télémétrie</span>
+</div>
+<h1 class="font-headline-lg md:text-[44px] md:leading-[52px] text-headline-lg font-bold tracking-tight text-on-surface">
+              Un téléphone silencieux, un contrôle limpide.
+            </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-xl">
+              Bloquez nativement les centres d'appels et le démarchage intrusif sur Android. Décentralisé, auto-hébergeable et conçu sans compromis pour votre vie privée.
+            </p>
+<!-- Actions CTA -->
+<div class="flex flex-wrap items-center gap-4 pt-2">
+<a class="inline-flex items-center gap-2 px-6 h-12 rounded-full bg-primary-container text-on-primary font-label-lg text-label-lg transition-transform hover:scale-[1.01] active:scale-[0.98] shadow-sm" href="#telecharger">
+<span class="material-symbols-outlined text-[20px]" data-icon="android">android</span>
+<span>Télécharger sur F-Droid</span>
+</a>
+<a class="inline-flex items-center gap-2 px-5 h-12 rounded-full border border-outline-variant bg-surface-container-lowest text-primary font-label-lg text-label-lg hover:bg-surface-container-low transition-colors active:scale-[0.98]" href="#auto-hebergement">
+<span class="material-symbols-outlined text-[20px]" data-icon="dns">dns</span>
+<span>Guide d'auto-hébergement</span>
+</a>
+<a class="inline-flex items-center gap-1.5 px-3 py-2 text-on-surface-variant hover:text-primary font-label-md text-label-md transition-colors" href="#vie-privee">
+<span class="material-symbols-outlined text-[18px]" data-icon="policy">policy</span>
+<span class="underline underline-offset-4 decoration-outline-variant">Découvrir la liste ARCEP</span>
+</a>
+</div>
+<!-- Trust Micro-Badges -->
+<div class="pt-4 flex flex-wrap items-center gap-6 text-on-surface-variant font-label-sm text-label-sm">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="verified_user">verified_user</span>
+<span>Sans compte utilisateur</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="terminal">terminal</span>
+<span>Licence libre AGPLv3</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="cloud_off">cloud_off</span>
+<span>Exécution 100% hors ligne</span>
+</div>
+</div>
+</div>
+<!-- Hero Mockup: Situational Call Screening Proof -->
+<div class="lg:col-span-5">
+<div class="relative mx-auto max-w-[340px] rounded-[36px] p-3 bg-surface-container-high border border-outline-variant/40 shadow-sm">
+<!-- Smartphone frame styling -->
+<div class="rounded-[28px] bg-surface-container-lowest p-5 flex flex-col gap-4 border border-outline-variant/20 overflow-hidden">
+<!-- Status bar simulation -->
+<div class="flex justify-between items-center text-on-surface-variant font-mono text-[11px] opacity-70">
+<span>14:02</span>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[14px]" data-icon="signal_cellular_alt">signal_cellular_alt</span>
+<span class="material-symbols-outlined text-[14px]" data-icon="wifi">wifi</span>
+<span class="material-symbols-outlined text-[14px]" data-icon="battery_full">battery_full</span>
+</div>
+</div>
+<!-- Call Interception Card -->
+<div class="mt-2 rounded-2xl bg-surface-container-low p-4 border border-outline-variant/30 flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-error-container text-on-error-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]" data-icon="call_end">call_end</span>
+</div>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-error font-medium">Appel intercepté</span>
+</div>
+<span class="font-mono text-body-sm text-on-surface-variant">0.8 ms</span>
+</div>
+<div>
+<p class="font-title-md text-title-md font-mono text-on-surface tracking-tight font-medium">+33 1 62 49 18 ••</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Démarchage commercial détecté</p>
+</div>
+<div class="pt-2 border-t border-outline-variant/20 flex flex-col gap-1.5">
+<div class="flex items-center justify-between text-body-sm">
+<span class="text-on-surface-variant">Règle appliquée :</span>
+<span class="font-medium text-primary">Plage légale ARCEP (0162)</span>
+</div>
+<div class="flex items-center justify-between text-body-sm">
+<span class="text-on-surface-variant">Action Android :</span>
+<span class="font-medium text-on-surface">Rejet silencieux natif</span>
+</div>
+</div>
+</div>
+<!-- Local Integrity badge -->
+<div class="p-3 rounded-xl bg-secondary-container/40 flex items-center gap-2.5">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="check_circle">check_circle</span>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm font-medium text-on-secondary-fixed">Zéro transmission de carnet</span>
+<span class="font-body-sm text-[11px] text-on-surface-variant leading-tight">Vérification SQLite en mémoire vive locale</span>
+</div>
+</div>
+<div class="text-center pt-1">
+<span class="font-mono text-[11px] text-outline">CallScreeningService API 34 · Validé</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 3. Section 'Comment ça fonctionne' (3 étapes claires) -->
+<section class="py-20 bg-surface-container-low border-y border-outline-variant/20" id="fonctionnement">
+<div class="w-full max-w-[1200px] mx-auto px-margin-tablet md:px-margin-desktop">
+<div class="max-w-2xl mx-auto text-center mb-16">
+<span class="font-label-md text-label-md uppercase tracking-wider text-primary font-medium">Architecture locale</span>
+<h2 class="font-headline-md text-headline-md font-semibold text-on-surface mt-2">
+            Comment ça fonctionne
+          </h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-3">
+            Trois étapes simples pour restaurer la sérénité de votre smartphone, sans intermédiaires commerciaux ni télémétrie.
+          </p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Étape 1 -->
+<div class="bg-surface rounded-2xl p-6 border border-outline-variant/20 flex flex-col justify-between hover:border-outline-variant/60 transition-colors">
+<div>
+<div class="w-12 h-12 rounded-full bg-secondary-container text-primary flex items-center justify-center font-bold text-title-md mb-6">
+                1
+              </div>
+<h3 class="font-title-md text-title-md font-medium text-on-surface mb-2">
+                Installez l'application libre
+              </h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                Téléchargeable sans compte via F-Droid ou via APK signée. Fonctionne directement avec une base SQLite ultra-légère embarquée en local sur votre appareil.
+              </p>
+</div>
+<div class="mt-6 pt-4 border-t border-outline-variant/20 flex items-center gap-2 text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="storage">storage</span>
+<span>Empreinte mémoire : &lt; 8 Mo</span>
+</div>
+</div>
+<!-- Étape 2 -->
+<div class="bg-surface rounded-2xl p-6 border border-outline-variant/20 flex flex-col justify-between hover:border-outline-variant/60 transition-colors">
+<div>
+<div class="w-12 h-12 rounded-full bg-secondary-container text-primary flex items-center justify-center font-bold text-title-md mb-6">
+                2
+              </div>
+<h3 class="font-title-md text-title-md font-medium text-on-surface mb-2">
+                Connectez votre instance
+              </h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                Rejoignez l'instance communautaire par défaut ou déployez votre propre backend Docker/Podman en 2 minutes pour synchroniser vos propres règles et listes.
+              </p>
+</div>
+<div class="mt-6 pt-4 border-t border-outline-variant/20 flex items-center gap-2 text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="hub">hub</span>
+<span>Protocole chiffré REST / JSON</span>
+</div>
+</div>
+<!-- Étape 3 -->
+<div class="bg-surface rounded-2xl p-6 border border-outline-variant/20 flex flex-col justify-between hover:border-outline-variant/60 transition-colors">
+<div>
+<div class="w-12 h-12 rounded-full bg-secondary-container text-primary flex items-center justify-center font-bold text-title-md mb-6">
+                3
+              </div>
+<h3 class="font-title-md text-title-md font-medium text-on-surface mb-2">
+                Activez le filtrage natif
+              </h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                Accordez le rôle officiel Android <span class="font-mono text-body-sm bg-surface-container px-1 py-0.5 rounded">CallScreeningService</span> : l'appareil rejette silencieusement les plages abusives avant même la première sonnerie.
+              </p>
+</div>
+<div class="mt-6 pt-4 border-t border-outline-variant/20 flex items-center gap-2 text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="do_not_disturb_on">do_not_disturb_on</span>
+<span>Rejet instantané en 0.8ms</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 4. Section 'Auto-hébergement souverain vs Instance de confiance' -->
+<section class="py-20" id="auto-hebergement">
+<div class="w-full max-w-[1200px] mx-auto px-margin-tablet md:px-margin-desktop">
+<div class="max-w-2xl mb-12">
+<span class="font-label-md text-label-md uppercase tracking-wider text-primary font-medium">Contrôle infrastructurel</span>
+<h2 class="font-headline-md text-headline-md font-semibold text-on-surface mt-2">
+            Auto-hébergement souverain vs Instance de confiance
+          </h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-2">
+            Choisissez la topologie qui convient à vos exigences d'administration et de confidentialité.
+          </p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+<!-- Option A: Instance communautaire modérée -->
+<div class="bg-surface-container-low rounded-3xl p-8 border border-outline-variant/20 flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-4">
+<span class="px-3 py-1 rounded-full text-label-sm font-label-sm bg-surface-container text-on-surface font-medium">Option clé en main</span>
+<span class="material-symbols-outlined text-primary text-[24px]" data-icon="public">public</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm font-medium text-on-surface mb-3">
+                Instance communautaire modérée
+              </h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6">
+                Accès sans configuration technique. Synchronisation chiffrée périodique des plages ARCEP officielles et des signalements qualifiés et validés par l'équipe de modération bénévole.
+              </p>
+<ul class="space-y-3 font-body-md text-body-md text-on-surface-variant">
+<li class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-primary text-[18px] shrink-0 mt-0.5" data-icon="check">check</span>
+<span>Mises à jour automatiques des règles ARCEP hebdomadaires</span>
+</li>
+<li class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-primary text-[18px] shrink-0 mt-0.5" data-icon="check">check</span>
+<span>Zéro inscription requise, authentification par token anonyme</span>
+</li>
+<li class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-primary text-[18px] shrink-0 mt-0.5" data-icon="check">check</span>
+<span>Hébergement associatif localisé en Union Européenne</span>
+</li>
+</ul>
+</div>
+<div class="mt-8 pt-6 border-t border-outline-variant/20">
+<a class="inline-flex items-center gap-2 text-primary font-label-lg text-label-lg font-medium hover:underline" href="#telecharger">
+<span>Rejoindre via l'application F-Droid</span>
+<span class="material-symbols-outlined text-[18px]" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Option B: Serveur autonome (Self-hosted) -->
+<div class="bg-surface-container-lowest rounded-3xl p-8 border-2 border-primary/20 flex flex-col justify-between shadow-sm">
+<div>
+<div class="flex items-center justify-between mb-4">
+<span class="px-3 py-1 rounded-full text-label-sm font-label-sm bg-primary-container text-on-primary font-medium">Contrôle intégral</span>
+<span class="material-symbols-outlined text-primary text-[24px]" data-icon="terminal">terminal</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm font-medium text-on-surface mb-3">
+                Serveur autonome (Self-hosted)
+              </h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6">
+                Contrôle total via un conteneur unique sous licence AGPLv3. Stockage SQLite local, fédération peer-to-peer optionnelle et indépendance absolue de tout tiers (Google, AWS, cloud public).
+              </p>
+<!-- Console Box stylisée -->
+<div class="rounded-xl bg-inverse-surface text-inverse-on-surface p-4 font-mono text-body-sm mb-6 border border-outline-variant/30 overflow-x-auto">
+<div class="flex items-center justify-between text-outline-variant mb-2 text-[11px]">
+<span>docker-compose.yml</span>
+<span class="text-inverse-primary font-sans font-medium">Conteneur officiel</span>
+</div>
+<pre class="leading-relaxed text-[13px] text-surface-dim"><code>services:
+  nomorecallcenter:
+    image: ghcr.io/nomorecallcenter/server:1.4
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./data:/var/lib/nomorecallcenter
+    environment:
+      - ARCEP_SYNC_ENABLED=true
+      - TELEMETRY=disabled</code></pre>
+</div>
+<ul class="space-y-2.5 font-body-md text-body-md text-on-surface-variant">
+<li class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-primary text-[18px] shrink-0 mt-0.5" data-icon="check">check</span>
+<span>Gestion fine de vos listes blanches et expressions régulières (Regex)</span>
+</li>
+<li class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-primary text-[18px] shrink-0 mt-0.5" data-icon="check">check</span>
+<span>Support natif ARM64 pour Raspberry Pi &amp; VPS économiques</span>
+</li>
+</ul>
+</div>
+<div class="mt-8 pt-6 border-t border-outline-variant/20 flex items-center justify-between">
+<a class="inline-flex items-center gap-2 text-primary font-label-lg text-label-lg font-medium hover:underline" href="#documentation">
+<span>Lire la documentation Docker</span>
+<span class="material-symbols-outlined text-[18px]" data-icon="arrow_forward">arrow_forward</span>
+</a>
+<span class="font-mono text-label-sm text-outline">v1.4.2</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 5. Section 'Vie privée par conception & Respect du cadre ARCEP' -->
+<section class="py-20 bg-surface-container-low border-t border-outline-variant/20" id="vie-privee">
+<div class="w-full max-w-[1200px] mx-auto px-margin-tablet md:px-margin-desktop">
+<div class="max-w-2xl mb-14">
+<span class="font-label-md text-label-md uppercase tracking-wider text-primary font-medium">Éthique &amp; Légalité</span>
+<h2 class="font-headline-md text-headline-md font-semibold text-on-surface mt-2">
+            Vie privée par conception &amp; Respect du cadre ARCEP
+          </h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-2">
+            Les 3 piliers éthiques assurant que votre bouclier ne se transforme jamais en outil de surveillance.
+          </p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Pilier 1 -->
+<div class="bg-surface rounded-2xl p-7 border border-outline-variant/20 flex flex-col gap-4">
+<div class="w-10 h-10 rounded-full bg-secondary-container text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]" data-icon="gavel">gavel</span>
+</div>
+<h3 class="font-title-md text-title-md font-medium text-on-surface">
+              Plages officielles ARCEP intégrées
+            </h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+              Pré-chargement des préfixes réservés au démarchage commercial en France par l'autorité de régulation :
+            </p>
+<div class="flex flex-wrap gap-1.5 pt-1">
+<span class="px-2 py-1 rounded bg-surface-container font-mono text-label-sm text-on-surface">0162</span>
+<span class="px-2 py-1 rounded bg-surface-container font-mono text-label-sm text-on-surface">0163</span>
+<span class="px-2 py-1 rounded bg-surface-container font-mono text-label-sm text-on-surface">0270</span>
+<span class="px-2 py-1 rounded bg-surface-container font-mono text-label-sm text-on-surface">0424</span>
+<span class="px-2 py-1 rounded bg-surface-container font-mono text-label-sm text-on-surface">0948</span>
+<span class="px-2 py-1 rounded bg-surface-container-high font-mono text-label-sm text-on-surface-variant">+12 autres</span>
+</div>
+<p class="font-body-sm text-body-sm text-outline mt-auto pt-2">
+              Conformité avec le plan national de numérotation ARCEP.
+            </p>
+</div>
+<!-- Pilier 2 -->
+<div class="bg-surface rounded-2xl p-7 border border-outline-variant/20 flex flex-col gap-4">
+<div class="w-10 h-10 rounded-full bg-secondary-container text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]" data-icon="key">key</span>
+</div>
+<h3 class="font-title-md text-title-md font-medium text-on-surface">
+              Cryptographie SHA-256
+            </h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+              Seuls des préfixes tronqués et des empreintes cryptographiques normalisées sont synchronisés. Aucun numéro complet ni métadonnée personnelle n'est jamais stocké ni diffusé.
+            </p>
+<div class="mt-auto p-3 rounded-xl bg-surface-container-lowest border border-outline-variant/30 font-mono text-body-sm text-on-surface-variant">
+<div class="text-[11px] text-outline mb-1">Hash local unilatéral :</div>
+<div class="truncate text-[12px] text-primary">sha256(+33162...) → 8f4c9...</div>
+</div>
+</div>
+<!-- Pilier 3 -->
+<div class="bg-surface rounded-2xl p-7 border border-outline-variant/20 flex flex-col gap-4">
+<div class="w-10 h-10 rounded-full bg-secondary-container text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]" data-icon="visibility_off">visibility_off</span>
+</div>
+<h3 class="font-title-md text-title-md font-medium text-on-surface">
+              Zéro tracker, zéro publicité
+            </h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+              Ni SDK tiers, ni Firebase, ni régie publicitaire, ni analyse de comportement. L'application ne demande jamais l'accès de lecture à votre carnet de contacts personnel.
+            </p>
+<div class="mt-auto flex items-center gap-2 pt-2 text-on-surface font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="verified">verified</span>
+<span>Audit Exodus Privacy : 0 pisteur</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 6. Section 'Documentation rapide & Ressources développeur' -->
+<section class="py-20" id="documentation">
+<div class="w-full max-w-[1200px] mx-auto px-margin-tablet md:px-margin-desktop">
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+<div>
+<span class="font-label-md text-label-md uppercase tracking-wider text-primary font-medium">Écosystème technique</span>
+<h2 class="font-headline-md text-headline-md font-semibold text-on-surface mt-2">
+              Documentation rapide &amp; Ressources développeur
+            </h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-2">
+              Tout le nécessaire pour intégrer, déployer ou étendre le protocole.
+            </p>
+</div>
+<a class="inline-flex items-center gap-2 text-primary font-label-lg text-label-lg hover:underline shrink-0" href="https://github.com" rel="noopener noreferrer" target="_blank">
+<span>Dépôt Git principal</span>
+<span class="material-symbols-outlined text-[18px]" data-icon="open_in_new">open_in_new</span>
+</a>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Doc Card 1 -->
+<a class="group p-6 rounded-2xl bg-surface-container-low hover:bg-surface-container transition-colors border border-outline-variant/20 flex flex-col justify-between" href="#">
+<div>
+<div class="w-10 h-10 rounded-full bg-surface text-primary flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[20px]" data-icon="smartphone">smartphone</span>
+</div>
+<h3 class="font-title-sm text-title-sm font-medium text-on-surface mb-2">
+                Guide Android CallScreening
+              </h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                Prise en main de l'API 29+, gestion des permissions d'exécution sans batterie optimisée.
+              </p>
+</div>
+<div class="mt-6 flex items-center gap-1 font-label-sm text-label-sm text-primary">
+<span>Consulter le guide</span>
+<span class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform" data-icon="chevron_right">chevron_right</span>
+</div>
+</a>
+<!-- Doc Card 2 -->
+<a class="group p-6 rounded-2xl bg-surface-container-low hover:bg-surface-container transition-colors border border-outline-variant/20 flex flex-col justify-between" href="#">
+<div>
+<div class="w-10 h-10 rounded-full bg-surface text-primary flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[20px]" data-icon="router">router</span>
+</div>
+<h3 class="font-title-sm text-title-sm font-medium text-on-surface mb-2">
+                Reverse-Proxy &amp; SSL
+              </h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                Snippets testés pour Nginx, Traefik et Caddy avec terminaison TLS et en-têtes durcis.
+              </p>
+</div>
+<div class="mt-6 flex items-center gap-1 font-label-sm text-label-sm text-primary">
+<span>Voir configurations</span>
+<span class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform" data-icon="chevron_right">chevron_right</span>
+</div>
+</a>
+<!-- Doc Card 3 -->
+<a class="group p-6 rounded-2xl bg-surface-container-low hover:bg-surface-container transition-colors border border-outline-variant/20 flex flex-col justify-between" href="#">
+<div>
+<div class="w-10 h-10 rounded-full bg-surface text-primary flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[20px]" data-icon="api">api</span>
+</div>
+<h3 class="font-title-sm text-title-sm font-medium text-on-surface mb-2">
+                API REST &amp; Webhooks
+              </h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                Spécification OpenAPI 3.1 pour l'alimentation de listes et intégration PBX/Asterisk/SIP.
+              </p>
+</div>
+<div class="mt-6 flex items-center gap-1 font-label-sm text-label-sm text-primary">
+<span>Explorer l'API</span>
+<span class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform" data-icon="chevron_right">chevron_right</span>
+</div>
+</a>
+<!-- Doc Card 4 -->
+<a class="group p-6 rounded-2xl bg-surface-container-low hover:bg-surface-container transition-colors border border-outline-variant/20 flex flex-col justify-between" href="#">
+<div>
+<div class="w-10 h-10 rounded-full bg-surface text-primary flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[20px]" data-icon="download">download</span>
+</div>
+<h3 class="font-title-sm text-title-sm font-medium text-on-surface mb-2">
+                Listes Brutes CSV / JSON
+              </h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                Téléchargement brut des préfixes ARCEP et listes communautaires sous licence ouverte CC BY-SA 4.0.
+              </p>
+</div>
+<div class="mt-6 flex items-center gap-1 font-label-sm text-label-sm text-primary">
+<span>Télécharger les jeux</span>
+<span class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform" data-icon="chevron_right">chevron_right</span>
+</div>
+</a>
+</div>
+</div>
+</section>
+<!-- Section Appel au téléchargement (F-Droid & Source) -->
+<section class="py-16 bg-surface-container-high border-t border-outline-variant/20" id="telecharger">
+<div class="w-full max-w-[1200px] mx-auto px-margin-tablet md:px-margin-desktop text-center">
+<div class="max-w-xl mx-auto flex flex-col items-center gap-6">
+<div class="w-14 h-14 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[28px]" data-icon="shield">shield</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm font-semibold text-on-surface">
+            Prêt à retrouver le silence ?
+          </h2>
+<p class="font-body-md text-body-md text-on-surface-variant">
+            nomorecallcenter est gratuit, sans publicité et maintenu par une communauté passionnée de vie privée.
+          </p>
+<div class="flex flex-wrap items-center justify-center gap-4">
+<a class="inline-flex items-center gap-2 px-6 h-12 rounded-full bg-primary text-on-primary font-label-lg text-label-lg hover:opacity-95 transition-all active:scale-[0.98]" href="https://f-droid.org" rel="noopener noreferrer" target="_blank">
+<span class="material-symbols-outlined text-[20px]" data-icon="android">android</span>
+<span>Installer via F-Droid</span>
+</a>
+<a class="inline-flex items-center gap-2 px-6 h-12 rounded-full border border-outline-variant bg-surface text-on-surface font-label-lg text-label-lg hover:bg-surface-container-low transition-colors active:scale-[0.98]" href="https://github.com" rel="noopener noreferrer" target="_blank">
+<span class="material-symbols-outlined text-[20px]" data-icon="download">download</span>
+<span>Télécharger l'APK v1.4</span>
+</a>
+</div>
+<span class="font-mono text-body-sm text-outline">Empreinte SHA-256 APK : e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855</span>
+</div>
+</div>
+</section>
+</main>
+<!-- 7. Pied de page (Footer) - strictly adhering to Shared Components JSON -->
+<footer class="bg-surface-container-low dark:bg-inverse-surface border-t border-outline-variant/20 dark:border-outline-variant/10 flat no shadows docked full-width bottom">
+<div class="w-full px-margin-tablet md:px-margin-desktop py-space-xl max-w-[1200px] mx-auto flex flex-col md:flex-row justify-between items-center gap-space-lg">
+<!-- Identity & Copyright statement as per JSON mandate -->
+<div class="flex flex-col gap-2 max-w-xl text-center md:text-left">
+<div class="font-title-md text-title-md text-primary dark:text-inverse-primary font-bold flex items-center justify-center md:justify-start gap-2">
+<span class="material-symbols-outlined text-[20px]" data-icon="shield">shield</span>
+<span>nomorecallcenter</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant dark:text-inverse-on-surface">
+          nomorecallcenter — Logiciel libre sous licence AGPLv3. Données de préfixes sous licence CC BY-SA 4.0. Souveraineté et respect strict du cadre réglementaire ARCEP.
+        </p>
+</div>
+<!-- Footer Navigation Links matching JSON exactly -->
+<nav class="flex flex-wrap justify-center md:justify-end gap-x-6 gap-y-3 font-label-md text-label-md">
+<a class="text-on-surface-variant dark:text-inverse-on-surface hover:text-primary dark:hover:text-inverse-primary transition-colors duration-150" href="https://github.com">Code source AGPLv3</a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface hover:text-primary dark:hover:text-inverse-primary transition-colors duration-150" href="https://f-droid.org">F-Droid</a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface hover:text-primary dark:hover:text-inverse-primary transition-colors duration-150" href="#vie-privee">Règles ARCEP France</a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface hover:text-primary dark:hover:text-inverse-primary transition-colors duration-150" href="#documentation">Documentation API &amp; SIP</a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface hover:text-primary dark:hover:text-inverse-primary transition-colors duration-150" href="#vie-privee">Mentions légales &amp; Télémétrie zéro</a>
+</nav>
+</div>
+</footer>
+</body></html>

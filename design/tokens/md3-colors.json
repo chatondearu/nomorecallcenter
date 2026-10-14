@@ -1,0 +1,60 @@
+{
+  "$schema_comment": "Light snapshot from Stitch DESIGN.md (Sérénité Téléphonique). Seed #1A6352. Dark scheme must be regenerated via material-color-utilities — do not invent dark hex ad hoc.",
+  "seed": "#1A6352",
+  "scheme": "tonalSpot",
+  "light": {
+    "primary": "#004a3c",
+    "onPrimary": "#ffffff",
+    "primaryContainer": "#1a6352",
+    "onPrimaryContainer": "#97dcc7",
+    "secondary": "#4d635b",
+    "onSecondary": "#ffffff",
+    "secondaryContainer": "#cde5db",
+    "onSecondaryContainer": "#51675f",
+    "tertiary": "#1f4556",
+    "onTertiary": "#ffffff",
+    "tertiaryContainer": "#385d6e",
+    "onTertiaryContainer": "#aed5e8",
+    "error": "#ba1a1a",
+    "onError": "#ffffff",
+    "errorContainer": "#ffdad6",
+    "onErrorContainer": "#93000a",
+    "background": "#f7faf6",
+    "onBackground": "#181c1a",
+    "surface": "#f7faf6",
+    "onSurface": "#181c1a",
+    "surfaceVariant": "#e0e3df",
+    "onSurfaceVariant": "#3f4945",
+    "surfaceContainerLowest": "#ffffff",
+    "surfaceContainerLow": "#f1f4f0",
+    "surfaceContainer": "#ecefeb",
+    "surfaceContainerHigh": "#e6e9e5",
+    "surfaceContainerHighest": "#e0e3df",
+    "outline": "#6f7975",
+    "outlineVariant": "#bfc9c4",
+    "inverseSurface": "#2d312f",
+    "inverseOnSurface": "#eef2ed",
+    "inversePrimary": "#8fd4bf",
+    "surfaceTint": "#226958"
+  },
+  "semantic": {
+    "statusBlocked": "#8E4A49",
+    "statusAllowed": "#2A6A4E",
+    "statusWatch": "#7D5721"
+  },
+  "radius": {
+    "xs": "4px",
+    "sm": "8px",
+    "md": "12px",
+    "lg": "16px",
+    "xl": "24px",
+    "full": "9999px"
+  },
+  "spacing": {
+    "xs": "4px",
+    "sm": "8px",
+    "md": "16px",
+    "lg": "24px",
+    "xl": "32px"
+  }
+}
