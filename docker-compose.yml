@@ -34,6 +34,7 @@ services:
       DATABASE_URL: postgresql://${POSTGRES_USER:-nmcc}:${POSTGRES_PASSWORD:-nmcc}@postgres:5432/${POSTGRES_DB:-nmcc}
       BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:-dev-only-better-auth-secret-change-me}
       BETTER_AUTH_URL: ${BETTER_AUTH_URL:-http://localhost:3000}
+      ADMIN_URL: ${ADMIN_URL:-http://localhost:3001}
       BOOTSTRAP_ADMIN_EMAIL: ${BOOTSTRAP_ADMIN_EMAIL:-}
       EVENTS_RETENTION_DAYS: ${EVENTS_RETENTION_DAYS:-90}
     ports:

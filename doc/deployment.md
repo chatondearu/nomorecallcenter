@@ -16,6 +16,19 @@ Acceptance: `pnpm lists:acceptance` (wipe volumes → migrate → admin session 
 
 Services: Postgres 17 + API image from `modules/app/Dockerfile`. Ports and env defaults match `.env.example`.
 
+## Admin UI (Slice 6)
+
+Local (API already up on port 3000):
+
+```bash
+pnpm dev:admin
+# http://127.0.0.1:3001 — login as bootstrap admin → Propositions → Approuver
+```
+
+`@nmcc/admin` proxies `/api/**` to `API_PROXY_TARGET` (default `http://127.0.0.1:3000`) so session cookies stay on the admin origin. Set `ADMIN_URL` on the API when using a non-default admin origin so Better Auth trusts it.
+
+Acceptance (alternate ports; wipes compose volumes): `pnpm admin:acceptance`.
+
 ## Android client (sideload)
 
 See [`android/README.md`](../android/README.md).

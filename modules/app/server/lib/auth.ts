@@ -13,6 +13,7 @@ const bootstrapAdminEmail = process.env.BOOTSTRAP_ADMIN_EMAIL?.trim().toLowerCas
 const trustedOrigins = Array.from(new Set([
   betterAuthUrl,
   process.env.NUXT_PUBLIC_BASE_URL?.replace(/\/$/, ''),
+  process.env.ADMIN_URL?.replace(/\/$/, ''),
   'http://localhost:3000',
   'http://127.0.0.1:3000',
   'http://localhost:3001',
