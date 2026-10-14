@@ -15,6 +15,13 @@
       "when": 1791980977468,
       "tag": "0001_absent_vargas",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791982077933,
+      "tag": "0002_outgoing_shaman",
+      "breakpoints": true
     }
   ]
 }

@@ -1,14 +1,17 @@
 export * from './auth'
 export * from './invites'
+export * from './lists'
 
 import { pgTable, text, timestamp } from 'drizzle-orm/pg-core'
 
 /**
- * Bootstrap table so Slice 0 can migrate a fresh DB.
- * Domain tables beyond auth land in later slices.
+ * Key/value meta (bootstrap + list sync revision counter).
  */
 export const schemaMeta = pgTable('schema_meta', {
   key: text('key').primaryKey(),
   value: text('value').notNull(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
 })
+
+/** schema_meta key for shared list sync revision */
+export const LISTS_REVISION_KEY = 'lists.revision'

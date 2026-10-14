@@ -3,11 +3,13 @@
 Open-source Android call-screening client with a self-hosted multi-user backend
 (Nuxt/Nitro + Postgres + Drizzle). AGPL-3.0.
 
-Status: Slice 1 auth (Better Auth email/password, bootstrap admin, invite-only signup).
+Status: Slice 2 lists (ARCEP/data.gouv seed + authenticated sync). Auth from Slice 1.
 
 Product docs: [`prd/PRD-1-mvp-and-vision.md`](prd/PRD-1-mvp-and-vision.md) ·
 [`plans/PLAN-1-mvp-and-vision.md`](plans/PLAN-1-mvp-and-vision.md) ·
 [`DESIGN.md`](DESIGN.md)
+
+Full documentation: [`doc/README.md`](doc/README.md)
 
 ## Monorepo layout
 
@@ -46,6 +48,7 @@ Or run the bundled scripts:
 pnpm install
 pnpm smoke              # compose up → health → migrate
 pnpm auth:acceptance    # wipe volumes → admin → invite → second user → reject open signup
+pnpm lists:acceptance   # wipe → migrate → admin → ARCEP seed → GET /api/lists/sync
 ```
 
 ### Auth bootstrap (Slice 1)
@@ -54,6 +57,12 @@ pnpm auth:acceptance    # wipe volumes → admin → invite → second user → 
 2. Optional harden: set `BOOTSTRAP_ADMIN_EMAIL` so only that address may register first.
 3. After bootstrap, signup requires a valid `inviteToken` (admin: `POST /api/invites`).
 4. Session check: `GET /api/me` (cookie session from Better Auth).
+
+### Shared lists (Slice 2)
+
+1. After migrate: `DATABASE_URL=… pnpm lists:seed` fetches ARCEP MAJNUM (LO 2.0) and upserts `0892*` demarchage prefixes (ADR-002 — no third-party dumps in the repo).
+2. Clients pull with a session cookie: `GET /api/lists/sync?since=0` (full active snapshot) or `since=<revision>` (deltas + tombstones).
+3. Offline: `pnpm lists:seed -- --fixture` or `ARCEP_SEED_FIXTURE=1`.
 
 Stop the stack: `pnpm compose:down` (add `-v` to wipe the Postgres volume).
 
@@ -72,4 +81,6 @@ pnpm dev:admin   # http://localhost:3001
 Copyright (C) 2026 nomorecallcenter contributors.
 
 This program is free software under the [GNU Affero General Public License v3.0](LICENSE)
-(AGPL-3.0-only). Default list data licenses are documented separately when shipped.
+(AGPL-3.0-only). Default list data is **derived** from ARCEP / data.gouv MAJNUM under
+**Licence Ouverte 2.0** (attribution + date on each entry); our published list policy is
+CC BY-SA (ADR-001 / ADR-002).

@@ -137,6 +137,9 @@ importers:
       typescript:
         specifier: 'catalog:'
         version: 5.8.3
+      vitest:
+        specifier: 3.2.1
+        version: 3.2.1(@types/node@22.15.29)(jiti@2.7.0)(terser@5.51.2)(tsx@4.19.4)(yaml@2.9.1)
 
   modules/shared:
     dependencies:

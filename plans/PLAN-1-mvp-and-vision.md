@@ -69,10 +69,10 @@ Tracer-bullet order: **slice 0** runnable compose + empty Nitro health; then **a
 
 ### Slice 2 — Lists
 
-- [ ] **List schema**: shared list entries (prefix pattern, source, attribution metadata, active flag).
-- [ ] **ARCEP seed pipeline**: script/job fetches or loads open data, writes seed entries with LO 2.0 attribution + date; no third-party dump vendored in repo.
-- [ ] **List sync API**: authenticated client can pull list revision/`since` and receive entries; inactive entries tombstoned or omitted per chosen sync contract.
-- [ ] **Acceptance**: seed produces ≥1 known FR demarchage-style prefix; sync endpoint returns it to a member session.
+- [x] **List schema**: shared list entries (prefix pattern, source, attribution metadata, active flag).
+- [x] **ARCEP seed pipeline**: script/job fetches or loads open data, writes seed entries with LO 2.0 attribution + date; no third-party dump vendored in repo.
+- [x] **List sync API**: authenticated client can pull list revision/`since` and receive entries; inactive entries tombstoned or omitted per chosen sync contract.
+- [x] **Acceptance**: seed produces ≥1 known FR demarchage-style prefix; sync endpoint returns it to a member session.
 
 ### Slice 3 — Personal rules + propose
 

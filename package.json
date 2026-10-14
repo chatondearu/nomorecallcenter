@@ -23,7 +23,9 @@
     "compose:down": "docker compose down",
     "compose:logs": "docker compose logs -f",
     "smoke": "bash scripts/smoke.sh",
-    "auth:acceptance": "bash scripts/auth-acceptance.sh"
+    "auth:acceptance": "bash scripts/auth-acceptance.sh",
+    "lists:seed": "pnpm --filter @nmcc/db lists:seed",
+    "lists:acceptance": "bash scripts/lists-acceptance.sh"
   },
   "devDependencies": {
     "@types/node": "catalog:",
