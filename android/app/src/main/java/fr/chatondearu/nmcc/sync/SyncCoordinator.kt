@@ -1,6 +1,6 @@
 package fr.chatondearu.nmcc.sync
 
-import fr.chatondearu.nmcc.data.LocalRuleStore
+import fr.chatondearu.nmcc.store.LocalRuleStore
 import fr.chatondearu.nmcc.network.ApiClient
 import fr.chatondearu.nmcc.prefs.AppPrefs
 import kotlinx.coroutines.Dispatchers
