@@ -93,14 +93,14 @@ Tracer-bullet order: **slice 0** runnable compose + empty Nitro health; then **a
 
 ### Slice 5 — Android client
 
-- [ ] **App shell**: Compose app, minSdk 29; settings for instance base URL; login with email/password against Better Auth/API.
-- [ ] **Call Screening role onboarding**: request `ROLE_CALL_SCREENING`; UI does not claim protected until role held.
-- [ ] **Screening service**: `onScreenCall` matches shared list + active personal rules; default silent reject; responds within platform budget.
-- [ ] **Rule matcher**: shared pure matching logic covered by unit tests (prefix/exact/TTL).
-- [ ] **Sync loop**: pull lists + personal rules; push local-originated personal rule changes; propose-to-global action calls API.
-- [ ] **Stats screens**: personal counters/history; optional instance aggregates view for members.
-- [ ] **Event reporting**: after screen decision, enqueue ingest (best-effort; offline queue acceptable).
-- [ ] **Acceptance**: instrumented or device test — synthetic handle matching a seeded prefix is rejected when role held; personal TTL rule syncs after create on API.
+- [x] **App shell**: Compose app, minSdk 29; settings for instance base URL; login with email/password against Better Auth/API.
+- [x] **Call Screening role onboarding**: request `ROLE_CALL_SCREENING`; UI does not claim protected until role held.
+- [x] **Screening service**: `onScreenCall` matches shared list + active personal rules; default silent reject; responds within platform budget.
+- [x] **Rule matcher**: shared pure matching logic covered by unit tests (prefix/exact/TTL).
+- [x] **Sync loop**: pull lists + personal rules; push local-originated personal rule changes; propose-to-global action calls API.
+- [x] **Stats screens**: personal counters/history; optional instance aggregates view for members.
+- [x] **Event reporting**: after screen decision, enqueue ingest (best-effort; offline queue acceptable).
+- [ ] **Acceptance**: instrumented or device test — synthetic handle matching a seeded prefix is rejected when role held; personal TTL rule syncs after create on API. *(device/SDK-dependent; matcher JVM coverage shipped)*
 
 ### Slice 6 — Admin UI
 
@@ -133,10 +133,10 @@ Seams under test (see Technical approach):
 
 - [ ] **API auth/invite**: integration tests against Postgres (testcontainer or compose profile).
 - [ ] **List seed + sync**: unit/integration on seed output + sync contract.
-- [ ] **Rule matcher + TTL**: pure unit tests (no Android runtime).
+- [x] **Rule matcher + TTL**: pure unit tests (no Android runtime).
 - [x] **Proposal moderation**: integration — pending → approve/reject side effects.
 - [x] **Stats aggregates**: integration with seeded events for two users.
-- [ ] **Android matcher / screening decision**: JVM unit tests for matcher; optional instrumented test for service wiring.
+- [x] **Android matcher / screening decision**: JVM unit tests for matcher; optional instrumented test for service wiring.
 - [ ] **Compose smoke**: scripted up → health → migrate → bootstrap admin.
 
 ## Verification

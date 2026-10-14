@@ -3,7 +3,7 @@
 Open-source Android call-screening client with a self-hosted multi-user backend
 (Nuxt/Nitro + Postgres + Drizzle). AGPL-3.0.
 
-Status: Slice 3 personal TTL rules + moderated propose/approve APIs.
+Status: Slice 5 Android Call Screening client (Compose, sync, stats).
 
 Product docs: [`prd/PRD-1-mvp-and-vision.md`](prd/PRD-1-mvp-and-vision.md) ·
 [`plans/PLAN-1-mvp-and-vision.md`](plans/PLAN-1-mvp-and-vision.md) ·
@@ -19,7 +19,7 @@ Full documentation: [`doc/README.md`](doc/README.md)
 | `modules/shared` | `@nmcc/shared` | Nuxt layer — UnoCSS + MD3 tokens (`#1A6352`) |
 | `modules/app` | `@nmcc/app` | Public API (Nitro REST) |
 | `modules/admin` | `@nmcc/admin` | Admin UI skeleton |
-| `android/` | — | Kotlin client placeholder (ADR-003) |
+| `android/` | — | Kotlin Compose Call Screening client (ADR-003) |
 
 ## Prerequisites
 
@@ -78,6 +78,18 @@ If ports `5432`/`3000` are busy, override: `API_PORT=3017 POSTGRES_PORT=5437 pnp
 Stop the stack: `pnpm compose:down` (add `-v` to wipe the Postgres volume).
 
 Default credentials match [`.env.example`](.env.example) (`nmcc` / `nmcc`). Change Postgres password and `BETTER_AUTH_SECRET` before any real deployment.
+
+## Android client
+
+```bash
+cd android
+./gradlew :matcher:test          # JVM unit tests (JDK 17; no Android SDK)
+# With ANDROID_HOME set:
+./gradlew :app:assembleDebug
+```
+
+Point the app at your instance URL, sign in, grant Call Screening role, then sync.
+Details: [`android/README.md`](android/README.md).
 
 ## Local web (optional)
 
