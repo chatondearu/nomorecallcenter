@@ -67,4 +67,5 @@ Cursor rule (if present): `.cursor/rules/product-memory.mdc`.
 - Stack (ADR-004): pnpm workspaces under `modules/*` — `@nmcc/db`, `@nmcc/shared`, `@nmcc/app`, `@nmcc/admin`; Android under `android/`.
 - Design (ADR-009): `DESIGN.md` + `design/tokens/md3-colors.json` seed `#1A6352`; UnoCSS MD3 in `@nmcc/shared`.
 - Verify: `pnpm install` → `pnpm smoke` (compose up → `GET /api/health` → drizzle migrate). Auth: `pnpm auth:acceptance`. Lists: `pnpm lists:acceptance`. Rules: `pnpm rules:acceptance`. Stats: `pnpm stats:acceptance`. Admin UI: `pnpm admin:acceptance`. Or see README / `doc/`.
-- License: AGPL-3.0-only (`LICENSE`).
+- License: AGPL-3.0-only (`LICENSE`); list attribution `NOTICE` (ARCEP LO 2.0 → CC BY-SA).
+- OCI: `modules/app/Dockerfile` + `.github/workflows/oci-api.yml` → GHCR `nmcc-api`; compose `DOCKER_IMAGE_API`.

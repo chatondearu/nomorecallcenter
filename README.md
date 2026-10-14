@@ -3,7 +3,7 @@
 Open-source Android call-screening client with a self-hosted multi-user backend
 (Nuxt/Nitro + Postgres + Drizzle). AGPL-3.0.
 
-Status: Slice 5 Android Call Screening client (Compose, sync, stats).
+Status: MVP packaging — OCI/compose, GitHub/F-Droid notes, self-host docs (Slice 7).
 
 Product docs: [`prd/PRD-1-mvp-and-vision.md`](prd/PRD-1-mvp-and-vision.md) ·
 [`plans/PLAN-1-mvp-and-vision.md`](plans/PLAN-1-mvp-and-vision.md) ·
@@ -18,78 +18,86 @@ Full documentation: [`doc/README.md`](doc/README.md)
 | `modules/db` | `@nmcc/db` | Drizzle schema, client, migrate |
 | `modules/shared` | `@nmcc/shared` | Nuxt layer — UnoCSS + MD3 tokens (`#1A6352`) |
 | `modules/app` | `@nmcc/app` | Public API (Nitro REST) |
-| `modules/admin` | `@nmcc/admin` | Admin UI skeleton |
+| `modules/admin` | `@nmcc/admin` | Admin UI (moderation, stats, invites) |
 | `android/` | — | Kotlin Compose Call Screening client (ADR-003) |
 
 ## Prerequisites
 
 - Node.js ≥ 22, pnpm ≥ 10
 - Docker + Docker Compose
+- Android: JDK 17 + SDK 35 for APK builds
 
 ## Self-host smoke path
 
+Compose → bootstrap → invite → Android URL → Call Screening role:
+
 ```bash
-# 1. Install workspace deps (once, for migrate from the host)
 pnpm install
-
-# 2. Bring up Postgres + API
 docker compose up -d --build
-
-# 3. Health check (expect HTTP 200 + {"ok":true,...})
 curl -fsS http://127.0.0.1:3000/api/health
 
-# 4. Apply Drizzle migrations on the fresh DB
 DATABASE_URL=postgresql://nmcc:nmcc@localhost:5432/nmcc pnpm db:migrate
+DATABASE_URL=postgresql://nmcc:nmcc@localhost:5432/nmcc pnpm lists:seed
+
+# First sign-up on an empty instance becomes admin
+curl -fsS -c /tmp/nmcc-admin.txt -X POST http://127.0.0.1:3000/api/auth/sign-up/email \
+  -H 'content-type: application/json' \
+  -d '{"name":"Admin","email":"admin@example.com","password":"change-me-now"}'
+
+# Invite a member (copy inviteToken into the second sign-up)
+curl -fsS -b /tmp/nmcc-admin.txt -X POST http://127.0.0.1:3000/api/invites \
+  -H 'content-type: application/json' \
+  -d '{}'
+
+pnpm dev:admin   # http://127.0.0.1:3001 — moderation UI
 ```
 
-Or run the bundled scripts:
+Then on Android (see [`android/README.md`](android/README.md)):
+
+1. Install a debug/release APK.
+2. Set **Instance URL** to the API (`http://10.0.2.2:3000` on emulator, or your LAN IP).
+3. Sign in with the invited account.
+4. Grant **Call Screening** — the app does not claim “protected” until the role is held.
+5. Sync; a seeded `0892*` prefix should silent-reject when the role is held.
+
+Or run bundled scripts:
 
 ```bash
-pnpm install
 pnpm smoke              # compose up → health → migrate
-pnpm auth:acceptance    # wipe volumes → admin → invite → second user → reject open signup
-pnpm lists:acceptance   # wipe → migrate → admin → ARCEP seed → GET /api/lists/sync
-pnpm rules:acceptance   # wipe → 7d rule → renew → propose → admin approve → shared list
-pnpm stats:acceptance   # wipe → two users ingest → personal vs instance + admin feed ACL
+pnpm auth:acceptance    # wipe → admin → invite → second user
+pnpm lists:acceptance   # ARCEP seed → GET /api/lists/sync
+pnpm rules:acceptance
+pnpm stats:acceptance
+pnpm admin:acceptance
 ```
 
-If ports `5432`/`3000` are busy, override: `API_PORT=3017 POSTGRES_PORT=5437 pnpm stats:acceptance`.
+Busy ports: `API_PORT=3017 POSTGRES_PORT=5437 pnpm …`. Stop: `pnpm compose:down` (`-v` wipes DB).
 
-### Auth bootstrap (Slice 1)
+Pre-built API image (GHCR): set `DOCKER_IMAGE_API=ghcr.io/<owner>/nmcc-api:<tag>` and
+`docker compose up -d` without `--build`. Details: [`doc/deployment.md`](doc/deployment.md).
 
-1. First successful `POST /api/auth/sign-up/email` on an empty instance becomes **admin**.
-2. Optional harden: set `BOOTSTRAP_ADMIN_EMAIL` so only that address may register first.
-3. After bootstrap, signup requires a valid `inviteToken` (admin: `POST /api/invites`).
-4. Session check: `GET /api/me` (cookie session from Better Auth).
+Default credentials match [`.env.example`](.env.example). Change Postgres password and
+`BETTER_AUTH_SECRET` before any real deployment.
 
-### Shared lists (Slice 2)
+### Feature notes
 
-1. After migrate: `DATABASE_URL=… pnpm lists:seed` fetches ARCEP MAJNUM (LO 2.0) and upserts `0892*` demarchage prefixes (ADR-002 — no third-party dumps in the repo).
-2. Clients pull with a session cookie: `GET /api/lists/sync?since=0` (full active snapshot) or `since=<revision>` (deltas + tombstones).
-3. Offline: `pnpm lists:seed -- --fixture` or `ARCEP_SEED_FIXTURE=1`.
-
-### Personal rules + proposals (Slice 3)
-
-1. Member creates a personal rule: `POST /api/rules` with `{ pattern, matchType, ttlPreset }` (`1h`/`24h`/`7d`/`30d`/`permanent`).
-2. Sync active rules: `GET /api/rules/sync` (expired omitted). Lifecycle: `…/renew`, `…/make-permanent`, `DELETE`.
-3. Propose to global: `POST /api/proposals` with `{ personalRuleId }` — stays `pending` (no shared-list mutate).
-4. Admin: `POST /api/proposals/:id/approve` upserts shared list; `reject` closes. Members get `403` on moderate.
-
-Stop the stack: `pnpm compose:down` (add `-v` to wipe the Postgres volume).
-
-Default credentials match [`.env.example`](.env.example) (`nmcc` / `nmcc`). Change Postgres password and `BETTER_AUTH_SECRET` before any real deployment.
+| Area | Pointer |
+| ---- | ------- |
+| Auth bootstrap / invites | First sign-up = admin; then invite-only (`POST /api/invites`) |
+| Shared lists | `pnpm lists:seed` (ARCEP LO 2.0); `GET /api/lists/sync` |
+| Personal rules / proposals | `POST /api/rules`, `POST /api/proposals`, admin approve/reject |
+| OCI + admin process | [`doc/deployment.md`](doc/deployment.md) |
 
 ## Android client
 
 ```bash
 cd android
-./gradlew :matcher:test          # JVM unit tests (JDK 17; no Android SDK)
-# With ANDROID_HOME set:
-./gradlew :app:assembleDebug
+./gradlew :matcher:test
+./gradlew :app:assembleDebug          # needs ANDROID_HOME
+./gradlew :app:assembleRelease :app:bundleRelease   # GitHub Release artifacts
 ```
 
-Point the app at your instance URL, sign in, grant Call Screening role, then sync.
-Details: [`android/README.md`](android/README.md).
+F-Droid-oriented notes (no Play-only deps): [`android/README.md`](android/README.md).
 
 ## Local web (optional)
 
@@ -105,5 +113,5 @@ Copyright (C) 2026 nomorecallcenter contributors.
 
 This program is free software under the [GNU Affero General Public License v3.0](LICENSE)
 (AGPL-3.0-only). Default list data is **derived** from ARCEP / data.gouv MAJNUM under
-**Licence Ouverte 2.0** (attribution + date on each entry); our published list policy is
-CC BY-SA (ADR-001 / ADR-002).
+**Licence Ouverte 2.0**; our published list policy is **CC BY-SA**. Full attribution:
+[`NOTICE`](NOTICE) (ADR-001 / ADR-002).

@@ -3,7 +3,9 @@
 - **Status**: approved
 - **GitHub**: [#1](https://github.com/chatondearu/nomorecallcenter/issues/1)
 - **Date**: 2026-10-13
+- **Updated**: 2026-10-14
 - **Tags**: #product #mvp #android #self-host
+- **Ship note**: PLAN-1 Slice 7 (packaging/docs) complete; keep **approved** (not `shipped`) until physical-device Call Screening acceptance and dual-device personal-rule sync in Success metrics are verified.
 
 ## Problem
 

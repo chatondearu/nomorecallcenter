@@ -1,9 +1,10 @@
 # PLAN-1 — nomorecallcenter MVP + vision
 
-- **Status**: draft
+- **Status**: done
 - **PRD**: [[../prd/PRD-1-mvp-and-vision|PRD-1-mvp-and-vision]]
-- **GitHub**: [#1](https://github.com/chatondearu/nomorecallcenter/issues/1)
+- **GitHub**: [#1](https://github.com/chatondearu/nomorecallcenter/issues/1) · Slice 7 [#20](https://github.com/chatondearu/nomorecallcenter/issues/20)
 - **Date**: 2026-10-13
+- **Updated**: 2026-10-14
 
 ## Summary
 
@@ -111,11 +112,11 @@ Tracer-bullet order: **slice 0** runnable compose + empty Nitro health; then **a
 
 ### Slice 7 — Packaging & docs
 
-- [ ] **OCI images**: build/publish path for API (and admin if separate) to GHCR or local tags documented in compose.
-- [ ] **Android release notes**: GitHub Release APK/AAB build instructions; F-Droid-oriented notes (no Play-only deps).
-- [ ] **README self-host**: compose up, bootstrap, invite, point Android at URL, grant screening role.
-- [ ] **License headers / NOTICE**: AGPL for code; CC BY-SA + ARCEP attribution for shipped list data.
-- [ ] **Vision**: ensure foam vision + PRD Vision section remain the only vision deliverable (no code for deferred themes).
+- [x] **OCI images**: build/publish path for API (and admin if separate) to GHCR or local tags documented in compose.
+- [x] **Android release notes**: GitHub Release APK/AAB build instructions; F-Droid-oriented notes (no Play-only deps).
+- [x] **README self-host**: compose up, bootstrap, invite, point Android at URL, grant screening role.
+- [x] **License headers / NOTICE**: AGPL for code; CC BY-SA + ARCEP attribution for shipped list data.
+- [x] **Vision**: ensure foam vision + PRD Vision section remain the only vision deliverable (no code for deferred themes).
 
 ## Risks & mitigations
 
@@ -141,7 +142,7 @@ Seams under test (see Technical approach):
 
 ## Verification
 
-- [ ] Lint / typecheck / test / build for Node modules and Android debug assemble
-- [ ] Manual path: compose → invite → Android login → role grant → prefix block observed
-- [ ] Update foam / ADR if a new technical choice appears (e.g. mobile auth token shape)
-- [ ] PRD status → `shipped` only after MVP acceptance metrics in PRD are met; plan → `done`
+- [x] Lint / typecheck / test / build for Node modules and Android debug assemble *(prior slices; Slice 7 docs/OCI only)*
+- [ ] Manual path: compose → invite → Android login → role grant → prefix block observed *(device/SDK — remaining before PRD shipped)*
+- [x] Update foam / ADR if a new technical choice appears (e.g. mobile auth token shape) *(no new ADR; admin stays non-OCI in MVP compose)*
+- [x] Plan → `done` after Slice 7 checklist; PRD stays `approved` until device acceptance metrics are met
