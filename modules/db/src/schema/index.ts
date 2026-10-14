@@ -1,6 +1,7 @@
 export * from './auth'
 export * from './invites'
 export * from './lists'
+export * from './rules'
 
 import { pgTable, text, timestamp } from 'drizzle-orm/pg-core'
 
