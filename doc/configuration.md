@@ -7,6 +7,7 @@ Values consumed by the stack (see also `.env.example`).
 | `DATABASE_URL` | `@nmcc/db` migrate/seed, API | Postgres connection string |
 | `POSTGRES_*` | Compose | DB name/user/password/port |
 | `API_PORT` | Compose / scripts | Host port for the API (default `3000`) |
+| `DOCKER_IMAGE_API` | Compose | API image name/tag (default `nmcc-api`; GHCR e.g. `ghcr.io/<owner>/nmcc-api:main`) |
 | `BETTER_AUTH_SECRET` | API | Required in real deployments |
 | `BETTER_AUTH_URL` | API | Public base URL for Better Auth |
 | `BOOTSTRAP_ADMIN_EMAIL` | API | Optional; restrict first admin email |

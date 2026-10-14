@@ -18,6 +18,8 @@ services:
       retries: 12
       start_period: 10s
 
+  # Local: docker compose up -d --build (tags nmcc-api).
+  # GHCR: DOCKER_IMAGE_API=ghcr.io/<owner>/nmcc-api:<tag> docker compose up -d
   api:
     build:
       context: .
