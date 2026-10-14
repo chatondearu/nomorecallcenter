@@ -26,7 +26,8 @@
     "auth:acceptance": "bash scripts/auth-acceptance.sh",
     "lists:seed": "pnpm --filter @nmcc/db lists:seed",
     "lists:acceptance": "bash scripts/lists-acceptance.sh",
-    "rules:acceptance": "bash scripts/rules-acceptance.sh"
+    "rules:acceptance": "bash scripts/rules-acceptance.sh",
+    "stats:acceptance": "bash scripts/stats-acceptance.sh"
   },
   "devDependencies": {
     "@types/node": "catalog:",
