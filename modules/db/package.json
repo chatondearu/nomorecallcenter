@@ -11,9 +11,11 @@
   "scripts": {
     "build": "tsc --noEmit -p tsconfig.json",
     "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
     "drizzle:generate": "drizzle-kit generate",
     "drizzle:migrate": "tsx src/migrate.ts",
-    "drizzle:studio": "drizzle-kit studio"
+    "drizzle:studio": "drizzle-kit studio",
+    "lists:seed": "tsx src/seed-lists.ts"
   },
   "dependencies": {
     "drizzle-orm": "catalog:",
@@ -23,6 +25,7 @@
     "@types/node": "catalog:",
     "drizzle-kit": "catalog:",
     "tsx": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vitest": "3.2.1"
   }
 }
