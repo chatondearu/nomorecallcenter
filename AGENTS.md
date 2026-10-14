@@ -66,5 +66,5 @@ Cursor rule (if present): `.cursor/rules/product-memory.mdc`.
 
 - Stack (ADR-004): pnpm workspaces under `modules/*` — `@nmcc/db`, `@nmcc/shared`, `@nmcc/app`, `@nmcc/admin`; Android under `android/`.
 - Design (ADR-009): `DESIGN.md` + `design/tokens/md3-colors.json` seed `#1A6352`; UnoCSS MD3 in `@nmcc/shared`.
-- Verify: `pnpm install` → `pnpm smoke` (compose up → `GET /api/health` → drizzle migrate). Auth: `pnpm auth:acceptance`. Lists: `pnpm lists:acceptance`. Rules: `pnpm rules:acceptance`. Or see README / `doc/`.
+- Verify: `pnpm install` → `pnpm smoke` (compose up → `GET /api/health` → drizzle migrate). Auth: `pnpm auth:acceptance`. Lists: `pnpm lists:acceptance`. Rules: `pnpm rules:acceptance`. Stats: `pnpm stats:acceptance`. Or see README / `doc/`.
 - License: AGPL-3.0-only (`LICENSE`).

@@ -12,3 +12,4 @@ Values consumed by the stack (see also `.env.example`).
 | `BOOTSTRAP_ADMIN_EMAIL` | API | Optional; restrict first admin email |
 | `ARCEP_MAJNUM_URL` | `pnpm lists:seed` | Override MAJNUM CSV URL (default ARCEP extranet) |
 | `ARCEP_SEED_FIXTURE` | `pnpm lists:seed` | Set `1` to seed a single `0892` fixture without network |
+| `EVENTS_RETENTION_DAYS` | API | Days to keep call events (default `90`); older rows purged/omitted |

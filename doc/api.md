@@ -74,3 +74,69 @@ Proposing never mutates the shared list until an admin approves (ADR-007).
 | `POST` | `/api/proposals/:id/reject` | admin | closes proposal; list unchanged |
 
 Members receive `403` on approve/reject/list.
+
+## Call events + stats
+
+Privacy: store **prefix** (2–8 digits) and/or **SHA-256 hash** only — clear full numbers are rejected (ADR-001 / ADR-006). Retention via `EVENTS_RETENTION_DAYS` (default `90`); older events are purged on write/read.
+
+### Ingest
+
+`POST /api/events` — authenticated.
+
+Body:
+
+```json
+{
+  "prefix": "0892",
+  "hash": "<64-char sha256 hex>",
+  "action": "blocked",
+  "occurredAt": "2026-10-14T12:00:00.000Z"
+}
+```
+
+- At least one of `prefix` / `hash` (alias `numberHash`) required.
+- `action`: `screened` | `blocked` | `allowed`.
+- `occurredAt` optional (defaults to server now).
+- Fields `number`, `phone`, `fullNumber` → `400`.
+
+Response: `{ event: { id, prefix, hash, action, occurredAt, userId } }`.
+
+### Personal stats
+
+`GET /api/stats/me` — authenticated.
+
+```json
+{
+  "scope": "personal",
+  "retentionCutoff": "...",
+  "counters": {
+    "7d": { "screened": 0, "blocked": 1, "allowed": 0 },
+    "30d": { "screened": 0, "blocked": 1, "allowed": 0 }
+  },
+  "topPrefixes": [{ "prefix": "0892", "count": 1 }],
+  "recent": [{ "id": "...", "prefix": "0892", "hash": null, "action": "blocked", "occurredAt": "..." }]
+}
+```
+
+### Instance stats
+
+`GET /api/stats/instance` — authenticated (member or admin).
+
+Same shape as personal with `scope: "instance"` and aggregates across users. Recent items omit `userId` for members.
+
+Admin extras on the same response:
+
+```json
+{
+  "proposalFunnel": { "submitted": 3, "pending": 1, "approved": 1, "rejected": 1 },
+  "eventVolume": 42
+}
+```
+
+`submitted` = pending + approved + rejected.
+
+### Admin live feed (poll)
+
+`GET /api/admin/events/feed?limit=50` — **admin only** (`403` for members).
+
+Returns `{ retentionCutoff, events: [{ id, prefix, hash, action, userId, occurredAt }] }` ordered newest-first (max `limit` 200).

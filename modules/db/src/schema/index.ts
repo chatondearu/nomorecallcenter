@@ -1,4 +1,5 @@
 export * from './auth'
+export * from './events'
 export * from './invites'
 export * from './lists'
 export * from './rules'

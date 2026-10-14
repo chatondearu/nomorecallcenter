@@ -50,9 +50,10 @@ pnpm smoke              # compose up → health → migrate
 pnpm auth:acceptance    # wipe volumes → admin → invite → second user → reject open signup
 pnpm lists:acceptance   # wipe → migrate → admin → ARCEP seed → GET /api/lists/sync
 pnpm rules:acceptance   # wipe → 7d rule → renew → propose → admin approve → shared list
+pnpm stats:acceptance   # wipe → two users ingest → personal vs instance + admin feed ACL
 ```
 
-If ports `5432`/`3000` are busy, override: `API_PORT=3001 POSTGRES_PORT=5433 pnpm rules:acceptance`.
+If ports `5432`/`3000` are busy, override: `API_PORT=3017 POSTGRES_PORT=5437 pnpm stats:acceptance`.
 
 ### Auth bootstrap (Slice 1)
 

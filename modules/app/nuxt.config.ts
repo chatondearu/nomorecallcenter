@@ -18,5 +18,7 @@ export default defineNuxtConfig({
     betterAuthSecret: process.env.BETTER_AUTH_SECRET || '',
     betterAuthUrl: process.env.BETTER_AUTH_URL || '',
     bootstrapAdminEmail: process.env.BOOTSTRAP_ADMIN_EMAIL || '',
+    eventsRetentionDays: process.env.EVENTS_RETENTION_DAYS || '90',
   },
 })
+

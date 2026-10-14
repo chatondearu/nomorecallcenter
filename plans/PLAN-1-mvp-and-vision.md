@@ -84,12 +84,12 @@ Tracer-bullet order: **slice 0** runnable compose + empty Nitro health; then **a
 
 ### Slice 4 — Events + stats
 
-- [ ] **Event ingest**: POST events with prefix/hash, action, timestamp; reject clear full numbers if sent (or normalize to hash/prefix only); attach user id from session.
-- [ ] **User stats**: counters screened/blocked/allowed for 7d/30d + top prefixes + recent personal history.
-- [ ] **Instance stats**: aggregates across users for members; admin also gets proposal funnel counts + event volume.
-- [ ] **Admin live feed**: admin-only endpoint (poll or SSE) returns recent instance events (prefix/hash, action, user id, time).
-- [ ] **Retention**: configurable retention env/setting; older events purged or omitted by job/query.
-- [ ] **Acceptance**: ingest N events as two users → personal vs instance aggregates differ correctly; non-admin cannot read live feed.
+- [x] **Event ingest**: POST events with prefix/hash, action, timestamp; reject clear full numbers if sent (or normalize to hash/prefix only); attach user id from session.
+- [x] **User stats**: counters screened/blocked/allowed for 7d/30d + top prefixes + recent personal history.
+- [x] **Instance stats**: aggregates across users for members; admin also gets proposal funnel counts + event volume.
+- [x] **Admin live feed**: admin-only endpoint (poll or SSE) returns recent instance events (prefix/hash, action, user id, time).
+- [x] **Retention**: configurable retention env/setting; older events purged or omitted by job/query.
+- [x] **Acceptance**: ingest N events as two users → personal vs instance aggregates differ correctly; non-admin cannot read live feed.
 
 ### Slice 5 — Android client
 
@@ -135,7 +135,7 @@ Seams under test (see Technical approach):
 - [ ] **List seed + sync**: unit/integration on seed output + sync contract.
 - [ ] **Rule matcher + TTL**: pure unit tests (no Android runtime).
 - [x] **Proposal moderation**: integration — pending → approve/reject side effects.
-- [ ] **Stats aggregates**: integration with seeded events for two users.
+- [x] **Stats aggregates**: integration with seeded events for two users.
 - [ ] **Android matcher / screening decision**: JVM unit tests for matcher; optional instrumented test for service wiring.
 - [ ] **Compose smoke**: scripted up → health → migrate → bootstrap admin.
 

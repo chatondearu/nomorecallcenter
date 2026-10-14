@@ -35,6 +35,7 @@ services:
       BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:-dev-only-better-auth-secret-change-me}
       BETTER_AUTH_URL: ${BETTER_AUTH_URL:-http://localhost:3000}
       BOOTSTRAP_ADMIN_EMAIL: ${BOOTSTRAP_ADMIN_EMAIL:-}
+      EVENTS_RETENTION_DAYS: ${EVENTS_RETENTION_DAYS:-90}
     ports:
       - '${API_PORT:-3000}:3000'
     healthcheck:
