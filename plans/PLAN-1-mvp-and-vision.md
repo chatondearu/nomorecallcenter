@@ -76,11 +76,11 @@ Tracer-bullet order: **slice 0** runnable compose + empty Nitro health; then **a
 
 ### Slice 3 — Personal rules + propose
 
-- [ ] **Personal rules API**: CRUD for exact/prefix rules with TTL presets (1h/24h/7d/30d/permanent); server stores `expiresAt` or null; renew / make-permanent / delete behaviors.
-- [ ] **Sync**: member devices pull personal rules for the account; expired rules not returned as active.
-- [ ] **Propose CTA backend**: from a rule or free-form payload, create proposal in `pending`; does not mutate shared list until admin approve.
-- [ ] **Admin moderation**: approve applies to shared list; reject closes proposal; member cannot approve.
-- [ ] **Acceptance**: create 7d rule → renew → expire path (time mocked or short TTL in test) → propose → admin approve → shared list contains pattern.
+- [x] **Personal rules API**: CRUD for exact/prefix rules with TTL presets (1h/24h/7d/30d/permanent); server stores `expiresAt` or null; renew / make-permanent / delete behaviors.
+- [x] **Sync**: member devices pull personal rules for the account; expired rules not returned as active.
+- [x] **Propose CTA backend**: from a rule or free-form payload, create proposal in `pending`; does not mutate shared list until admin approve.
+- [x] **Admin moderation**: approve applies to shared list; reject closes proposal; member cannot approve.
+- [x] **Acceptance**: create 7d rule → renew → expire path (time mocked or short TTL in test) → propose → admin approve → shared list contains pattern.
 
 ### Slice 4 — Events + stats
 
@@ -134,7 +134,7 @@ Seams under test (see Technical approach):
 - [ ] **API auth/invite**: integration tests against Postgres (testcontainer or compose profile).
 - [ ] **List seed + sync**: unit/integration on seed output + sync contract.
 - [ ] **Rule matcher + TTL**: pure unit tests (no Android runtime).
-- [ ] **Proposal moderation**: integration — pending → approve/reject side effects.
+- [x] **Proposal moderation**: integration — pending → approve/reject side effects.
 - [ ] **Stats aggregates**: integration with seeded events for two users.
 - [ ] **Android matcher / screening decision**: JVM unit tests for matcher; optional instrumented test for service wiring.
 - [ ] **Compose smoke**: scripted up → health → migrate → bootstrap admin.

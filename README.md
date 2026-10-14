@@ -3,7 +3,7 @@
 Open-source Android call-screening client with a self-hosted multi-user backend
 (Nuxt/Nitro + Postgres + Drizzle). AGPL-3.0.
 
-Status: Slice 2 lists (ARCEP/data.gouv seed + authenticated sync). Auth from Slice 1.
+Status: Slice 3 personal TTL rules + moderated propose/approve APIs.
 
 Product docs: [`prd/PRD-1-mvp-and-vision.md`](prd/PRD-1-mvp-and-vision.md) ·
 [`plans/PLAN-1-mvp-and-vision.md`](plans/PLAN-1-mvp-and-vision.md) ·
@@ -49,7 +49,10 @@ pnpm install
 pnpm smoke              # compose up → health → migrate
 pnpm auth:acceptance    # wipe volumes → admin → invite → second user → reject open signup
 pnpm lists:acceptance   # wipe → migrate → admin → ARCEP seed → GET /api/lists/sync
+pnpm rules:acceptance   # wipe → 7d rule → renew → propose → admin approve → shared list
 ```
+
+If ports `5432`/`3000` are busy, override: `API_PORT=3001 POSTGRES_PORT=5433 pnpm rules:acceptance`.
 
 ### Auth bootstrap (Slice 1)
 
@@ -63,6 +66,13 @@ pnpm lists:acceptance   # wipe → migrate → admin → ARCEP seed → GET /api
 1. After migrate: `DATABASE_URL=… pnpm lists:seed` fetches ARCEP MAJNUM (LO 2.0) and upserts `0892*` demarchage prefixes (ADR-002 — no third-party dumps in the repo).
 2. Clients pull with a session cookie: `GET /api/lists/sync?since=0` (full active snapshot) or `since=<revision>` (deltas + tombstones).
 3. Offline: `pnpm lists:seed -- --fixture` or `ARCEP_SEED_FIXTURE=1`.
+
+### Personal rules + proposals (Slice 3)
+
+1. Member creates a personal rule: `POST /api/rules` with `{ pattern, matchType, ttlPreset }` (`1h`/`24h`/`7d`/`30d`/`permanent`).
+2. Sync active rules: `GET /api/rules/sync` (expired omitted). Lifecycle: `…/renew`, `…/make-permanent`, `DELETE`.
+3. Propose to global: `POST /api/proposals` with `{ personalRuleId }` — stays `pending` (no shared-list mutate).
+4. Admin: `POST /api/proposals/:id/approve` upserts shared list; `reject` closes. Members get `403` on moderate.
 
 Stop the stack: `pnpm compose:down` (add `-v` to wipe the Postgres volume).
 
