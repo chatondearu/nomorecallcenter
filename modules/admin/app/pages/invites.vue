@@ -5,18 +5,31 @@ definePageMeta({
 
 const { apiFetch } = useApi()
 const email = ref('')
-const expiresInDays = ref(7)
+const expiresInDays = ref('7')
 const pending = ref(false)
 const error = ref<string | null>(null)
 const created = ref<{ token: string, url: string, email: string | null } | null>(null)
+
+function parseDays(raw: string) {
+  const days = Number(raw)
+  if (!Number.isInteger(days) || days < 1 || days > 365)
+    return null
+  return days
+}
 
 async function onSubmit() {
   pending.value = true
   error.value = null
   created.value = null
+  const days = parseDays(expiresInDays.value.trim())
+  if (days === null) {
+    error.value = 'La durée doit être un entier entre 1 et 365.'
+    pending.value = false
+    return
+  }
   try {
     const body: { email?: string, expiresInDays: number } = {
-      expiresInDays: expiresInDays.value,
+      expiresInDays: days,
     }
     const trimmed = email.value.trim()
     if (trimmed)
@@ -53,63 +66,40 @@ async function onSubmit() {
       <h1 class="text-2xl font-bold">
         Invitations
       </h1>
-      <p class="text-system-on-surface-variant text-sm mt-1">
+      <p class="text-system-on-surface-variant text-sm mt-xs">
         Créer un jeton d’invitation (inscription réservée aux invités).
       </p>
     </header>
 
     <form
-      class="rounded-lg border border-system-outline-variant bg-system-surface p-md flex flex-col gap-md"
+      class="rounded-lg bg-system-surface p-md flex flex-col gap-md"
       @submit.prevent="onSubmit"
     >
-      <label class="flex flex-col gap-1 text-sm">
-        <span class="text-system-on-surface-variant">E-mail (optionnel)</span>
-        <input
-          v-model="email"
-          type="email"
-          class="rounded-md border border-system-outline bg-system-surface-container px-3 py-2"
-          placeholder="membre@exemple.fr"
-        >
-      </label>
-
-      <label class="flex flex-col gap-1 text-sm">
-        <span class="text-system-on-surface-variant">Expire dans (jours)</span>
-        <input
-          v-model.number="expiresInDays"
-          type="number"
-          min="1"
-          max="365"
-          required
-          class="rounded-md border border-system-outline bg-system-surface-container px-3 py-2 tabular-nums"
-        >
-      </label>
+      <OutlinedField v-model="email" label="E-mail (optionnel)" />
+      <OutlinedField v-model="expiresInDays" label="Expire dans (jours)" />
 
       <p v-if="error" class="text-error text-sm" role="alert">
         {{ error }}
       </p>
 
-      <button
-        type="submit"
-        class="rounded-md bg-primary text-on-primary px-4 py-2 font-medium disabled:opacity-50 self-start"
-        :disabled="pending"
-      >
+      <FilledButton type="submit" :disabled="pending">
         {{ pending ? 'Création…' : 'Créer une invitation' }}
-      </button>
+      </FilledButton>
     </form>
 
     <div
       v-if="created"
-      class="rounded-lg border border-primary-container bg-primary-container/20 p-md text-sm flex flex-col gap-2"
+      class="rounded-lg bg-system-primary-container p-md text-sm flex flex-col gap-sm"
     >
-      <p class="font-medium text-primary">
+      <p class="font-medium text-system-on-primary-container">
         Invitation créée
       </p>
-      <p v-if="created.email" class="text-system-on-surface-variant">
+      <p v-if="created.email" class="text-system-on-primary-container">
         Destinée à {{ created.email }}
       </p>
-      <label class="flex flex-col gap-1">
-        <span class="text-system-on-surface-variant">Jeton</span>
-        <code class="font-mono break-all bg-system-surface-container px-2 py-1 rounded-md">{{ created.token }}</code>
+      <label class="flex flex-col gap-xs">
+        <span class="text-system-on-primary-container">Jeton</span>
+        <code class="font-mono break-all bg-system-surface text-system-on-surface px-sm py-xs rounded-md">{{ created.token }}</code>
       </label>
     </div>
   </div>
