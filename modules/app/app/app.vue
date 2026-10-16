@@ -81,7 +81,7 @@ async function copyInstanceUrl() {
       <section class="grid grid-cols-1 items-center gap-lg md:grid-cols-2">
         <div class="flex flex-col gap-md">
           <h1 class="text-4xl font-medium leading-tight text-system-on-background md:text-5xl">
-            Filtrer les centres d’appels
+            Un téléphone silencieux, un contrôle limpide.
           </h1>
           <p class="max-w-prose text-base leading-relaxed text-system-on-surface-variant">
             Un client Android et un serveur Postgres que vous hébergez. L’accès se fait sur invitation.
@@ -100,23 +100,47 @@ async function copyInstanceUrl() {
             </a>
           </div>
         </div>
-        <ProtectionCard />
+
+        <!-- Phone frame only; the call itself is the shared activity row. -->
+        <figure class="mx-auto w-full max-w-sm rounded-3xl border border-system-outline-variant bg-system-surface-container-high p-sm">
+          <div class="flex flex-col gap-md rounded-2xl border border-system-outline-variant bg-system-surface p-md">
+            <p class="font-mono text-xs text-system-on-surface-variant">
+              14:02
+            </p>
+            <ProtectionCard />
+            <EventRow
+              title="+33 1 62 •• ••"
+              reason="Démarchage"
+              status="Silencieux"
+              time="14:02"
+            />
+          </div>
+          <figcaption class="sr-only">
+            Exemple d’un appel rejeté en silence
+          </figcaption>
+        </figure>
       </section>
 
       <section aria-labelledby="steps-title">
         <h2 id="steps-title" class="text-2xl font-medium text-system-on-background">
           Mise en route
         </h2>
-        <ol class="mt-md divide-y divide-system-outline-variant">
+        <ol class="mt-md grid list-none grid-cols-1 gap-md md:grid-cols-3">
           <li
-            v-for="step in steps"
+            v-for="(step, index) in steps"
             :key="step.title"
-            class="flex flex-col gap-xs py-md"
+            class="flex flex-col gap-sm rounded-lg border border-system-outline-variant bg-system-surface-container-low p-md"
           >
+            <span
+              class="flex h-10 w-10 items-center justify-center rounded-full bg-system-secondary-container text-sm font-medium text-system-primary"
+              aria-hidden="true"
+            >
+              {{ index + 1 }}
+            </span>
             <h3 class="text-base font-medium text-primary">
               {{ step.title }}
             </h3>
-            <p class="max-w-prose text-system-on-surface-variant leading-relaxed">
+            <p class="text-system-on-surface-variant leading-relaxed">
               {{ step.body }}
             </p>
           </li>
