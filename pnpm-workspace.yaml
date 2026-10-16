@@ -6,6 +6,7 @@ catalog:
   '@material/material-color-utilities': 0.4.0
   '@types/node': 22.15.29
   '@unocss/nuxt': 66.6.8
+  '@unocss/reset': 66.6.8
   better-auth: 1.6.9
   drizzle-kit: 0.31.1
   drizzle-orm: 0.44.2

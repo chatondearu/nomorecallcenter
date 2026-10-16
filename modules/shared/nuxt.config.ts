@@ -14,6 +14,8 @@ export default defineNuxtConfig({
   },
 
   css: [
+    // presetUno preflight only sets CSS variables; the style reset lives here.
+    '@unocss/reset/tailwind.css',
     join(currentDir, 'app/assets/css/main.css'),
   ],
 
