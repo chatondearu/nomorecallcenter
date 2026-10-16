@@ -18,6 +18,9 @@ catalogs:
     '@unocss/nuxt':
       specifier: 66.6.8
       version: 66.6.8
+    '@unocss/reset':
+      specifier: 66.6.8
+      version: 66.6.8
     better-auth:
       specifier: 1.6.9
       version: 1.6.9
@@ -149,6 +152,9 @@ importers:
       '@unocss/nuxt':
         specifier: 'catalog:'
         version: 66.6.8(@emnapi/core@1.11.3)(@emnapi/runtime@1.11.3)(@nuxt/schema@4.4.4)(confbox@0.3.1)(dotenv@17.4.2)(esbuild@0.28.2)(giget@3.3.1)(jiti@2.7.0)(magic-string@1.4.3)(mlly@1.8.2)(oxc-parser@0.124.0(@emnapi/core@1.11.3)(@emnapi/runtime@1.11.3))(rollup@4.64.6)(unplugin@3.4.0(esbuild@0.28.2)(rollup@4.64.6)(vite@7.3.7(@types/node@22.15.29)(jiti@2.7.0)(terser@5.51.2)(tsx@4.19.4)(yaml@2.9.1))(webpack@5.111.1(esbuild@0.28.2)))(vite@7.3.7(@types/node@22.15.29)(jiti@2.7.0)(terser@5.51.2)(tsx@4.19.4)(yaml@2.9.1))(webpack@5.111.1(esbuild@0.28.2))
+      '@unocss/reset':
+        specifier: 'catalog:'
+        version: 66.6.8
       nuxt:
         specifier: 'catalog:'
         version: 4.4.4(@babel/core@7.29.7)(@babel/plugin-syntax-jsx@7.29.7(@babel/core@7.29.7))(@types/node@22.15.29)(@vue/compiler-sfc@3.5.44)(cac@6.7.14)(confbox@0.3.1)(db0@0.3.4(drizzle-orm@0.44.2(kysely@0.28.17)(postgres@3.4.7)))(dotenv@17.4.2)(drizzle-orm@0.44.2(kysely@0.28.17)(postgres@3.4.7))(esbuild@0.28.2)(giget@3.3.1)(ioredis@5.11.1)(magicast@0.5.5)(rollup-plugin-visualizer@7.1.1(rollup@4.64.6))(rollup@4.64.6)(terser@5.51.2)(tsx@4.19.4)(typescript@5.8.3)(vite@7.3.7(@types/node@22.15.29)(jiti@2.7.0)(terser@5.51.2)(tsx@4.19.4)(yaml@2.9.1))(vue-tsc@2.2.10(typescript@5.8.3))(webpack@5.111.1(esbuild@0.28.2))(yaml@2.9.1)
