@@ -123,7 +123,7 @@ F-Droid-oriented notes (no Play-only deps): [`android/README.md`](android/README
 
 ```bash
 pnpm install
-pnpm dev:api     # http://localhost:3000
+pnpm dev:api     # http://localhost:3000 — French landing and API
 pnpm dev:admin   # http://localhost:3001
 ```
 
