@@ -5,6 +5,8 @@ withDefaults(defineProps<{
   reason?: string
   time: string
   status: string
+  /** ISO timestamp for the machine-readable time. Display stays in `time`. */
+  dateTime?: string
 }>(), {
   reason: '',
 })
@@ -35,6 +37,6 @@ withDefaults(defineProps<{
         </div>
       </div>
     </div>
-    <time class="shrink-0 font-mono text-sm text-system-on-surface-variant">{{ time }}</time>
+    <time :datetime="dateTime" class="shrink-0 font-mono text-sm text-system-on-surface-variant">{{ time }}</time>
   </div>
 </template>

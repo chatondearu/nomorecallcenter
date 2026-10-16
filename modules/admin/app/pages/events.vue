@@ -23,6 +23,16 @@ const events = ref<FeedEvent[]>([])
 const revealed = ref<Record<string, string>>({})
 const error = ref<string | null>(null)
 const loading = ref(true)
+const feedStatus = ref('')
+const errorEl = ref<HTMLElement | null>(null)
+let feedSignature = ''
+
+watch(error, async (value) => {
+  if (!value)
+    return
+  await nextTick()
+  errorEl.value?.focus()
+})
 
 function hashMarker(hash: string | null) {
   if (!hash)
@@ -35,13 +45,15 @@ function statusLabel(action: string) {
 }
 
 async function reveal(id: string) {
+  if (!window.confirm('Afficher le numéro en clair ? Il reste visible sur cette page.'))
+    return
   try {
     const body = await apiFetch<{ number: string }>(`/api/admin/events/${id}/reveal`, { method: 'POST' })
     revealed.value = { ...revealed.value, [id]: body.number || '(vide)' }
   }
   catch (e: unknown) {
     const err = e as { statusMessage?: string }
-    error.value = err?.statusMessage || 'Révélation refusée.'
+    error.value = err?.statusMessage || 'Révélation refusée. Réessayez dans un instant.'
   }
 }
 
@@ -50,6 +62,10 @@ async function load() {
     const feed = await apiFetch<{ events: FeedEvent[] }>('/api/admin/events/feed?limit=40')
     events.value = feed.events
     error.value = null
+    const nextSignature = feed.events.map(event => event.id).join(',')
+    if (feedSignature && nextSignature !== feedSignature)
+      feedStatus.value = 'Fil mis à jour.'
+    feedSignature = nextSignature
   }
   catch (e: unknown) {
     const err = e as { statusMessage?: string }
@@ -94,7 +110,10 @@ function formatTime(iso: string) {
       </p>
     </header>
 
-    <p v-if="error" class="text-error text-sm" role="alert">
+    <p class="sr-only" aria-live="polite">
+      {{ feedStatus }}
+    </p>
+    <p v-if="error" ref="errorEl" tabindex="-1" class="text-error text-sm" role="alert">
       {{ error }}
     </p>
     <p v-if="loading" class="text-system-on-surface-variant text-sm">
@@ -112,13 +131,18 @@ function formatTime(iso: string) {
           :status="statusLabel(ev.action)"
           :reason="ev.prefix || ''"
           :time="formatTime(ev.occurredAt)"
+          :date-time="ev.occurredAt"
         />
         <div class="flex flex-wrap items-center gap-md px-md text-sm">
           <span class="text-system-on-surface-variant font-mono text-xs truncate max-w-40">{{ ev.userId }}</span>
-          <button type="button" class="text-system-primary underline underline-offset-2" @click="reveal(ev.id)">
+          <button
+            type="button"
+            class="text-system-primary underline underline-offset-2 hover:text-system-on-primary-container focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-system-primary"
+            @click="reveal(ev.id)"
+          >
             Révéler
           </button>
-          <span v-if="revealed[ev.id]" class="font-mono">{{ revealed[ev.id] }}</span>
+          <span v-if="revealed[ev.id]" class="font-mono" role="status" aria-live="polite">{{ revealed[ev.id] }}</span>
         </div>
       </li>
     </ul>

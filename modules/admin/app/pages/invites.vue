@@ -9,6 +9,14 @@ const expiresInDays = ref('7')
 const pending = ref(false)
 const error = ref<string | null>(null)
 const created = ref<{ token: string, url: string, email: string | null } | null>(null)
+const errorEl = ref<HTMLElement | null>(null)
+
+watch(error, async (value) => {
+  if (!value)
+    return
+  await nextTick()
+  errorEl.value?.focus()
+})
 
 function parseDays(raw: string) {
   const days = Number(raw)
@@ -52,7 +60,7 @@ async function onSubmit() {
   }
   catch (e: unknown) {
     const err = e as { statusMessage?: string, data?: { message?: string } }
-    error.value = err?.data?.message || err?.statusMessage || 'Échec de création.'
+    error.value = err?.data?.message || err?.statusMessage || 'Échec de création. Vérifiez les champs, puis réessayez.'
   }
   finally {
     pending.value = false
@@ -75,10 +83,24 @@ async function onSubmit() {
       class="rounded-lg border border-system-outline-variant bg-system-surface-container p-md flex flex-col gap-md"
       @submit.prevent="onSubmit"
     >
-      <OutlinedField v-model="email" label="E-mail (optionnel)" />
-      <OutlinedField v-model="expiresInDays" label="Expire dans (jours)" />
+      <OutlinedField
+        v-model="email"
+        label="E-mail (optionnel)"
+        type="email"
+        name="email"
+        autocomplete="email"
+        :spellcheck="false"
+      />
+      <OutlinedField
+        v-model="expiresInDays"
+        label="Expire dans (jours)"
+        type="number"
+        name="expiresInDays"
+        inputmode="numeric"
+        autocomplete="off"
+      />
 
-      <p v-if="error" class="text-error text-sm" role="alert">
+      <p v-if="error" ref="errorEl" tabindex="-1" class="text-error text-sm" role="alert">
         {{ error }}
       </p>
 
@@ -90,6 +112,8 @@ async function onSubmit() {
     <div
       v-if="created"
       class="rounded-lg bg-system-primary-container p-md text-sm flex flex-col gap-sm"
+      role="status"
+      aria-live="polite"
     >
       <p class="font-medium text-system-on-primary-container">
         Invitation créée

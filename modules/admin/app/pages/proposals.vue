@@ -17,6 +17,14 @@ const proposals = ref<Proposal[]>([])
 const error = ref<string | null>(null)
 const loading = ref(true)
 const busyId = ref<string | null>(null)
+const errorEl = ref<HTMLElement | null>(null)
+
+watch(error, async (value) => {
+  if (!value)
+    return
+  await nextTick()
+  errorEl.value?.focus()
+})
 
 const queueSummary = computed(() => {
   const action = 'Approuver applique le motif à la liste partagée.'
@@ -46,6 +54,8 @@ async function load() {
 await load()
 
 async function moderate(id: string, action: 'approve' | 'reject') {
+  if (action === 'reject' && !window.confirm('Rejeter cette proposition ? Cette action est définitive.'))
+    return
   busyId.value = id
   error.value = null
   try {
@@ -54,7 +64,10 @@ async function moderate(id: string, action: 'approve' | 'reject') {
   }
   catch (e: unknown) {
     const err = e as { statusMessage?: string, data?: { message?: string } }
-    error.value = err?.data?.message || err?.statusMessage || `Échec ${action}.`
+    const fallback = action === 'reject'
+      ? 'Le rejet a échoué. Actualisez la file, puis réessayez.'
+      : 'L’approbation a échoué. Actualisez la file, puis réessayez.'
+    error.value = err?.data?.message || err?.statusMessage || fallback
   }
   finally {
     busyId.value = null
@@ -87,7 +100,7 @@ function formatTime(iso: string) {
       </FilledButton>
     </header>
 
-    <p v-if="error" class="text-error text-sm" role="alert">
+    <p v-if="error" ref="errorEl" tabindex="-1" class="text-error text-sm" role="alert">
       {{ error }}
     </p>
 
@@ -119,7 +132,7 @@ function formatTime(iso: string) {
           <!-- Shared FilledButton has no destructive style. -->
           <button
             type="button"
-            class="rounded-full border border-error text-error px-lg py-sm text-sm font-medium disabled:opacity-40"
+            class="rounded-full border border-error text-error px-lg py-sm text-sm font-medium hover:bg-system-error-container disabled:opacity-40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-system-error"
             :disabled="busyId === p.id"
             @click="moderate(p.id, 'reject')"
           >

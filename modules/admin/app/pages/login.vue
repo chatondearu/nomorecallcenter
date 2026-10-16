@@ -10,7 +10,14 @@ const email = ref('')
 const password = ref('')
 const error = ref<string | null>(null)
 const pending = ref(false)
-const passwordId = useId()
+const errorEl = ref<HTMLElement | null>(null)
+
+watch(error, async (value) => {
+  if (!value)
+    return
+  await nextTick()
+  errorEl.value?.focus()
+})
 
 onMounted(async () => {
   if (route.query.error === 'admin')
@@ -24,7 +31,7 @@ onMounted(async () => {
 async function onSubmit() {
   error.value = null
   if (!email.value.trim() || !password.value) {
-    error.value = 'E-mail et mot de passe sont requis.'
+    error.value = 'E-mail et mot de passe sont requis. Remplissez les deux champs.'
     return
   }
   pending.value = true
@@ -38,7 +45,7 @@ async function onSubmit() {
   }
   catch (e: unknown) {
     const err = e as { data?: { message?: string }, statusMessage?: string }
-    error.value = err?.data?.message || err?.statusMessage || 'Échec de la connexion.'
+    error.value = err?.data?.message || err?.statusMessage || 'Échec de la connexion. Vérifiez l’e-mail et le mot de passe, puis réessayez.'
   }
   finally {
     pending.value = false
@@ -52,7 +59,7 @@ async function onSubmit() {
     @submit.prevent="onSubmit"
   >
     <div>
-      <h1 class="text-primary text-2xl font-bold">
+      <h1 class="text-primary text-2xl font-bold" translate="no">
         nomorecallcenter
       </h1>
       <p class="text-system-on-surface-variant mt-xs text-sm">
@@ -60,24 +67,25 @@ async function onSubmit() {
       </p>
     </div>
 
-    <OutlinedField v-model="email" label="E-mail" />
+    <OutlinedField
+      v-model="email"
+      label="E-mail"
+      type="email"
+      name="email"
+      autocomplete="username"
+      :spellcheck="false"
+    />
 
-    <!-- OutlinedField cannot set input type="password". -->
-    <div class="flex flex-col gap-xs">
-      <label :for="passwordId" class="text-sm text-system-on-surface">
-        Mot de passe
-      </label>
-      <input
-        :id="passwordId"
-        v-model="password"
-        type="password"
-        required
-        autocomplete="current-password"
-        class="rounded-sm border border-system-outline bg-system-surface px-md py-sm text-system-on-surface outline-none focus:border-primary"
-      >
-    </div>
+    <OutlinedField
+      v-model="password"
+      label="Mot de passe"
+      type="password"
+      name="password"
+      autocomplete="current-password"
+      :spellcheck="false"
+    />
 
-    <p v-if="error" class="text-error text-sm" role="alert">
+    <p v-if="error" ref="errorEl" tabindex="-1" class="text-error text-sm" role="alert">
       {{ error }}
     </p>
 

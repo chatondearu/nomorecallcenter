@@ -5,4 +5,5 @@ body {
   font-family: 'Roboto Flex', Roboto, sans-serif;
   background: var(--um3-background);
   color: var(--um3-on-background);
+  touch-action: manipulation;
 }

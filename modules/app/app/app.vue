@@ -58,8 +58,14 @@ async function copyInstanceUrl() {
 
 <template>
   <div class="min-h-dvh bg-system-background text-system-on-background">
+    <a
+      href="#contenu"
+      class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-system-surface focus:p-sm focus:text-primary"
+    >
+      Aller au contenu
+    </a>
     <header class="mx-auto flex max-w-5xl flex-col gap-sm px-md py-md md:min-h-16 md:flex-row md:items-center md:justify-between">
-      <p class="text-lg font-medium text-primary">
+      <p class="text-lg font-medium text-primary" translate="no">
         nomorecallcenter
       </p>
       <nav class="flex flex-wrap items-center gap-md md:flex-nowrap" aria-label="Documentation">
@@ -77,10 +83,10 @@ async function copyInstanceUrl() {
       </nav>
     </header>
 
-    <main class="mx-auto flex max-w-5xl flex-col gap-xl px-md pb-xl">
+    <main id="contenu" class="mx-auto flex max-w-5xl flex-col gap-xl px-md pb-xl">
       <section class="grid grid-cols-1 items-center gap-lg md:grid-cols-2">
         <div class="flex flex-col gap-md">
-          <h1 class="text-4xl font-medium leading-tight text-system-on-background md:text-5xl">
+          <h1 class="text-balance text-4xl font-medium leading-tight text-system-on-background md:text-5xl">
             Un téléphone silencieux, un contrôle limpide.
           </h1>
           <p class="max-w-prose text-base leading-relaxed text-system-on-surface-variant">
@@ -153,7 +159,14 @@ async function copyInstanceUrl() {
         </h2>
         <div class="grid grid-cols-1 items-start gap-lg md:grid-cols-2">
           <form class="flex flex-col gap-sm" @submit.prevent="copyInstanceUrl">
-            <OutlinedField v-model="instanceUrl" label="URL de l’API" />
+            <OutlinedField
+              v-model="instanceUrl"
+              label="URL de l’API"
+              type="url"
+              name="instance-url"
+              autocomplete="url"
+              :spellcheck="false"
+            />
             <p class="text-sm text-system-on-surface-variant">
               Collez-la dans l’application Android. Aucun compte n’est créé ici.
             </p>
@@ -161,6 +174,9 @@ async function copyInstanceUrl() {
               <FilledButton type="submit" :disabled="instanceUrl.trim().length === 0">
                 {{ copyState === 'copied' ? 'Copié' : 'Copier' }}
               </FilledButton>
+              <p class="sr-only" aria-live="polite">
+                {{ copyState === 'copied' ? 'Adresse copiée.' : '' }}
+              </p>
             </div>
             <p v-if="copyState === 'failed'" class="text-sm text-error" role="alert">
               La copie a échoué. Sélectionnez l’adresse à la main.
