@@ -1,33 +1,164 @@
 <script setup lang="ts">
-const ttl = ref<'1h' | '24h' | '7j' | '30j' | 'Permanent'>('24h')
-const effect = ref<'block' | 'allow'>('block')
-const label = ref('')
+// Markdown docs are not Nuxt routes; link the repo anchors that already exist.
+const selfHostDoc = 'https://github.com/chatondearu/nomorecallcenter/blob/main/doc/deployment.md#full-self-host-smoke'
+const fdroidDoc = 'https://github.com/chatondearu/nomorecallcenter/blob/main/android/README.md#f-droid-oriented-notes'
+
+const ctas = [
+  { href: selfHostDoc, label: 'Héberger', primary: true },
+  { href: fdroidDoc, label: 'Notes F-Droid', primary: false },
+] as const
+
+const steps = [
+  {
+    title: 'Héberger le serveur',
+    body: 'Postgres, l’image OCI et Compose. La marche à suivre est dans la documentation d’installation.',
+  },
+  {
+    title: 'Inviter les personnes',
+    body: 'Le premier compte administre l’instance. Les suivants arrivent par une invitation.',
+  },
+  {
+    title: 'Filtrer les appels',
+    body: 'L’accueil indique la protection seulement quand le rôle de filtrage d’appels est accordé.',
+  },
+] as const
+
+const instanceUrl = ref(useRequestURL().origin)
+const copyState = ref<'idle' | 'copied' | 'failed'>('idle')
+
+const linkClass = {
+  primary: 'inline-flex items-center justify-center rounded-full bg-primary text-system-on-primary px-lg py-sm text-sm font-medium no-underline whitespace-nowrap active:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2',
+  secondary: 'inline-flex items-center justify-center rounded-full border border-system-outline bg-system-surface text-primary px-lg py-sm text-sm font-medium no-underline whitespace-nowrap active:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2',
+} as const
+
+useHead({
+  title: 'nomorecallcenter',
+  meta: [
+    {
+      name: 'description',
+      content: 'Filtre d’appels Android à héberger soi-même. Accès sur invitation. Notes F-Droid.',
+    },
+  ],
+})
+
+watch(instanceUrl, () => {
+  copyState.value = 'idle'
+})
+
+async function copyInstanceUrl() {
+  try {
+    await navigator.clipboard.writeText(instanceUrl.value)
+    copyState.value = 'copied'
+  }
+  catch {
+    copyState.value = 'failed'
+  }
+}
 </script>
 
 <template>
-  <main class="min-h-screen bg-system-background text-system-on-background p-md flex flex-col gap-lg max-w-xl">
-    <header>
-      <h1 class="text-primary text-2xl font-bold">
+  <div class="min-h-dvh bg-system-background text-system-on-background">
+    <header class="mx-auto flex max-w-5xl flex-col gap-sm px-md py-md md:min-h-16 md:flex-row md:items-center md:justify-between">
+      <p class="text-lg font-medium text-primary">
         nomorecallcenter
-      </h1>
-      <p class="text-system-on-surface-variant mt-sm">
-        API skeleton — see <code class="font-mono">GET /api/health</code>
       </p>
+      <nav class="flex flex-wrap items-center gap-md md:flex-nowrap" aria-label="Documentation">
+        <a
+          v-for="cta in ctas"
+          :key="cta.href"
+          :href="cta.href"
+          class="text-sm font-medium text-primary underline-offset-2 hover:underline whitespace-nowrap"
+          :aria-label="`${cta.label}, nouvelle fenêtre`"
+          target="_blank"
+          rel="noreferrer"
+        >
+          {{ cta.label }}
+        </a>
+      </nav>
     </header>
 
-    <ProtectionCard :held="true" />
-    <ProtectionCard :held="false" />
+    <main class="mx-auto flex max-w-5xl flex-col gap-xl px-md pb-xl">
+      <section class="grid grid-cols-1 items-center gap-lg md:grid-cols-2">
+        <div class="flex flex-col gap-md">
+          <h1 class="text-4xl font-medium leading-tight text-system-on-background md:text-5xl">
+            Filtrer les centres d’appels
+          </h1>
+          <p class="max-w-prose text-base leading-relaxed text-system-on-surface-variant">
+            Un client Android et un serveur Postgres que vous hébergez. L’accès se fait sur invitation.
+          </p>
+          <div class="flex flex-wrap items-center gap-sm">
+            <a
+              v-for="cta in ctas"
+              :key="cta.href"
+              :href="cta.href"
+              :class="cta.primary ? linkClass.primary : linkClass.secondary"
+              :aria-label="`${cta.label}, nouvelle fenêtre`"
+              target="_blank"
+              rel="noreferrer"
+            >
+              {{ cta.label }}
+            </a>
+          </div>
+        </div>
+        <ProtectionCard :held="true" />
+      </section>
 
-    <div class="grid grid-cols-2 gap-md">
-      <StatTile label="Filtrés" :value="12" />
-      <StatTile label="Bloqués" :value="3" />
-    </div>
+      <section aria-labelledby="steps-title">
+        <h2 id="steps-title" class="text-2xl font-medium text-system-on-background">
+          Mise en route
+        </h2>
+        <ol class="mt-md divide-y divide-system-outline-variant">
+          <li
+            v-for="step in steps"
+            :key="step.title"
+            class="flex flex-col gap-xs py-md"
+          >
+            <h3 class="text-base font-medium text-primary">
+              {{ step.title }}
+            </h3>
+            <p class="max-w-prose text-system-on-surface-variant leading-relaxed">
+              {{ step.body }}
+            </p>
+          </li>
+        </ol>
+      </section>
 
-    <EventRow marker="a1b2c3d4e5…" action="blocked" time="16 oct. 17:18" />
+      <section class="flex flex-col gap-md" aria-labelledby="instance-title">
+        <h2 id="instance-title" class="text-2xl font-medium text-system-on-background">
+          Adresse de l’instance
+        </h2>
+        <div class="grid grid-cols-1 items-start gap-lg md:grid-cols-2">
+          <form class="flex flex-col gap-sm" @submit.prevent="copyInstanceUrl">
+            <OutlinedField v-model="instanceUrl" label="URL de l’API" />
+            <p class="text-sm text-system-on-surface-variant">
+              Collez-la dans l’application Android. Aucun compte n’est créé ici.
+            </p>
+            <div>
+              <FilledButton type="submit" :disabled="instanceUrl.trim().length === 0">
+                {{ copyState === 'copied' ? 'Copié' : 'Copier' }}
+              </FilledButton>
+            </div>
+            <p v-if="copyState === 'failed'" class="text-sm text-error" role="alert">
+              La copie a échoué. Sélectionnez l’adresse à la main.
+            </p>
+          </form>
+          <div class="grid grid-cols-2 gap-md">
+            <StatTile label="Serveur" value="Postgres" />
+            <StatTile label="Accès" value="Invitation" />
+          </div>
+        </div>
+      </section>
+    </main>
 
-    <TtlChips v-model="ttl" />
-    <EffectChips v-model="effect" />
-    <OutlinedField v-model="label" label="Libellé" />
-    <FilledButton>Enregistrer</FilledButton>
-  </main>
+    <footer class="mx-auto max-w-5xl px-md pb-lg text-sm text-system-on-surface-variant">
+      <a
+        class="text-primary underline-offset-2 hover:underline"
+        href="https://github.com/chatondearu/nomorecallcenter/blob/main/LICENSE"
+        target="_blank"
+        rel="noreferrer"
+      >
+        AGPL-3.0
+      </a>
+    </footer>
+  </div>
 </template>
