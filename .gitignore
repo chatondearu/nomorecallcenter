@@ -8,6 +8,9 @@ dist
 .env
 .env.*
 !.env.example
+.envrc.local
+.direnv
+.pnpm
 .DS_Store
 coverage
 *.tsbuildinfo
