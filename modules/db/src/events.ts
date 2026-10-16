@@ -1,3 +1,5 @@
+import { createHash } from 'node:crypto'
+
 /** ADR-006 call-event actions */
 export const EVENT_ACTIONS = ['screened', 'blocked', 'allowed'] as const
 export type EventAction = typeof EVENT_ACTIONS[number]
@@ -23,6 +25,28 @@ export function normalizeEventPrefix(raw: unknown): string | null {
   if (digits.length < EVENT_PREFIX_MIN || digits.length > EVENT_PREFIX_MAX)
     return null
   return digits
+}
+
+/**
+ * Clear caller number stored on the event (ADR-010).
+ * Same FR canonical form as the Android matcher: digits, drop leading 00, national 0… → 33….
+ */
+export function normalizeCallerNumber(raw: unknown): string | null {
+  if (typeof raw !== 'string')
+    return null
+  let digits = raw.replace(/\D/g, '')
+  if (digits.startsWith('00'))
+    digits = digits.slice(2)
+  if (digits.startsWith('0'))
+    digits = `33${digits.slice(1)}`
+  if (digits.length < 2 || digits.length > 15)
+    return null
+  return digits
+}
+
+/** SHA-256 hex of the normalized digits (display hash). */
+export function hashCallerNumber(normalizedDigits: string): string {
+  return createHash('sha256').update(normalizedDigits, 'utf8').digest('hex')
 }
 
 /** Lowercase SHA-256 hex, or null if invalid. */

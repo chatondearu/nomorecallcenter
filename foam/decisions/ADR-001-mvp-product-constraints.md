@@ -15,7 +15,7 @@ Exploration of nomorecallcenter locked product constraints before a PRD. Source:
 3. **Backend responsibilities**: default/shared lists, spam/range **proposals**, moderation, and **analytics** that power suggestions — not lists-only.
 4. **Default lists**: **France first** (ARCEP / known call-center ranges); EU later.
 5. **Trust**: any authenticated user may **propose**; **instance admin** publishes to the shared list (no auto-publish).
-6. **Privacy**: store **prefix and/or hash**, timestamp, call action, user id — not clear full numbers; retention configurable per instance.
+6. **Privacy**: store **prefix and/or hash**, timestamp, call action, user id — not clear full numbers; retention configurable per instance. **Superseded 2026-10-16 by [[ADR-010-caller-number-storage|ADR-010]]** for call events: the clear normalized number is stored so an instance admin can reveal it; members still receive a hash.
 7. **License**: code **AGPL-3.0**; list datasets **CC BY-SA** (or equivalent) when we publish our own.
 8. **Block UX default**: **silent reject** via Android Call Screening (no ring).
 

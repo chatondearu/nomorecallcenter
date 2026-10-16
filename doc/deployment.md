@@ -109,6 +109,8 @@ DATABASE_URL=postgresql://nmcc:nmcc@localhost:5432/nmcc pnpm db:migrate
 DATABASE_URL=postgresql://nmcc:nmcc@localhost:5432/nmcc pnpm lists:seed
 ```
 
+Database backups include **clear caller numbers** on `call_events.caller_number` (ADR-010). Treat dumps as sensitive. Retention still deletes old events.
+
 `pnpm lists:seed` fetches ARCEP MAJNUM (Licence Ouverte 2.0), writes `0892*`
 demarchage prefixes into `list_entries`, and bumps `schema_meta.lists.revision`.
 Use `ARCEP_SEED_FIXTURE=1` or `--fixture` offline. Attribution text lives in

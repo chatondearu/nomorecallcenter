@@ -15,7 +15,7 @@ ADR-001 requires server-side analytics (hash/prefix, timestamp, action, user id)
 3. **Admin**: instance aggregates + **proposal funnel** (submitted / approved / rejected) + event volume; plus an **admin-only near-real-time debug feed** of recent instance events (prefix/hash, action, user id, time) via short poll or SSE — not infra monitoring.
 4. **Vision / later**: ML reputation scores, push “hot range” alerts, BI exports, member-facing live dashboards, ops/Grafana-style monitoring.
 
-Privacy: no clear phone numbers; no identifiable “who got which full number” feed for members.
+Privacy: member surfaces stay hash/prefix. **Superseded 2026-10-16 by [[ADR-010-caller-number-storage|ADR-010]]** for storage and admin reveal: events keep the clear number; the default feed still shows the hash until an admin reveals one event.
 
 ## Alternatives considered
 
@@ -29,7 +29,7 @@ Privacy: no clear phone numbers; no identifiable “who got which full number”
 
 - **Positive**: Clear UI scope; admin can verify screening/sync; members get useful counts.
 - **Negative**: Admin live feed needs a small realtime/poll path in Nitro.
-- **Constraint**: Aggregates and feeds must honor hash/prefix-only storage (ADR-001).
+- **Constraint**: Member aggregates stay hash/prefix. Admin reveal of one clear number follows [[ADR-010-caller-number-storage|ADR-010]].
 
 ## References
 

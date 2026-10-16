@@ -37,12 +37,13 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import fr.chatondearu.nmcc.NmccApp
 import fr.chatondearu.nmcc.matcher.ScreenAction
-import fr.chatondearu.nmcc.matcher.decideScreen
 import fr.chatondearu.nmcc.screening.ScreeningRole
+import fr.chatondearu.nmcc.screening.decideIncoming
 import fr.chatondearu.nmcc.store.OfflineBootstrap
 import fr.chatondearu.nmcc.ui.theme.NmccColors
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import org.json.JSONArray
 import org.json.JSONObject
 import java.time.Instant
 
@@ -76,6 +77,7 @@ fun HomeScreen(activity: Activity) {
     var smsGranted by remember { mutableStateOf(activity.hasSmsAccess()) }
     var smsDeniedHard by remember { mutableStateOf(false) }
     var lastScreen by remember { mutableStateOf<String?>(null) }
+    var journal by remember { mutableStateOf<List<String>>(emptyList()) }
     var testNumber by remember { mutableStateOf("0783123456") }
     var testResult by remember { mutableStateOf<String?>(null) }
 
@@ -115,6 +117,30 @@ fun HomeScreen(activity: Activity) {
         if (smsGranted) smsDeniedHard = false
     }
 
+    fun refreshJournal() {
+        scope.launch {
+            val raw = app.prefs.blockedJournalJson.first()
+            journal = runCatching {
+                val arr = JSONArray(raw)
+                buildList {
+                    for (i in arr.length() - 1 downTo 0) {
+                        val o = arr.getJSONObject(i)
+                        val number = o.optString("number")
+                        val pattern = o.optString("pattern")
+                        val at = o.optString("at")
+                        add(
+                            buildString {
+                                append(number.ifBlank { "Numéro masqué" })
+                                if (pattern.isNotBlank()) append(" · $pattern")
+                                if (at.isNotBlank()) append(" · $at")
+                            },
+                        )
+                    }
+                }
+            }.getOrDefault(emptyList())
+        }
+    }
+
     fun refreshLastScreen() {
         scope.launch {
             val raw = app.prefs.lastScreenJson.first()
@@ -148,6 +174,7 @@ fun HomeScreen(activity: Activity) {
     LaunchedEffect(Unit) {
         refreshListCount()
         refreshLastScreen()
+        refreshJournal()
     }
 
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -157,6 +184,7 @@ fun HomeScreen(activity: Activity) {
                 refreshRole()
                 refreshSms()
                 refreshLastScreen()
+                refreshJournal()
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
@@ -238,6 +266,19 @@ fun HomeScreen(activity: Activity) {
             Text(lastScreen!!, style = MaterialTheme.typography.bodyMedium)
         }
 
+        Text("Journal des appels bloqués", style = MaterialTheme.typography.titleMedium)
+        if (journal.isEmpty()) {
+            Text(
+                "Aucun appel bloqué enregistré sur cet appareil.",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        } else {
+            journal.take(20).forEach { line ->
+                Text(line, style = MaterialTheme.typography.bodyMedium)
+            }
+        }
+
         Text("2. Simulate incoming call", style = MaterialTheme.typography.titleMedium)
         Text(
             "Runs the same matcher as CallScreeningService (list + personal rules). " +
@@ -256,10 +297,16 @@ fun HomeScreen(activity: Activity) {
             onClick = {
                 scope.launch {
                     OfflineBootstrap.ensureBundledList(activity, app.prefs)
-                    val list = app.store.loadListEntries()
-                    val rules = app.store.loadPersonalRules()
-                    val decision = decideScreen(testNumber, list, rules)
+                    val decision = decideIncoming(activity, app.prefs, app.store, testNumber)
                     val blocked = decision.action == ScreenAction.BLOCK
+                    val at = Instant.now().toString()
+                    if (blocked) {
+                        app.prefs.appendBlockedJournal(
+                            decision.normalizedNumber ?: "Numéro masqué",
+                            decision.matchedPattern,
+                            at,
+                        )
+                    }
                     testResult = buildString {
                         append(if (blocked) "BLOCK" else "ALLOW")
                         decision.normalizedNumber?.let { append(" · normalized $it") }
@@ -272,11 +319,12 @@ fun HomeScreen(activity: Activity) {
                             .put("raw", testNumber)
                             .put("normalized", decision.normalizedNumber ?: "")
                             .put("matched", decision.matchedPattern ?: "")
-                            .put("at", Instant.now().toString())
+                            .put("at", at)
                             .put("source", "simulate")
                             .toString(),
                     )
                     refreshLastScreen()
+                    refreshJournal()
                 }
             },
             enabled = testNumber.filter { it.isDigit() }.length >= 2,

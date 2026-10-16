@@ -54,13 +54,15 @@ Authenticated member/admin. Server stores `expiresAt` (null = permanent). Preset
 
 | Method | Path | Body / notes |
 | ------ | ---- | ------------ |
-| `POST` | `/api/rules` | `{ pattern, matchType, ttlPreset }` → `{ rule }` |
+| `POST` | `/api/rules` | `{ pattern, matchType, ttlPreset, effect? }` → `{ rule }`. `effect` is `allow` or `block` (default `block`). The same pattern may exist once per effect. |
 | `GET` | `/api/rules/sync` | Active rules only (expired omitted) → `{ rules: [...] }` |
 | `POST` | `/api/rules/:id/renew` | optional `{ ttlPreset }` — restart TTL from now |
 | `POST` | `/api/rules/:id/make-permanent` | sets `ttlPreset=permanent`, `expiresAt=null` |
 | `DELETE` | `/api/rules/:id` | owner only |
 
-Rule object: `{ id, pattern, matchType, ttlPreset, expiresAt, active, createdAt, updatedAt }`.
+Rule object: `{ id, pattern, matchType, effect, ttlPreset, expiresAt, active, createdAt, updatedAt }`.
+
+Allow rules are personal only. `POST /api/proposals` with an allow rule returns `400` (shared lists stay block-only).
 
 ## Proposals (moderated)
 
@@ -77,7 +79,7 @@ Members receive `403` on approve/reject/list.
 
 ## Call events + stats
 
-Privacy: store **prefix** (2–8 digits) and/or **SHA-256 hash** only — clear full numbers are rejected (ADR-001 / ADR-006). Retention via `EVENTS_RETENTION_DAYS` (default `90`); older events are purged on write/read.
+Privacy (ADR-010): ingest may store the **clear normalized number** (`number`). Member stats, aggregates, and the default admin feed return `hash` (SHA-256 hex of those digits) and never the clear value. An instance admin reveals one event with `POST /api/admin/events/:id/reveal`. Prefix stays 2–8 digits. Retention via `EVENTS_RETENTION_DAYS` (default `90`) deletes the row, clear number included. Old rows without a stored number reveal as `""`.
 
 ### Ingest
 
@@ -88,18 +90,26 @@ Body:
 ```json
 {
   "prefix": "0892",
+  "number": "0612345678",
   "hash": "<64-char sha256 hex>",
   "action": "blocked",
   "occurredAt": "2026-10-14T12:00:00.000Z"
 }
 ```
 
-- At least one of `prefix` / `hash` (alias `numberHash`) required.
+- At least one of `prefix`, `hash` (alias `numberHash`), or `number` is required.
+- `number`: clear caller (2–15 digits). Stored normalized (FR national `0…` → `33…`). The display hash is SHA-256 of those digits and replaces a client-supplied hash.
 - `action`: `screened` | `blocked` | `allowed`.
 - `occurredAt` optional (defaults to server now).
-- Fields `number`, `phone`, `fullNumber` → `400`.
+- Fields `phone` and `fullNumber` → `400`. A prefix longer than 8 digits → `400`.
 
-Response: `{ event: { id, prefix, hash, action, occurredAt, userId } }`.
+Response: `{ event: { id, prefix, hash, action, occurredAt, userId } }` — no clear number.
+
+### Admin reveal
+
+`POST /api/admin/events/:id/reveal` — **admin only** (`403` for members).
+
+Returns `{ number }` for that one event. `number` is `""` when the row has no stored clear value. Not a list endpoint.
 
 ### Personal stats
 

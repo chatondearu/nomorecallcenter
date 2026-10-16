@@ -175,4 +175,72 @@ if (e.prefix == null && e.hash == null) {
 console.log("[stats] admin feed OK count=" + j.events.length);
 ' "$FEED_JSON"
 
+echo "[stats] ingest clear number; member reads hash only"
+CLEAR_NUMBER="0612345678"
+NORMALIZED="33612345678"
+EXPECT_HASH="$(node -e 'const c=require("crypto"); process.stdout.write(c.createHash("sha256").update(process.argv[1]).digest("hex"))' "$NORMALIZED")"
+INGEST_JSON="$(curl -fsS -c "$COOKIE_USER" -b "$COOKIE_USER" \
+  -H 'content-type: application/json' \
+  -X POST "${BASE_URL}/api/events" \
+  -d "{\"number\":\"${CLEAR_NUMBER}\",\"action\":\"blocked\"}")"
+EVENT_ID="$(node -e '
+const j = JSON.parse(process.argv[1]);
+const hash = process.argv[2];
+const clear = process.argv[3];
+const normalized = process.argv[4];
+if (j.event?.hash !== hash) { console.error("hash mismatch", j); process.exit(2); }
+if (j.event.number || j.event.callerNumber) {
+  console.error("clear number leaked on ingest", j); process.exit(2);
+}
+process.stdout.write(j.event.id);
+' "$INGEST_JSON" "$EXPECT_HASH" "$CLEAR_NUMBER" "$NORMALIZED")"
+
+ME_AFTER="$(curl -fsS -c "$COOKIE_USER" -b "$COOKIE_USER" "${BASE_URL}/api/stats/me")"
+node -e '
+const j = JSON.parse(process.argv[1]);
+const id = process.argv[2];
+const clear = process.argv[3];
+const normalized = process.argv[4];
+const hit = (j.recent || []).find((e) => e.id === id);
+if (!hit || hit.hash !== process.argv[5] || hit.number || hit.callerNumber) {
+  console.error("member recent shape", hit); process.exit(2);
+}
+void clear; void normalized;
+console.log("[stats] member GET has hash only");
+' "$ME_AFTER" "$EVENT_ID" "$CLEAR_NUMBER" "$NORMALIZED" "$EXPECT_HASH"
+
+echo "[stats] member cannot reveal"
+HTTP_REVEAL="$(curl -sS -o /tmp/nmcc-stats-reveal-member.json -w '%{http_code}' \
+  -c "$COOKIE_USER" -b "$COOKIE_USER" \
+  -X POST "${BASE_URL}/api/admin/events/${EVENT_ID}/reveal" || true)"
+if [[ "$HTTP_REVEAL" != "403" ]]; then
+  echo "[stats] expected 403 for member reveal, got HTTP ${HTTP_REVEAL}"
+  cat /tmp/nmcc-stats-reveal-member.json || true
+  exit 1
+fi
+
+echo "[stats] admin reveal returns the clear number"
+REVEAL_JSON="$(curl -fsS -c "$COOKIE_ADMIN" -b "$COOKIE_ADMIN" \
+  -X POST "${BASE_URL}/api/admin/events/${EVENT_ID}/reveal")"
+node -e '
+const j = JSON.parse(process.argv[1]);
+const normalized = process.argv[2];
+if (j.number !== normalized) { console.error("reveal mismatch", j); process.exit(2); }
+console.log("[stats] admin reveal OK");
+' "$REVEAL_JSON" "$NORMALIZED"
+
+echo "[stats] admin feed still omits the clear number"
+FEED_AFTER="$(curl -fsS -c "$COOKIE_ADMIN" -b "$COOKIE_ADMIN" "${BASE_URL}/api/admin/events/feed?limit=20")"
+node -e '
+const j = JSON.parse(process.argv[1]);
+const id = process.argv[2];
+const clear = process.argv[3];
+const normalized = process.argv[4];
+const hit = (j.events || []).find((e) => e.id === id);
+if (!hit || hit.number || hit.callerNumber) { console.error("feed leaked fields", hit); process.exit(2); }
+if (hit.hash !== process.argv[5]) { console.error("feed hash", hit); process.exit(2); }
+void clear; void normalized;
+console.log("[stats] admin feed hash-only OK");
+' "$FEED_AFTER" "$EVENT_ID" "$CLEAR_NUMBER" "$NORMALIZED" "$EXPECT_HASH"
+
 echo "[stats] done"

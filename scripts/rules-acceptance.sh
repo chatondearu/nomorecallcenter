@@ -79,6 +79,61 @@ process.stdout.write(j.rule.id);
 ' "$CREATE_JSON")"
 echo "[rules] rule id=${RULE_ID}"
 
+echo "[rules] create allow for the same pattern"
+ALLOW_JSON="$(curl -fsS -c "$COOKIE_USER" -b "$COOKIE_USER" \
+  -H 'content-type: application/json' \
+  -X POST "${BASE_URL}/api/rules" \
+  -d "{\"pattern\":\"${PATTERN}\",\"matchType\":\"exact\",\"ttlPreset\":\"24h\",\"effect\":\"allow\"}")"
+ALLOW_ID="$(node -e '
+const j = JSON.parse(process.argv[1]);
+if (!j.rule?.id || j.rule.effect !== "allow" || j.rule.active !== true) {
+  console.error(j); process.exit(2);
+}
+process.stdout.write(j.rule.id);
+' "$ALLOW_JSON")"
+echo "[rules] allow id=${ALLOW_ID}"
+
+echo "[rules] same allow again is a conflict"
+HTTP_DUP="$(curl -sS -o /tmp/nmcc-rules-dup-allow.json -w '%{http_code}' \
+  -c "$COOKIE_USER" -b "$COOKIE_USER" \
+  -H 'content-type: application/json' \
+  -X POST "${BASE_URL}/api/rules" \
+  -d "{\"pattern\":\"${PATTERN}\",\"matchType\":\"exact\",\"ttlPreset\":\"24h\",\"effect\":\"allow\"}" || true)"
+if [[ "$HTTP_DUP" != "409" ]]; then
+  echo "[rules] expected 409 for duplicate allow, got HTTP ${HTTP_DUP}"
+  cat /tmp/nmcc-rules-dup-allow.json || true
+  exit 1
+fi
+
+echo "[rules] second device syncs the allow"
+COOKIE_USER2="$(mktemp)"
+trap 'rm -f "$COOKIE_ADMIN" "$COOKIE_USER" "$COOKIE_USER2"' EXIT
+curl -fsS -c "$COOKIE_USER2" -b "$COOKIE_USER2" \
+  -H 'content-type: application/json' \
+  -X POST "${BASE_URL}/api/auth/sign-in/email" \
+  -d "{\"email\":\"${USER_EMAIL}\",\"password\":\"${USER_PASSWORD}\"}" >/dev/null
+SYNC_ALLOW="$(curl -fsS -c "$COOKIE_USER2" -b "$COOKIE_USER2" "${BASE_URL}/api/rules/sync")"
+node -e '
+const j = JSON.parse(process.argv[1]);
+const id = process.argv[2];
+const hit = (j.rules || []).find((r) => r.id === id);
+if (!hit || hit.effect !== "allow") {
+  console.error("second device missing allow", j); process.exit(2);
+}
+console.log("[rules] second device sync OK");
+' "$SYNC_ALLOW" "$ALLOW_ID"
+
+echo "[rules] non-owner sync does not include the allow"
+SYNC_ADMIN="$(curl -fsS -c "$COOKIE_ADMIN" -b "$COOKIE_ADMIN" "${BASE_URL}/api/rules/sync")"
+node -e '
+const j = JSON.parse(process.argv[1]);
+const id = process.argv[2];
+if ((j.rules || []).some((r) => r.id === id)) {
+  console.error("non-owner can read allow", j); process.exit(2);
+}
+console.log("[rules] non-owner sync hides allow");
+' "$SYNC_ADMIN" "$ALLOW_ID"
+
 echo "[rules] renew 7d (restart TTL from now)"
 RENEW_BEFORE="$(node -e 'const j=JSON.parse(process.argv[1]); process.stdout.write(j.rule.expiresAt)' "$CREATE_JSON")"
 sleep 1

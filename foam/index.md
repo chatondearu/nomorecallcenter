@@ -36,6 +36,7 @@ Index: [[decisions/index|All ADRs]]
 - [[decisions/ADR-007-block-ttl-model|ADR-007]] — Personal block TTL model (accepted)
 - [[decisions/ADR-008-distribution-channels|ADR-008]] — Distribution channels MVP (accepted)
 - [[decisions/ADR-009-design-system|ADR-009]] — Design system MD3 (accepted)
+- [[decisions/ADR-010-caller-number-storage|ADR-010]] — Caller number storage and admin reveal (accepted)
 
 ## PRDs & plans
 
@@ -43,11 +44,12 @@ Index: [[decisions/index|All ADRs]]
 | --- | ------ |
 | [[../prd/PRD-1-mvp-and-vision\|PRD-1]] MVP + vision | approved |
 | [[../plans/PLAN-1-mvp-and-vision\|PLAN-1]] MVP + vision | draft |
+| [[../prd/PRD-28-android-allow-and-screening-modes\|PRD-28]] Allow rules + screening modes | approved |
+| [[../plans/PLAN-28-android-allow-and-screening-modes\|PLAN-28]] Allow rules + screening modes | draft |
 
 - PRD template: `prd/template.md`
 - Plan template: `plans/template.md`
 
 ## Tags
 
-`#product` `#architecture` `#deployment` `#data` `#auth`
-| [[../prd/PRD-1-mvp-and-vision|PRD-1-mvp-and-vision]] | draft |
+`#product` `#architecture` `#deployment` `#data` `#auth` `#privacy`

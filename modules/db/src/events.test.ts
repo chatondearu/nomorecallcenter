@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import {
   eventsRetentionDays,
+  hashCallerNumber,
   isEventAction,
+  normalizeCallerNumber,
   normalizeEventHash,
   normalizeEventPrefix,
   retentionCutoff,
@@ -16,6 +18,20 @@ describe('normalizeEventPrefix', () => {
   it('rejects clear full numbers (>8 digits)', () => {
     expect(normalizeEventPrefix('0612345678')).toBeNull()
     expect(normalizeEventPrefix('33612345678')).toBeNull()
+  })
+})
+
+describe('normalizeCallerNumber', () => {
+  it('canonicalizes FR national and international forms', () => {
+    expect(normalizeCallerNumber('0612345678')).toBe('33612345678')
+    expect(normalizeCallerNumber('+33 6 12 34 56 78')).toBe('33612345678')
+    expect(normalizeCallerNumber('1')).toBeNull()
+  })
+
+  it('hashes the normalized digits', () => {
+    const hash = hashCallerNumber('33612345678')
+    expect(hash).toHaveLength(64)
+    expect(hash).toBe(hashCallerNumber('33612345678'))
   })
 })
 

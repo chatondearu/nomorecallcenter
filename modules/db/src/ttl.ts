@@ -5,6 +5,9 @@ export type TtlPreset = typeof TTL_PRESETS[number]
 export const MATCH_TYPES = ['exact', 'prefix'] as const
 export type MatchType = typeof MATCH_TYPES[number]
 
+export const RULE_EFFECTS = ['allow', 'block'] as const
+export type RuleEffect = typeof RULE_EFFECTS[number]
+
 const TTL_MS: Record<Exclude<TtlPreset, 'permanent'>, number> = {
   '1h': 3_600_000,
   '24h': 86_400_000,
@@ -18,6 +21,10 @@ export function isTtlPreset(value: unknown): value is TtlPreset {
 
 export function isMatchType(value: unknown): value is MatchType {
   return typeof value === 'string' && (MATCH_TYPES as readonly string[]).includes(value)
+}
+
+export function isRuleEffect(value: unknown): value is RuleEffect {
+  return typeof value === 'string' && (RULE_EFFECTS as readonly string[]).includes(value)
 }
 
 /** Compute expiresAt from now for a preset; permanent → null. */

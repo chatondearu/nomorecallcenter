@@ -8,6 +8,7 @@ export function serializePersonalRule(row: PersonalRuleRow, now: Date = new Date
     id: row.id,
     pattern: row.pattern,
     matchType: row.matchType,
+    effect: row.effect,
     ttlPreset: row.ttlPreset,
     expiresAt: row.expiresAt ? row.expiresAt.toISOString() : null,
     active: isRuleActive(row.expiresAt, now),
