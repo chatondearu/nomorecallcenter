@@ -27,6 +27,26 @@ Full documentation: [`doc/README.md`](doc/README.md)
 - Docker + Docker Compose
 - Android: JDK 17 + SDK 35 for APK builds
 
+## Dev shell (Nix + direnv)
+
+Preferred local setup for humans and agents — pins Node 22, pnpm, JDK 17,
+Android SDK (platforms 35 + build-tools 34/35), and docker-compose.
+
+```bash
+# First time (or after cloning)
+direnv allow          # interactive terminals with direnv
+# Agents / CI without direnv: wrap every command
+nix develop -c pnpm install
+nix develop -c bash -c 'cd android && ./gradlew :matcher:test :app:assembleDebug'
+```
+
+If `flake.nix` / `.envrc` are new and untracked, `git add` them first so Nix
+can see the flake. Debug APK:
+`android/app/build/outputs/apk/debug/app-debug.apk`.
+
+Without Nix: install the prerequisites above yourself and keep
+`JAVA_HOME` / `ANDROID_HOME` set (see [`android/README.md`](android/README.md)).
+
 ## Self-host smoke path
 
 Compose → bootstrap → invite → Android URL → Call Screening role:
