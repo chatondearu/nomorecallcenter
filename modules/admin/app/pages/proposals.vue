@@ -69,18 +69,13 @@ function formatTime(iso: string) {
         <h1 class="text-2xl font-bold">
           Propositions
         </h1>
-        <p class="text-system-on-surface-variant text-sm mt-1">
+        <p class="text-system-on-surface-variant text-sm mt-xs">
           File d’attente — approuver applique le motif à la liste partagée.
         </p>
       </div>
-      <button
-        type="button"
-        class="rounded-md border border-system-outline px-3 py-2 text-sm hover:bg-system-surface-variant"
-        :disabled="loading"
-        @click="load"
-      >
+      <FilledButton :disabled="loading" @click="load">
         Actualiser
-      </button>
+      </FilledButton>
     </header>
 
     <p v-if="error" class="text-error text-sm" role="alert">
@@ -95,28 +90,27 @@ function formatTime(iso: string) {
       <li
         v-for="p in proposals"
         :key="p.id"
-        class="rounded-lg border border-system-outline-variant bg-system-surface p-md flex flex-col sm:flex-row sm:items-center gap-md justify-between"
+        class="rounded-lg bg-system-surface p-md flex flex-col sm:flex-row sm:items-center gap-md justify-between"
       >
         <div>
           <p class="font-mono text-lg tabular-nums text-primary">
             {{ p.pattern }}
           </p>
-          <p class="text-sm text-system-on-surface-variant mt-1">
+          <p class="text-sm text-system-on-surface-variant mt-xs">
             {{ p.matchType }} · {{ formatTime(p.createdAt) }}
           </p>
         </div>
-        <div class="flex gap-2 shrink-0">
-          <button
-            type="button"
-            class="rounded-md bg-primary text-on-primary px-4 py-2 text-sm font-medium disabled:opacity-50"
+        <div class="flex gap-sm shrink-0">
+          <FilledButton
             :disabled="busyId === p.id"
             @click="moderate(p.id, 'approve')"
           >
             Approuver
-          </button>
+          </FilledButton>
+          <!-- Shared FilledButton has no destructive style. -->
           <button
             type="button"
-            class="rounded-md border border-error text-error px-4 py-2 text-sm font-medium disabled:opacity-50"
+            class="rounded-full border border-error text-error px-lg py-sm text-sm font-medium disabled:opacity-40"
             :disabled="busyId === p.id"
             @click="moderate(p.id, 'reject')"
           >

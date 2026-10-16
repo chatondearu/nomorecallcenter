@@ -33,6 +33,19 @@ const revealed = ref<Record<string, string>>({})
 const error = ref<string | null>(null)
 const loading = ref(true)
 
+const tiles = computed(() => [
+  { label: 'En attente', value: stats.value?.proposalFunnel?.pending ?? 0 },
+  { label: 'Approuvées', value: stats.value?.proposalFunnel?.approved ?? 0 },
+  { label: 'Rejetées', value: stats.value?.proposalFunnel?.rejected ?? 0 },
+  { label: 'Volume événements', value: stats.value?.eventVolume ?? 0 },
+])
+
+function hashMarker(hash: string | null) {
+  if (!hash)
+    return '—'
+  return hash.length > 12 ? `${hash.slice(0, 12)}…` : hash
+}
+
 async function reveal(id: string) {
   try {
     const body = await apiFetch<{ number: string }>(`/api/admin/events/${id}/reveal`, { method: 'POST' })
@@ -92,7 +105,7 @@ function formatTime(iso: string) {
       <h1 class="text-2xl font-bold text-system-on-background">
         Vue d’ensemble
       </h1>
-      <p class="text-system-on-surface-variant text-sm mt-1">
+      <p class="text-system-on-surface-variant text-sm mt-xs">
         Entonnoir des propositions et fil d’événements (rafraîchi toutes les 5 s).
       </p>
     </header>
@@ -106,56 +119,42 @@ function formatTime(iso: string) {
 
     <template v-else>
       <section class="grid grid-cols-2 md:grid-cols-4 gap-md">
-        <div
-          v-for="tile in [
-            { label: 'En attente', value: stats?.proposalFunnel?.pending ?? 0 },
-            { label: 'Approuvées', value: stats?.proposalFunnel?.approved ?? 0 },
-            { label: 'Rejetées', value: stats?.proposalFunnel?.rejected ?? 0 },
-            { label: 'Volume événements', value: stats?.eventVolume ?? 0 },
-          ]"
+        <StatTile
+          v-for="tile in tiles"
           :key="tile.label"
-          class="rounded-lg bg-system-surface-container p-md border border-system-outline-variant"
-        >
-          <p class="text-system-on-surface-variant text-sm">
-            {{ tile.label }}
-          </p>
-          <p class="text-2xl font-bold tabular-nums mt-1 text-primary">
-            {{ tile.value }}
-          </p>
-        </div>
+          :label="tile.label"
+          :value="tile.value"
+        />
       </section>
 
-      <section v-if="stats?.counters" class="text-sm text-system-on-surface-variant">
-        Instance 7 j —
-        filtrés {{ stats.counters['7d'].screened }},
-        bloqués {{ stats.counters['7d'].blocked }},
-        autorisés {{ stats.counters['7d'].allowed }}
+      <section v-if="stats?.counters" class="grid grid-cols-3 gap-md">
+        <StatTile label="Filtrés (7 j)" :value="stats.counters['7d'].screened" />
+        <StatTile label="Bloqués (7 j)" :value="stats.counters['7d'].blocked" />
+        <StatTile label="Autorisés (7 j)" :value="stats.counters['7d'].allowed" />
       </section>
 
-      <section>
-        <h2 class="text-lg font-semibold mb-md">
+      <section class="flex flex-col gap-sm">
+        <h2 class="text-lg font-semibold">
           Fil en direct
         </h2>
-        <ul v-if="events.length" class="flex flex-col gap-2">
+        <ul v-if="events.length" class="flex flex-col gap-sm">
           <li
             v-for="ev in events"
             :key="ev.id"
-            class="rounded-md bg-system-surface border border-system-outline-variant px-3 py-2 text-sm flex flex-wrap gap-x-4 gap-y-1"
+            class="flex flex-col gap-xs"
           >
-            <span class="font-mono tabular-nums text-tertiary">{{ ev.prefix || (ev.hash ? `${ev.hash.slice(0, 10)}…` : '—') }}</span>
-            <span
-              :class="{
-                'text-status-blocked': ev.action === 'blocked',
-                'text-status-allowed': ev.action === 'allowed',
-                'text-status-watch': ev.action === 'screened',
-              }"
-            >{{ ev.action }}</span>
-            <span class="text-system-on-surface-variant">{{ formatTime(ev.occurredAt) }}</span>
-            <span class="text-system-on-surface-variant font-mono text-xs truncate max-w-40">{{ ev.userId }}</span>
-            <button type="button" class="text-primary underline" @click="reveal(ev.id)">
-              Révéler
-            </button>
-            <span v-if="revealed[ev.id]" class="font-mono">{{ revealed[ev.id] }}</span>
+            <EventRow
+              :marker="hashMarker(ev.hash)"
+              :action="ev.action"
+              :time="formatTime(ev.occurredAt)"
+            />
+            <div class="flex flex-wrap items-center gap-md px-md text-sm">
+              <span class="text-system-on-surface-variant font-mono text-xs truncate max-w-40">{{ ev.userId }}</span>
+              <button type="button" class="text-primary underline" @click="reveal(ev.id)">
+                Révéler
+              </button>
+              <span v-if="revealed[ev.id]" class="font-mono">{{ revealed[ev.id] }}</span>
+            </div>
           </li>
         </ul>
         <p v-else class="text-system-on-surface-variant text-sm">

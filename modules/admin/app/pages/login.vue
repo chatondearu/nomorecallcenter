@@ -10,6 +10,7 @@ const email = ref('')
 const password = ref('')
 const error = ref<string | null>(null)
 const pending = ref(false)
+const passwordId = useId()
 
 onMounted(async () => {
   if (route.query.error === 'admin')
@@ -22,6 +23,10 @@ onMounted(async () => {
 
 async function onSubmit() {
   error.value = null
+  if (!email.value.trim() || !password.value) {
+    error.value = 'E-mail et mot de passe sont requis.'
+    return
+  }
   pending.value = true
   try {
     const sessionUser = await signIn(email.value.trim(), password.value)
@@ -43,50 +48,41 @@ async function onSubmit() {
 
 <template>
   <form
-    class="bg-system-surface rounded-lg p-lg border border-system-outline-variant flex flex-col gap-md"
+    class="bg-system-surface rounded-lg p-lg flex flex-col gap-md"
     @submit.prevent="onSubmit"
   >
     <div>
       <h1 class="text-primary text-2xl font-bold">
         nomorecallcenter
       </h1>
-      <p class="text-system-on-surface-variant mt-1 text-sm">
+      <p class="text-system-on-surface-variant mt-xs text-sm">
         Connexion administrateur
       </p>
     </div>
 
-    <label class="flex flex-col gap-1 text-sm">
-      <span class="text-system-on-surface-variant">E-mail</span>
-      <input
-        v-model="email"
-        type="email"
-        required
-        autocomplete="username"
-        class="rounded-md border border-system-outline bg-system-surface-container px-3 py-2 text-system-on-surface"
-      >
-    </label>
+    <OutlinedField v-model="email" label="E-mail" />
 
-    <label class="flex flex-col gap-1 text-sm">
-      <span class="text-system-on-surface-variant">Mot de passe</span>
+    <!-- OutlinedField cannot set input type="password". -->
+    <div class="flex flex-col gap-xs">
+      <label :for="passwordId" class="text-sm text-system-on-surface">
+        Mot de passe
+      </label>
       <input
+        :id="passwordId"
         v-model="password"
         type="password"
         required
         autocomplete="current-password"
-        class="rounded-md border border-system-outline bg-system-surface-container px-3 py-2 text-system-on-surface"
+        class="rounded-sm border border-system-outline bg-system-surface px-md py-sm text-system-on-surface outline-none focus:border-primary"
       >
-    </label>
+    </div>
 
     <p v-if="error" class="text-error text-sm" role="alert">
       {{ error }}
     </p>
 
-    <button
-      type="submit"
-      class="rounded-md bg-primary text-on-primary px-4 py-2 font-medium disabled:opacity-50"
-      :disabled="pending"
-    >
+    <FilledButton type="submit" :disabled="pending">
       {{ pending ? 'Connexion…' : 'Se connecter' }}
-    </button>
+    </FilledButton>
   </form>
 </template>

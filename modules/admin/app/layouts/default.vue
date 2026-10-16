@@ -33,7 +33,7 @@ async function onSignOut() {
           :to="link.to"
           class="rounded-md px-3 py-2 text-sm transition-colors"
           :class="route.path === link.to
-            ? 'bg-primary-container text-on-primary-container font-medium'
+            ? 'bg-system-primary-container text-system-on-primary-container font-medium'
             : 'text-system-on-surface hover:bg-system-surface-variant'"
         >
           {{ link.label }}
