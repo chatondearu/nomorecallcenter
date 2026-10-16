@@ -49,6 +49,15 @@ private val countryOptions = listOf(
 
 private enum class RulesTab { DEFAULT, PERSONAL }
 
+private fun ttlChipLabel(preset: String): String = when (preset) {
+    "1h" -> "1 h"
+    "24h" -> "24 h"
+    "7d" -> "7 j"
+    "30d" -> "30 j"
+    "permanent" -> "Permanent"
+    else -> preset
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RulesScreen() {
@@ -87,10 +96,10 @@ fun RulesScreen() {
         contentPadding = androidx.compose.foundation.layout.PaddingValues(vertical = 24.dp),
     ) {
         item {
-            Text("Rules", style = MaterialTheme.typography.headlineSmall)
+            Text("Règles", style = MaterialTheme.typography.headlineSmall)
             Text(
-                "Official FR ranges (bundled) and your personal rules. Toggle to enable/disable. " +
-                    "Call Screening role must be active (Home).",
+                "Tranches officielles FR (intégrées) et vos règles personnelles. Activez ou désactivez. " +
+                    "Le rôle de filtrage doit être actif (Accueil).",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(top = 8.dp),
@@ -102,19 +111,19 @@ fun RulesScreen() {
                 FilterChip(
                     selected = tab == RulesTab.DEFAULT,
                     onClick = { tab = RulesTab.DEFAULT },
-                    label = { Text("Default FR (${defaultEntries.size})") },
+                    label = { Text("Liste FR (${defaultEntries.size})") },
                 )
                 FilterChip(
                     selected = tab == RulesTab.PERSONAL,
                     onClick = { tab = RulesTab.PERSONAL },
-                    label = { Text("Personal (${personalRules.size})") },
+                    label = { Text("Personnelles (${personalRules.size})") },
                 )
             }
         }
 
         if (tab == RulesTab.PERSONAL) {
             item {
-                Text("Country code", style = MaterialTheme.typography.labelLarge)
+                Text("Indicatif", style = MaterialTheme.typography.labelLarge)
                 ExposedDropdownMenuBox(
                     expanded = countryExpanded,
                     onExpandedChange = { countryExpanded = it },
@@ -126,7 +135,7 @@ fun RulesScreen() {
                         value = selectedCountry.label,
                         onValueChange = {},
                         readOnly = true,
-                        label = { Text("Country") },
+                        label = { Text("Pays") },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(countryExpanded) },
                         modifier = Modifier
                             .menuAnchor(MenuAnchorType.PrimaryNotEditable)
@@ -153,28 +162,28 @@ fun RulesScreen() {
                 OutlinedTextField(
                     value = pattern,
                     onValueChange = { pattern = it },
-                    label = { Text("Local digits (e.g. 783 or 0783)") },
+                    label = { Text("Chiffres locaux (ex. 783 ou 0783)") },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     supportingText = {
                         if (preview.isNotEmpty()) {
-                            Text("Will save: ${preview.joinToString(" · ")}")
+                            Text("Sera enregistré : ${preview.joinToString(" · ")}")
                         }
                     },
                 )
             }
 
             item {
-                Text("Match type", style = MaterialTheme.typography.labelLarge)
+                Text("Correspondance", style = MaterialTheme.typography.labelLarge)
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     modifier = Modifier.padding(top = 4.dp),
                 ) {
-                    listOf("prefix", "exact").forEach { option ->
+                    listOf("prefix" to "Préfixe", "exact" to "Exact").forEach { (value, label) ->
                         FilterChip(
-                            selected = matchType == option,
-                            onClick = { matchType = option },
-                            label = { Text(option) },
+                            selected = matchType == value,
+                            onClick = { matchType = value },
+                            label = { Text(label) },
                         )
                     }
                 }
@@ -197,16 +206,22 @@ fun RulesScreen() {
             }
 
             item {
-                Text("TTL", style = MaterialTheme.typography.labelLarge)
+                Text("Durée", style = MaterialTheme.typography.labelLarge)
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     modifier = Modifier.padding(top = 4.dp),
                 ) {
-                    listOf("1h", "24h", "7d", "30d", "permanent").forEach { option ->
+                    listOf(
+                        "1h" to "1 h",
+                        "24h" to "24 h",
+                        "7d" to "7 j",
+                        "30d" to "30 j",
+                        "permanent" to "Permanent",
+                    ).forEach { (value, label) ->
                         FilterChip(
-                            selected = ttl == option,
-                            onClick = { ttl = option },
-                            label = { Text(option) },
+                            selected = ttl == value,
+                            onClick = { ttl = value },
+                            label = { Text(label) },
                         )
                     }
                 }
@@ -227,16 +242,16 @@ fun RulesScreen() {
                                     val saved = preview.joinToString(", ")
                                     pattern = ""
                                     reload()
-                                    "Saved: $saved"
+                                    "Enregistré : $saved"
                                 },
-                                onFailure = { it.message ?: "Create failed" },
+                                onFailure = { it.message ?: "Échec de la création" },
                             )
                         }
                     },
                     enabled = pattern.filter { it.isDigit() }.length >= 2,
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    Text("Add personal rule")
+                    Text("Ajouter une règle personnelle")
                 }
                 if (message != null) {
                     Text(
@@ -251,8 +266,8 @@ fun RulesScreen() {
                 RuleToggleRow(
                     title = rule.pattern,
                     subtitle = "${if (rule.effect == RuleEffect.ALLOW) "autoriser" else "bloquer"} · " +
-                        "${if (rule.matchType == MatchType.EXACT) "exact" else "prefix"} · ${rule.ttlPreset}" +
-                        (rule.expiresAt?.let { " · expires $it" } ?: " · permanent"),
+                        "${if (rule.matchType == MatchType.EXACT) "exact" else "préfixe"} · ${ttlChipLabel(rule.ttlPreset)}" +
+                        (rule.expiresAt?.let { " · expire $it" } ?: " · permanente"),
                     checked = rule.active,
                     onCheckedChange = { enabled ->
                         scope.launch {
@@ -266,13 +281,13 @@ fun RulesScreen() {
                                 onClick = {
                                     scope.launch {
                                         message = app.sync.proposeToGlobal(rule.id).fold(
-                                            onSuccess = { "Proposed to global (pending moderation)" },
-                                            onFailure = { it.message ?: "Propose failed" },
+                                            onSuccess = { "Proposée pour la liste globale (modération en attente)" },
+                                            onFailure = { it.message ?: "Échec de la proposition" },
                                         )
                                     }
                                 },
                             ) {
-                                Text("Propose")
+                                Text("Proposer")
                             }
                         }
                     } else {
@@ -283,13 +298,13 @@ fun RulesScreen() {
 
             if (personalRules.isEmpty()) {
                 item {
-                    Text("No personal rules yet", style = MaterialTheme.typography.bodySmall)
+                    Text("Aucune règle personnelle", style = MaterialTheme.typography.bodySmall)
                 }
             }
         } else {
             item {
                 Text(
-                    "Bundled ARCEP NPV / demarchage prefixes. Disable entries you want to allow.",
+                    "Préfixes ARCEP NPV / démarchage intégrés. Désactivez ceux que vous voulez laisser passer.",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -297,7 +312,7 @@ fun RulesScreen() {
             items(defaultEntries, key = { it.id }) { entry ->
                 RuleToggleRow(
                     title = entry.pattern,
-                    subtitle = "default · ${entry.id}",
+                    subtitle = "liste · ${entry.id}",
                     checked = entry.active,
                     onCheckedChange = { enabled ->
                         scope.launch {
@@ -309,7 +324,7 @@ fun RulesScreen() {
             }
             if (defaultEntries.isEmpty()) {
                 item {
-                    Text("Default list empty — use Refresh on Home", style = MaterialTheme.typography.bodySmall)
+                    Text("Liste vide — actualisez depuis Accueil", style = MaterialTheme.typography.bodySmall)
                 }
             }
         }

@@ -3,9 +3,9 @@ package fr.chatondearu.nmcc.ui
 import android.app.Activity
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Rule
 import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Rule
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -35,10 +35,10 @@ fun NmccNav(activity: Activity) {
     val showBar = route in setOf("home", "rules", "stats", "settings")
 
     val tabs = listOf(
-        Tab("home", "Home", Icons.Filled.Home),
-        Tab("rules", "Rules", Icons.Filled.Rule),
+        Tab("home", "Accueil", Icons.Filled.Home),
+        Tab("rules", "Règles", Icons.AutoMirrored.Filled.Rule),
         Tab("stats", "Stats", Icons.Filled.BarChart),
-        Tab("settings", "Settings", Icons.Filled.Settings),
+        Tab("settings", "Paramètres", Icons.Filled.Settings),
     )
 
     Scaffold(

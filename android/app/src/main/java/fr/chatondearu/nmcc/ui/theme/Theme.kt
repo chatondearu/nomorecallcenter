@@ -27,6 +27,11 @@ private val LightScheme = lightColorScheme(
     onSurface = NmccColors.onSurface,
     surfaceVariant = NmccColors.surfaceVariant,
     onSurfaceVariant = NmccColors.onSurfaceVariant,
+    surfaceContainerLowest = NmccColors.surfaceContainerLowest,
+    surfaceContainerLow = NmccColors.surfaceContainerLow,
+    surfaceContainer = NmccColors.surfaceContainer,
+    surfaceContainerHigh = NmccColors.surfaceContainerHigh,
+    surfaceContainerHighest = NmccColors.surfaceContainerHighest,
     outline = NmccColors.outline,
     outlineVariant = NmccColors.outlineVariant,
 )

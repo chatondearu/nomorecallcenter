@@ -84,7 +84,7 @@ fun expandCountryPrefixPatterns(countryCallingCode: String, rawLocal: String): L
     require(cc.isNotEmpty() && cc.length <= 3) { "Invalid country calling code" }
 
     var local = rawLocal.filter { it.isDigit() }
-    require(local.length >= 2) { "Pattern must be at least 2 digits" }
+    require(local.length >= 2) { "Le motif doit contenir au moins 2 chiffres" }
 
     if (local.startsWith("00")) local = local.drop(2)
     if (local.startsWith(cc)) local = local.drop(cc.length)
@@ -101,7 +101,7 @@ fun expandCountryPrefixPatterns(countryCallingCode: String, rawLocal: String): L
         else -> {
             val significant = if (local.startsWith("0")) local.drop(1) else local
             val international = (cc + significant).take(15)
-            require(international.length in 2..15) { "Pattern must be 2–15 digits" }
+            require(international.length in 2..15) { "Le motif doit contenir 2 à 15 chiffres" }
             listOf(international)
         }
     }

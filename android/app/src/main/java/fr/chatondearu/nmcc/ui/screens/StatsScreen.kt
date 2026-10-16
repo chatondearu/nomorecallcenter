@@ -2,11 +2,14 @@ package fr.chatondearu.nmcc.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -23,6 +26,38 @@ import fr.chatondearu.nmcc.network.StatsBundle
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
+
+private fun actionLabel(action: String): String = when (action) {
+    "blocked" -> "bloqué"
+    "allowed" -> "autorisé"
+    else -> action
+}
+
+@Composable
+private fun StatTileRow(tiles: List<Pair<String, Int>>) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        tiles.forEach { (label, value) ->
+            Card(
+                modifier = Modifier.weight(1f),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                ),
+            ) {
+                Column(modifier = Modifier.padding(12.dp)) {
+                    Text(value.toString(), style = MaterialTheme.typography.headlineSmall)
+                    Text(
+                        label,
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
+        }
+    }
+}
 
 @Composable
 fun StatsScreen() {
@@ -43,7 +78,7 @@ fun StatsScreen() {
                     for (i in (queue.length() - 1) downTo 0) {
                         val o = queue.getJSONObject(i)
                         add(
-                            "${o.optString("occurredAt")} · ${o.optString("action")} · " +
+                            "${o.optString("occurredAt")} · ${actionLabel(o.optString("action"))} · " +
                                 (o.optString("prefix").ifBlank { "—" }),
                         )
                     }
@@ -54,7 +89,7 @@ fun StatsScreen() {
         runCatching {
             withContext(Dispatchers.IO) {
                 val base = app.prefs.getBaseUrl()
-                require(base.isNotBlank()) { "Set an instance URL in Settings" }
+                require(base.isNotBlank()) { "Indiquez l’URL de l’instance dans Paramètres" }
                 if (scope == "personal") app.api.statsMe(base) else app.api.statsInstance(base)
             }
         }.onSuccess { stats = it }
@@ -68,17 +103,17 @@ fun StatsScreen() {
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        Text("Stats", style = MaterialTheme.typography.headlineSmall)
-        androidx.compose.foundation.layout.Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text("Statistiques", style = MaterialTheme.typography.headlineSmall)
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             FilterChip(
                 selected = scope == "local",
                 onClick = { scope = "local" },
-                label = { Text("Local queue") },
+                label = { Text("File locale") },
             )
             FilterChip(
                 selected = scope == "personal",
                 onClick = { scope = "personal" },
-                label = { Text("Personal") },
+                label = { Text("Personnel") },
             )
             FilterChip(
                 selected = scope == "instance",
@@ -92,9 +127,9 @@ fun StatsScreen() {
         }
 
         if (scope == "local") {
-            Text("Pending / recent local screen events", style = MaterialTheme.typography.titleMedium)
+            Text("Événements locaux en attente ou récents", style = MaterialTheme.typography.titleMedium)
             if (localLines.isEmpty()) {
-                Text("No local events yet", style = MaterialTheme.typography.bodySmall)
+                Text("Aucun événement local", style = MaterialTheme.typography.bodySmall)
             } else {
                 localLines.take(40).forEach { line ->
                     Text(line, style = MaterialTheme.typography.bodySmall, modifier = Modifier.fillMaxWidth())
@@ -103,20 +138,32 @@ fun StatsScreen() {
         }
 
         stats?.let { s ->
-            Text("Last 7 days", style = MaterialTheme.typography.titleMedium)
-            Text("Screened ${s.screened7d} · Blocked ${s.blocked7d} · Allowed ${s.allowed7d}")
-            Text("Last 30 days", style = MaterialTheme.typography.titleMedium)
-            Text("Screened ${s.screened30d} · Blocked ${s.blocked30d} · Allowed ${s.allowed30d}")
-            Text("Recent", style = MaterialTheme.typography.titleMedium)
+            Text("7 derniers jours", style = MaterialTheme.typography.titleMedium)
+            StatTileRow(
+                listOf(
+                    "Filtrés" to s.screened7d,
+                    "Bloqués" to s.blocked7d,
+                    "Autorisés" to s.allowed7d,
+                ),
+            )
+            Text("30 derniers jours", style = MaterialTheme.typography.titleMedium)
+            StatTileRow(
+                listOf(
+                    "Filtrés" to s.screened30d,
+                    "Bloqués" to s.blocked30d,
+                    "Autorisés" to s.allowed30d,
+                ),
+            )
+            Text("Récents", style = MaterialTheme.typography.titleMedium)
             s.recent.take(20).forEach { e ->
                 Text(
-                    "${e.occurredAt} · ${e.action} · ${e.prefix ?: "—"}",
+                    "${e.occurredAt} · ${actionLabel(e.action)} · ${e.prefix ?: "—"}",
                     style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
             if (s.recent.isEmpty()) {
-                Text("No recent events", style = MaterialTheme.typography.bodySmall)
+                Text("Aucun événement récent", style = MaterialTheme.typography.bodySmall)
             }
         }
     }

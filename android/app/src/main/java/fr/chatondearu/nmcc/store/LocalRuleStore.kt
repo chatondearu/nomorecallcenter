@@ -91,7 +91,7 @@ class LocalRuleStore(private val prefs: AppPrefs) {
         ttlPreset: String,
         effect: String = "block",
     ) {
-        require(patterns.isNotEmpty()) { "No patterns" }
+        require(patterns.isNotEmpty()) { "Aucun motif" }
         val expiresAt = expiresIsoFor(ttlPreset)
         val type = if (matchType.equals("exact", true)) MatchType.EXACT else MatchType.PREFIX
         val ruleEffect = if (effect.equals("allow", true)) RuleEffect.ALLOW else RuleEffect.BLOCK
@@ -100,7 +100,7 @@ class LocalRuleStore(private val prefs: AppPrefs) {
         val now = System.currentTimeMillis()
         patterns.forEachIndexed { index, pattern ->
             val digits = pattern.filter { it.isDigit() }
-            require(digits.length in 2..15) { "Pattern must be 2–15 digits" }
+            require(digits.length in 2..15) { "Le motif doit contenir 2 à 15 chiffres" }
             val key = ruleKey(digits, type, ruleEffect)
             if (key in existingKeys) return@forEachIndexed
             existing += SyncRule(

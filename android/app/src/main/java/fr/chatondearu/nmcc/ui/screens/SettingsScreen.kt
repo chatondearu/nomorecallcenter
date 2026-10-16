@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -72,10 +74,11 @@ fun SettingsScreen(onOpenLogin: () -> Unit, onSignedOut: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        Text("Réglages", style = MaterialTheme.typography.headlineSmall)
+        Text("Paramètres", style = MaterialTheme.typography.headlineSmall)
         PrefSwitch(
             title = "Contacts uniquement",
             subtitle = "Les numéros hors contacts sont rejetés. La liste des contacts reste sur l’appareil.",
@@ -145,21 +148,21 @@ fun SettingsScreen(onOpenLogin: () -> Unit, onSignedOut: () -> Unit) {
             },
         )
         Text(
-            "Optional: connect an instance later. Filtering works offline without sign-in.",
+            "Facultatif : connectez une instance plus tard. Le filtrage fonctionne hors ligne sans compte.",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         OutlinedTextField(
             value = baseUrl,
             onValueChange = { baseUrl = it },
-            label = { Text("Instance URL") },
+            label = { Text("URL de l’instance") },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
         )
         if (email.isNotBlank()) {
-            Text("Signed in as $email", style = MaterialTheme.typography.bodyMedium)
+            Text("Connecté en tant que $email", style = MaterialTheme.typography.bodyMedium)
         } else {
-            Text("Not signed in (offline)", style = MaterialTheme.typography.bodyMedium)
+            Text("Non connecté (hors ligne)", style = MaterialTheme.typography.bodyMedium)
         }
         Button(
             onClick = {
@@ -170,16 +173,16 @@ fun SettingsScreen(onOpenLogin: () -> Unit, onSignedOut: () -> Unit) {
             },
             modifier = Modifier.fillMaxWidth(),
         ) {
-            Text("Save URL")
+            Text("Enregistrer l’URL")
         }
         if (saved) {
-            Text("Saved", style = MaterialTheme.typography.bodySmall)
+            Text("Enregistré", style = MaterialTheme.typography.bodySmall)
         }
         OutlinedButton(
             onClick = onOpenLogin,
             modifier = Modifier.fillMaxWidth(),
         ) {
-            Text("Sign in to instance")
+            Text("Se connecter à l’instance")
         }
         if (email.isNotBlank()) {
             Button(
@@ -192,7 +195,7 @@ fun SettingsScreen(onOpenLogin: () -> Unit, onSignedOut: () -> Unit) {
                 },
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                Text("Sign out")
+                Text("Se déconnecter")
             }
         }
     }
