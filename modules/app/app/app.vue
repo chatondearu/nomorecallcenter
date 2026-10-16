@@ -100,7 +100,7 @@ async function copyInstanceUrl() {
             </a>
           </div>
         </div>
-        <ProtectionCard :held="true" />
+        <ProtectionCard />
       </section>
 
       <section aria-labelledby="steps-title">

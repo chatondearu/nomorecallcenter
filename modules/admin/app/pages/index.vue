@@ -144,8 +144,8 @@ function formatTime(iso: string) {
             class="flex flex-col gap-xs"
           >
             <EventRow
-              :marker="hashMarker(ev.hash)"
-              :action="ev.action"
+              :title="hashMarker(ev.hash)"
+              :status="ev.action"
               :time="formatTime(ev.occurredAt)"
             />
             <div class="flex flex-wrap items-center gap-md px-md text-sm">

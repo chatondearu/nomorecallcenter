@@ -11,10 +11,10 @@ const model = defineModel<(typeof options)[number]>()
       :key="option"
       type="button"
       role="radio"
-      class="rounded-full px-md py-xs text-sm border border-system-outline"
+      class="h-9 rounded-full px-md text-xs font-medium"
       :class="model === option
-        ? 'bg-primary text-system-on-primary'
-        : 'bg-system-surface text-system-on-surface'"
+        ? 'bg-system-primary-container text-system-on-primary-container'
+        : 'border border-system-outline-variant bg-system-surface-container-lowest text-system-on-surface-variant'"
       :aria-checked="model === option"
       @click="model = option"
     >

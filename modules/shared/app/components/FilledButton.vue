@@ -12,7 +12,7 @@ withDefaults(defineProps<{
   <button
     :type="type"
     :disabled="disabled"
-    class="rounded-full bg-primary text-system-on-primary px-lg py-sm text-sm font-medium disabled:opacity-40"
+    class="inline-flex h-12 items-center justify-center rounded-full bg-system-primary-container px-lg text-sm font-semibold text-system-on-primary disabled:opacity-40"
   >
     <slot />
   </button>
