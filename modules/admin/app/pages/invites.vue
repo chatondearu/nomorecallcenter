@@ -63,8 +63,8 @@ async function onSubmit() {
 <template>
   <div class="flex flex-col gap-lg max-w-lg">
     <header>
-      <h1 class="text-2xl font-bold">
-        Invitations
+      <h1 class="text-2xl font-bold text-system-on-surface">
+        Membres
       </h1>
       <p class="text-system-on-surface-variant text-sm mt-xs">
         Créer un jeton d’invitation (inscription réservée aux invités).
@@ -72,7 +72,7 @@ async function onSubmit() {
     </header>
 
     <form
-      class="rounded-lg bg-system-surface p-md flex flex-col gap-md"
+      class="rounded-lg border border-system-outline-variant bg-system-surface-container p-md flex flex-col gap-md"
       @submit.prevent="onSubmit"
     >
       <OutlinedField v-model="email" label="E-mail (optionnel)" />
