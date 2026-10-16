@@ -48,6 +48,11 @@ Index: [[decisions/index|All ADRs]]
 | [[../plans/PLAN-28-android-allow-and-screening-modes\|PLAN-28]] Allow rules + screening modes | draft |
 | [[../prd/PRD-31-md3-ui-pass\|PRD-31]] MD3 UI pass | approved |
 | [[../plans/PLAN-31-md3-ui-pass\|PLAN-31]] MD3 UI pass | draft |
+| [[../prd/PRD-41-rich-visual-pass\|PRD-41]] Rich visual pass | approved |
+| [[../plans/PLAN-42-shared-visual-kit\|PLAN-42]] Shared visual kit | draft |
+| [[../plans/PLAN-43-android-stitch-screens\|PLAN-43]] Android Stitch screens | draft |
+| [[../plans/PLAN-44-admin-stitch-shell\|PLAN-44]] Admin Stitch shell | draft |
+| [[../plans/PLAN-45-site-stitch-hero\|PLAN-45]] Public Stitch landing | draft |
 
 - PRD template: `prd/template.md`
 - Plan template: `plans/template.md`
