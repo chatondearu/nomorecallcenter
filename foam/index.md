@@ -46,6 +46,8 @@ Index: [[decisions/index|All ADRs]]
 | [[../plans/PLAN-1-mvp-and-vision\|PLAN-1]] MVP + vision | draft |
 | [[../prd/PRD-28-android-allow-and-screening-modes\|PRD-28]] Allow rules + screening modes | approved |
 | [[../plans/PLAN-28-android-allow-and-screening-modes\|PLAN-28]] Allow rules + screening modes | draft |
+| [[../prd/PRD-31-md3-ui-pass\|PRD-31]] MD3 UI pass | approved |
+| [[../plans/PLAN-31-md3-ui-pass\|PLAN-31]] MD3 UI pass | draft |
 
 - PRD template: `prd/template.md`
 - Plan template: `plans/template.md`
