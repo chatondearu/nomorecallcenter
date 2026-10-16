@@ -55,14 +55,14 @@ fun LoginScreen(onLoggedIn: () -> Unit) {
     ) {
         Text("No More Call Center", style = MaterialTheme.typography.headlineMedium)
         Text(
-            "Self-hosted instance login",
+            "Connexion à l’instance auto-hébergée",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         OutlinedTextField(
             value = baseUrl,
             onValueChange = { baseUrl = it },
-            label = { Text("Instance URL") },
+            label = { Text("URL de l’instance") },
             placeholder = { Text("http://192.168.1.10:3000") },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
@@ -70,14 +70,14 @@ fun LoginScreen(onLoggedIn: () -> Unit) {
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
-            label = { Text("Email") },
+            label = { Text("Adresse e-mail") },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
         )
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
-            label = { Text("Password") },
+            label = { Text("Mot de passe") },
             visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
@@ -102,7 +102,7 @@ fun LoginScreen(onLoggedIn: () -> Unit) {
                         }
                         onLoggedIn()
                     } catch (e: Exception) {
-                        error = e.message ?: "Login failed"
+                        error = e.message ?: "Échec de la connexion"
                     } finally {
                         loading = false
                     }
@@ -111,7 +111,7 @@ fun LoginScreen(onLoggedIn: () -> Unit) {
             enabled = !loading && baseUrl.isNotBlank() && email.isNotBlank() && password.isNotBlank(),
             modifier = Modifier.fillMaxWidth(),
         ) {
-            if (loading) CircularProgressIndicator() else Text("Sign in")
+            if (loading) CircularProgressIndicator() else Text("Se connecter")
         }
     }
 }

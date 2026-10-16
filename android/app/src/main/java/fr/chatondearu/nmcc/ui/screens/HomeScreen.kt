@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -80,15 +82,16 @@ fun HomeScreen(activity: Activity) {
     var journal by remember { mutableStateOf<List<String>>(emptyList()) }
     var testNumber by remember { mutableStateOf("0783123456") }
     var testResult by remember { mutableStateOf<String?>(null) }
+    var testBlocked by remember { mutableStateOf(false) }
 
     val roleLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult(),
     ) {
         holdsRole = ScreeningRole.holdsCallScreeningRole(activity)
         statusMessage = if (holdsRole) {
-            "Call screening role granted — incoming calls are filtered automatically"
+            "Rôle de filtrage accordé — les appels entrants sont filtrés automatiquement"
         } else {
-            "Role not granted yet. Only one call-screening app can be active — set NoMoreCallCenter in Default apps."
+            "Rôle pas encore accordé. Une seule application de filtrage peut être active — choisissez NoMoreCallCenter dans Applications par défaut."
         }
     }
 
@@ -101,9 +104,9 @@ fun HomeScreen(activity: Activity) {
                 !ActivityCompat.shouldShowRequestPermissionRationale(activity, it)
             }
         statusMessage = when {
-            smsGranted -> "SMS access granted — best-effort filter active"
-            smsDeniedHard -> "SMS blocked by system — open App settings → Permissions → SMS → Allow"
-            else -> "SMS permission denied — call screening still works without SMS"
+            smsGranted -> "Accès SMS accordé — filtre au mieux"
+            smsDeniedHard -> "SMS bloqués par le système — Réglages de l’application → Autorisations → SMS → Autoriser"
+            else -> "Autorisation SMS refusée — le filtrage des appels fonctionne sans SMS"
         }
     }
 
@@ -153,10 +156,15 @@ fun HomeScreen(activity: Activity) {
                     val normalized = o.optString("normalized").ifBlank { o.optString("raw") }
                     val matched = o.optString("matched")
                     val at = o.optString("at")
+                    val actionLabel = when (action) {
+                        "blocked" -> "bloqué"
+                        "allowed" -> "autorisé"
+                        else -> action
+                    }
                     buildString {
-                        append("Last screened: $action")
+                        append("Dernier filtrage : $actionLabel")
                         if (normalized.isNotBlank()) append(" · $normalized")
-                        if (matched.isNotBlank()) append(" · matched $matched")
+                        if (matched.isNotBlank()) append(" · règle $matched")
                         if (at.isNotBlank()) append("\n$at")
                     }
                 }.getOrNull()
@@ -198,39 +206,58 @@ fun HomeScreen(activity: Activity) {
             .padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        Text("Call & SMS filter", style = MaterialTheme.typography.headlineSmall)
+        Text("Accueil", style = MaterialTheme.typography.headlineSmall)
         Text(
-            "Bundled NPV prefixes ($listCount) + personal rules. Filtering is automatic once the call-screening role is held.",
+            "Préfixes NPV intégrés ($listCount) et règles personnelles. Le filtrage est automatique dès que le rôle est accordé.",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
 
-        Text("1. Call screening (required)", style = MaterialTheme.typography.titleMedium)
-        Text(
-            "This is NOT listed under App permissions. It is a system role (Default apps → Call screening / Caller ID & spam). SMS permission alone does not block calls.",
-            style = MaterialTheme.typography.bodyMedium,
-        )
-
-        if (holdsRole) {
-            Text(
-                "Protected — this app holds the call screening role.",
-                color = NmccColors.statusAllowed,
-                style = MaterialTheme.typography.titleMedium,
-            )
-        } else {
-            Text(
-                "NOT protected — calls are NOT filtered.",
-                color = NmccColors.statusBlocked,
-                style = MaterialTheme.typography.titleMedium,
-            )
-            if (!roleAvailable) {
+        Card(
+            colors = CardDefaults.cardColors(
+                containerColor = if (holdsRole) {
+                    MaterialTheme.colorScheme.primaryContainer
+                } else {
+                    MaterialTheme.colorScheme.errorContainer
+                },
+                contentColor = if (holdsRole) {
+                    MaterialTheme.colorScheme.onPrimaryContainer
+                } else {
+                    MaterialTheme.colorScheme.onErrorContainer
+                },
+            ),
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
                 Text(
-                    "ROLE_CALL_SCREENING is unavailable on this device/OEM.",
-                    color = NmccColors.statusBlocked,
-                    style = MaterialTheme.typography.bodySmall,
+                    if (holdsRole) "Protection active" else "Protection inactive",
+                    style = MaterialTheme.typography.titleLarge,
                 )
+                Text(
+                    if (holdsRole) {
+                        "Cette application détient le rôle de filtrage des appels."
+                    } else {
+                        "Les appels ne sont pas filtrés."
+                    },
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+                if (!holdsRole && !roleAvailable) {
+                    Text(
+                        "Le rôle de filtrage des appels n’est pas disponible sur cet appareil.",
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                }
             }
         }
+
+        Text("Filtrage des appels", style = MaterialTheme.typography.titleMedium)
+        Text(
+            "Ce n’est pas une autorisation d’application. C’est un rôle système (Applications par défaut → Filtrage d’appels / Identification et indésirables). L’autorisation SMS seule ne bloque pas les appels.",
+            style = MaterialTheme.typography.bodyMedium,
+        )
 
         Button(
             onClick = {
@@ -238,27 +265,27 @@ fun HomeScreen(activity: Activity) {
                 if (intent != null) {
                     roleLauncher.launch(intent)
                 } else {
-                    statusMessage = "Cannot request call screening role on this device"
+                    statusMessage = "Impossible de demander le rôle de filtrage sur cet appareil"
                 }
             },
             modifier = Modifier.fillMaxWidth(),
         ) {
-            Text(if (holdsRole) "Re-confirm call screening role" else "Enable call screening role")
+            Text(if (holdsRole) "Confirmer le rôle de filtrage" else "Activer le filtrage des appels")
         }
         OutlinedButton(
             onClick = {
                 ScreeningRole.openDefaultAppsSettings(activity)
-                statusMessage = "Pick NoMoreCallCenter as Call screening / Caller ID & spam app"
+                statusMessage = "Choisissez NoMoreCallCenter comme application de filtrage d’appels"
             },
             modifier = Modifier.fillMaxWidth(),
         ) {
-            Text("Open Default apps settings")
+            Text("Applications par défaut")
         }
 
-        Text("Last screened call", style = MaterialTheme.typography.titleMedium)
+        Text("Dernier appel filtré", style = MaterialTheme.typography.titleMedium)
         if (lastScreen == null) {
             Text(
-                "None yet. After a call, if this stays empty, Android never invoked this app — the role is not active (or the OEM skipped screening).",
+                "Aucun pour l’instant. Si cela reste vide après un appel, Android n’a pas appelé cette application — le rôle n’est pas actif.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = NmccColors.statusBlocked,
             )
@@ -275,21 +302,32 @@ fun HomeScreen(activity: Activity) {
             )
         } else {
             journal.take(20).forEach { line ->
-                Text(line, style = MaterialTheme.typography.bodyMedium)
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                    ),
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text(
+                        line,
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(12.dp),
+                    )
+                }
             }
         }
 
-        Text("2. Simulate incoming call", style = MaterialTheme.typography.titleMedium)
+        Text("Simuler un appel", style = MaterialTheme.typography.titleMedium)
         Text(
-            "Runs the same matcher as CallScreeningService (list + personal rules). " +
-                "Does not place a real call — use this to verify prefixes. Real-call proof still needs the role + Last screened call.",
+            "Même correspondance que le service de filtrage (liste + règles personnelles). " +
+                "Aucun appel réel — sert à vérifier les préfixes. Un appel réel exige le rôle et la ligne « Dernier appel filtré ».",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         OutlinedTextField(
             value = testNumber,
             onValueChange = { testNumber = it },
-            label = { Text("Fake caller (e.g. +33783123456 or 0783123456)") },
+            label = { Text("Numéro fictif (ex. +33783123456 ou 0783123456)") },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
         )
@@ -307,11 +345,12 @@ fun HomeScreen(activity: Activity) {
                             at,
                         )
                     }
+                    testBlocked = blocked
                     testResult = buildString {
-                        append(if (blocked) "BLOCK" else "ALLOW")
-                        decision.normalizedNumber?.let { append(" · normalized $it") }
-                        decision.matchedPattern?.let { append(" · matched $it") }
-                            ?: append(" · no rule matched")
+                        append(if (blocked) "BLOQUÉ" else "AUTORISÉ")
+                        decision.normalizedNumber?.let { append(" · normalisé $it") }
+                        decision.matchedPattern?.let { append(" · correspond à $it") }
+                            ?: append(" · aucune règle")
                     }
                     app.prefs.setLastScreenJson(
                         JSONObject()
@@ -330,24 +369,20 @@ fun HomeScreen(activity: Activity) {
             enabled = testNumber.filter { it.isDigit() }.length >= 2,
             modifier = Modifier.fillMaxWidth(),
         ) {
-            Text("Run spam check")
+            Text("Vérifier ce numéro")
         }
         if (testResult != null) {
             Text(
                 testResult!!,
-                color = if (testResult!!.startsWith("BLOCK")) {
-                    NmccColors.statusBlocked
-                } else {
-                    NmccColors.statusAllowed
-                },
+                color = if (testBlocked) NmccColors.statusBlocked else NmccColors.statusAllowed,
                 style = MaterialTheme.typography.titleMedium,
             )
         }
 
-        Text("3. SMS (optional)", style = MaterialTheme.typography.titleMedium)
+        Text("SMS (facultatif)", style = MaterialTheme.typography.titleMedium)
         if (smsGranted) {
             Text(
-                "SMS access granted — best-effort filter.",
+                "Accès SMS accordé — filtre au mieux.",
                 color = NmccColors.statusAllowed,
                 style = MaterialTheme.typography.bodyMedium,
             )
@@ -356,20 +391,20 @@ fun HomeScreen(activity: Activity) {
                 onClick = { smsPermissionLauncher.launch(smsPermissions) },
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                Text("Allow SMS filtering")
+                Text("Autoriser le filtrage SMS")
             }
             OutlinedButton(
                 onClick = {
                     activity.openAppPermissionSettings()
-                    statusMessage = "Enable SMS for NoMoreCallCenter, then return here"
+                    statusMessage = "Activez les SMS pour NoMoreCallCenter, puis revenez ici"
                 },
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                Text("Open app permissions (SMS)")
+                Text("Autorisations de l’application (SMS)")
             }
             if (smsDeniedHard) {
                 Text(
-                    "SMS permanently denied — toggle manually in settings.",
+                    "SMS refusés définitivement — à activer dans les réglages.",
                     color = NmccColors.statusBlocked,
                     style = MaterialTheme.typography.bodySmall,
                 )
@@ -385,12 +420,12 @@ fun HomeScreen(activity: Activity) {
                     OfflineBootstrap.ensureBundledList(activity, app.prefs)
                     listCount = app.store.loadListEntries().size
                     statusMessage =
-                        "Role=${if (holdsRole) "YES" else "NO"} · SMS=${if (smsGranted) "YES" else "NO"} · list=$listCount"
+                        "Rôle=${if (holdsRole) "oui" else "non"} · SMS=${if (smsGranted) "oui" else "non"} · liste=$listCount"
                 }
             },
             modifier = Modifier.fillMaxWidth(),
         ) {
-            Text("Refresh status")
+            Text("Actualiser")
         }
         if (statusMessage != null) {
             Text(statusMessage!!, style = MaterialTheme.typography.bodySmall)

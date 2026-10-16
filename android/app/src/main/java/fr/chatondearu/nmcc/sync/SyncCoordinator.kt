@@ -15,7 +15,7 @@ class SyncCoordinator(
     suspend fun syncAll(): Result<Unit> = withContext(Dispatchers.IO) {
         runCatching {
             val base = prefs.getBaseUrl()
-            require(base.isNotBlank()) { "Instance URL not set" }
+            require(base.isNotBlank()) { "URL de l’instance absente" }
 
             val since = prefs.getListRevision()
             val (revision, entries) = api.syncLists(base, since)
@@ -56,7 +56,7 @@ class SyncCoordinator(
         runCatching {
             val base = prefs.getBaseUrl()
             require(base.isNotBlank() && api.hasSessionCookie(base)) {
-                "Sign in to an instance to propose rules"
+                "Connectez-vous à une instance pour proposer une règle"
             }
             api.propose(base, personalRuleId)
         }
