@@ -8,6 +8,11 @@ export default defineNuxtConfig({
     '@unocss/nuxt',
   ],
 
+  // Consumers (admin, app) have no local uno.config; load the layer preset.
+  unocss: {
+    configFile: join(currentDir, 'uno.config.ts'),
+  },
+
   css: [
     join(currentDir, 'app/assets/css/main.css'),
   ],
