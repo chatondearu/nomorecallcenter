@@ -59,7 +59,7 @@ fun NmccNav(activity: Activity) {
     ) { padding ->
         NavHost(
             navController = nav,
-            startDestination = "login",
+            startDestination = "home",
             modifier = Modifier.padding(padding),
         ) {
             composable("login") {
@@ -76,8 +76,9 @@ fun NmccNav(activity: Activity) {
             composable("stats") { StatsScreen() }
             composable("settings") {
                 SettingsScreen(
+                    onOpenLogin = { nav.navigate("login") },
                     onSignedOut = {
-                        nav.navigate("login") {
+                        nav.navigate("home") {
                             popUpTo(0) { inclusive = true }
                         }
                     },

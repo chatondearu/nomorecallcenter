@@ -15,7 +15,7 @@ is out of MVP (ADR-008).
 
 - JDK 17+
 - Android SDK (`ANDROID_HOME`) with platform 35 for assemble
-- Self-hosted API reachable from the device/emulator (`doc/api.md`)
+- Optional: self-hosted API for sync/stats (`doc/api.md`) — **not required** for call/SMS filtering (offline bundled FR list + local rules)
 
 ## Verify (no Android SDK required)
 
@@ -30,10 +30,14 @@ export PATH="$JAVA_HOME/bin:$PATH"
 
 ```bash
 cd android
-export ANDROID_HOME="${ANDROID_HOME:-$HOME/Library/Android/sdk}"
+export JAVA_HOME="${JAVA_HOME:-/opt/homebrew/opt/openjdk@17}"
+export ANDROID_HOME="${ANDROID_HOME:-/opt/homebrew/share/android-commandlinetools}"
 ./gradlew :app:assembleDebug
 # APK: app/build/outputs/apk/debug/app-debug.apk
+# Copy also landed at ../dist/nmcc-debug.apk when built for local validation
 ```
+
+Offline validation: open the app → enable Call Screening role → optionally allow SMS → add a personal rule or rely on bundled `0892` / `33892` prefixes. No login required.
 
 ## GitHub Release (APK / AAB)
 

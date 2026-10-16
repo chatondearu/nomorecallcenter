@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,7 +24,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 @Composable
-fun SettingsScreen(onSignedOut: () -> Unit) {
+fun SettingsScreen(onOpenLogin: () -> Unit, onSignedOut: () -> Unit) {
     val app = NmccApp.instance
     val scope = rememberCoroutineScope()
     var baseUrl by remember { mutableStateOf("") }
@@ -42,6 +43,11 @@ fun SettingsScreen(onSignedOut: () -> Unit) {
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         Text("Settings", style = MaterialTheme.typography.headlineSmall)
+        Text(
+            "Optional: connect an instance later. Filtering works offline without sign-in.",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
         OutlinedTextField(
             value = baseUrl,
             onValueChange = { baseUrl = it },
@@ -49,7 +55,11 @@ fun SettingsScreen(onSignedOut: () -> Unit) {
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
         )
-        Text("Signed in as $email", style = MaterialTheme.typography.bodyMedium)
+        if (email.isNotBlank()) {
+            Text("Signed in as $email", style = MaterialTheme.typography.bodyMedium)
+        } else {
+            Text("Not signed in (offline)", style = MaterialTheme.typography.bodyMedium)
+        }
         Button(
             onClick = {
                 scope.launch {
@@ -64,17 +74,25 @@ fun SettingsScreen(onSignedOut: () -> Unit) {
         if (saved) {
             Text("Saved", style = MaterialTheme.typography.bodySmall)
         }
-        Button(
-            onClick = {
-                scope.launch {
-                    app.api.clearCookies()
-                    app.prefs.clearSessionLocal()
-                    onSignedOut()
-                }
-            },
+        OutlinedButton(
+            onClick = onOpenLogin,
             modifier = Modifier.fillMaxWidth(),
         ) {
-            Text("Sign out")
+            Text("Sign in to instance")
+        }
+        if (email.isNotBlank()) {
+            Button(
+                onClick = {
+                    scope.launch {
+                        app.api.clearCookies()
+                        app.prefs.clearSessionLocal()
+                        onSignedOut()
+                    }
+                },
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text("Sign out")
+            }
         }
     }
 }

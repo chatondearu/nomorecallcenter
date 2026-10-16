@@ -13,11 +13,20 @@ class RuleMatcherTest {
     @Test
     fun normalizeNumber_stripsNonDigitsAndBounds() {
         assertEquals("33612", normalizeNumber("+33 6 12"))
-        assertEquals("089200", normalizeNumber("0892-00"))
+        assertEquals("3389200", normalizeNumber("0892-00"))
         assertNull(normalizeNumber("1"))
         assertNull(normalizeNumber(""))
         assertNull(normalizeNumber(null))
         assertNull(normalizeNumber("1234567890123456")) // 16 digits
+    }
+
+    @Test
+    fun normalizeNumber_frNationalAndInternationalEquivalent() {
+        assertEquals("33612345678", normalizeNumber("0612345678"))
+        assertEquals("33612345678", normalizeNumber("+33612345678"))
+        assertEquals("33612345678", normalizeNumber("0033612345678"))
+        assertEquals("33612", normalizeNumber("0612"))
+        assertEquals("33612", normalizeNumber("33612"))
     }
 
     @Test
@@ -37,7 +46,34 @@ class RuleMatcherTest {
             nowEpochMs = now,
         )
         assertEquals(ScreenAction.BLOCK, decision.action)
-        assertEquals("089200", decision.matchedPattern)
+        assertEquals("3389200", decision.matchedPattern)
+    }
+
+    @Test
+    fun prefixMatch_nationalRuleBlocksInternationalCaller() {
+        val decision = decideScreen(
+            rawNumber = "+33612345678",
+            listEntries = emptyList(),
+            personalRules = listOf(
+                PersonalRule("0612345678", MatchType.PREFIX, expiresAtEpochMs = null),
+            ),
+            nowEpochMs = now,
+        )
+        assertEquals(ScreenAction.BLOCK, decision.action)
+        assertEquals("33612345678", decision.matchedPattern)
+    }
+
+    @Test
+    fun prefixMatch_internationalRuleBlocksNationalCaller() {
+        val decision = decideScreen(
+            rawNumber = "0612345678",
+            listEntries = emptyList(),
+            personalRules = listOf(
+                PersonalRule("33612345678", MatchType.EXACT, expiresAtEpochMs = null),
+            ),
+            nowEpochMs = now,
+        )
+        assertEquals(ScreenAction.BLOCK, decision.action)
     }
 
     @Test
@@ -51,7 +87,7 @@ class RuleMatcherTest {
             nowEpochMs = now,
         )
         assertEquals(ScreenAction.BLOCK, decision.action)
-        assertEquals("0612345678", decision.matchedPattern)
+        assertEquals("33612345678", decision.matchedPattern)
     }
 
     @Test
@@ -89,6 +125,7 @@ class RuleMatcherTest {
             ),
             nowEpochMs = now,
         )
+        // 0102030405 → 33102030405; 06 → 336 — no match; 0892 → 33892 — no match
         assertEquals(ScreenAction.ALLOW, decision.action)
     }
 
@@ -102,5 +139,19 @@ class RuleMatcherTest {
         )
         assertEquals(ScreenAction.ALLOW, decision.action)
         assertNull(decision.normalizedNumber)
+    }
+
+    @Test
+    fun expandCountryPrefixPatterns_franceBothForms() {
+        assertEquals(listOf("0783", "33783"), expandCountryPrefixPatterns("33", "0783"))
+        assertEquals(listOf("0783", "33783"), expandCountryPrefixPatterns("33", "783"))
+        assertEquals(listOf("0783", "33783"), expandCountryPrefixPatterns("33", "33783"))
+        assertEquals(listOf("0783", "33783"), expandCountryPrefixPatterns("+33", "0783"))
+    }
+
+    @Test
+    fun expandCountryPrefixPatterns_otherCountryInternationalOnly() {
+        assertEquals(listOf("324712"), expandCountryPrefixPatterns("32", "04712"))
+        assertEquals(listOf("324712"), expandCountryPrefixPatterns("32", "4712"))
     }
 }

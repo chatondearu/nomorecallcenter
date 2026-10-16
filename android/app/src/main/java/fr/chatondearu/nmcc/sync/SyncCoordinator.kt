@@ -1,5 +1,6 @@
 package fr.chatondearu.nmcc.sync
 
+import fr.chatondearu.nmcc.matcher.expandCountryPrefixPatterns
 import fr.chatondearu.nmcc.store.LocalRuleStore
 import fr.chatondearu.nmcc.network.ApiClient
 import fr.chatondearu.nmcc.prefs.AppPrefs
@@ -25,11 +26,26 @@ class SyncCoordinator(
         }
     }
 
-    suspend fun createPersonalRule(pattern: String, matchType: String, ttlPreset: String): Result<Unit> =
+    /**
+     * @param countryCallingCode dial code without '+' (e.g. `33`); expands FR to national + intl forms.
+     */
+    suspend fun createPersonalRule(
+        pattern: String,
+        matchType: String,
+        ttlPreset: String,
+        countryCallingCode: String = "33",
+    ): Result<Unit> =
         withContext(Dispatchers.IO) {
             runCatching {
+                val patterns = expandCountryPrefixPatterns(countryCallingCode, pattern)
                 val base = prefs.getBaseUrl()
-                api.createRule(base, pattern, matchType, ttlPreset)
+                if (base.isBlank() || !api.hasSessionCookie(base)) {
+                    store.addLocalRules(patterns, matchType, ttlPreset)
+                    return@runCatching
+                }
+                for (p in patterns) {
+                    api.createRule(base, p, matchType, ttlPreset)
+                }
                 val rules = api.syncRules(base)
                 store.saveRules(rules)
             }
@@ -37,7 +53,11 @@ class SyncCoordinator(
 
     suspend fun proposeToGlobal(personalRuleId: String): Result<Unit> = withContext(Dispatchers.IO) {
         runCatching {
-            api.propose(prefs.getBaseUrl(), personalRuleId)
+            val base = prefs.getBaseUrl()
+            require(base.isNotBlank() && api.hasSessionCookie(base)) {
+                "Sign in to an instance to propose rules"
+            }
+            api.propose(base, personalRuleId)
         }
     }
 }

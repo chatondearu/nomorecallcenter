@@ -18,9 +18,11 @@ class AppPrefs(private val context: Context) {
     private val keyListJson = stringPreferencesKey("list_entries_json")
     private val keyRulesJson = stringPreferencesKey("personal_rules_json")
     private val keyEventQueue = stringPreferencesKey("event_queue_json")
+    private val keyLastScreen = stringPreferencesKey("last_screen_json")
 
     val baseUrl: Flow<String> = context.dataStore.data.map { it[keyBaseUrl] ?: "" }
     val email: Flow<String> = context.dataStore.data.map { it[keyEmail] ?: "" }
+    val lastScreenJson: Flow<String> = context.dataStore.data.map { it[keyLastScreen] ?: "" }
 
     suspend fun getBaseUrl(): String = baseUrl.first()
     suspend fun getEmail(): String = email.first()
@@ -35,6 +37,9 @@ class AppPrefs(private val context: Context) {
 
     suspend fun getEventQueueJson(): String =
         context.dataStore.data.first()[keyEventQueue] ?: "[]"
+
+    suspend fun getLastScreenJson(): String =
+        context.dataStore.data.first()[keyLastScreen] ?: ""
 
     suspend fun setBaseUrl(url: String) {
         context.dataStore.edit { it[keyBaseUrl] = url.trim().trimEnd('/') }
@@ -59,12 +64,14 @@ class AppPrefs(private val context: Context) {
         context.dataStore.edit { it[keyEventQueue] = json }
     }
 
+    suspend fun setLastScreenJson(json: String) {
+        context.dataStore.edit { it[keyLastScreen] = json }
+    }
+
+    /** Clears auth identity only — keeps bundled/local lists for offline screening. */
     suspend fun clearSessionLocal() {
         context.dataStore.edit {
             it.remove(keyEmail)
-            it.remove(keyListRevision)
-            it.remove(keyListJson)
-            it.remove(keyRulesJson)
             it.remove(keyEventQueue)
         }
     }

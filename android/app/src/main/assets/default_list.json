@@ -1,0 +1,222 @@
+{
+  "revision": 3,
+  "attribution": "ARCEP verified multipurpose numbers (NPV) for automated calling/messaging + 0892 demarchage-style band. Source: https://www.arcep.fr/la-regulation/grands-dossiers-thematiques-transverses/la-numerotation.html (plan national de num\u00e9rotation).",
+  "entries": [
+    {
+      "id": "npv-0162",
+      "pattern": "0162",
+      "active": true,
+      "revision": 3
+    },
+    {
+      "id": "npv-33162",
+      "pattern": "33162",
+      "active": true,
+      "revision": 3
+    },
+    {
+      "id": "npv-0163",
+      "pattern": "0163",
+      "active": true,
+      "revision": 3
+    },
+    {
+      "id": "npv-33163",
+      "pattern": "33163",
+      "active": true,
+      "revision": 3
+    },
+    {
+      "id": "npv-0270",
+      "pattern": "0270",
+      "active": true,
+      "revision": 3
+    },
+    {
+      "id": "npv-33270",
+      "pattern": "33270",
+      "active": true,
+      "revision": 3
+    },
+    {
+      "id": "npv-0271",
+      "pattern": "0271",
+      "active": true,
+      "revision": 3
+    },
+    {
+      "id": "npv-33271",
+      "pattern": "33271",
+      "active": true,
+      "revision": 3
+    },
+    {
+      "id": "npv-0377",
+      "pattern": "0377",
+      "active": true,
+      "revision": 3
+    },
+    {
+      "id": "npv-33377",
+      "pattern": "33377",
+      "active": true,
+      "revision": 3
+    },
+    {
+      "id": "npv-0378",
+      "pattern": "0378",
+      "active": true,
+      "revision": 3
+    },
+    {
+      "id": "npv-33378",
+      "pattern": "33378",
+      "active": true,
+      "revision": 3
+    },
+    {
+      "id": "npv-0424",
+      "pattern": "0424",
+      "active": true,
+      "revision": 3
+    },
+    {
+      "id": "npv-33424",
+      "pattern": "33424",
+      "active": true,
+      "revision": 3
+    },
+    {
+      "id": "npv-0425",
+      "pattern": "0425",
+      "active": true,
+      "revision": 3
+    },
+    {
+      "id": "npv-33425",
+      "pattern": "33425",
+      "active": true,
+      "revision": 3
+    },
+    {
+      "id": "npv-0568",
+      "pattern": "0568",
+      "active": true,
+      "revision": 3
+    },
+    {
+      "id": "npv-33568",
+      "pattern": "33568",
+      "active": true,
+      "revision": 3
+    },
+    {
+      "id": "npv-0569",
+      "pattern": "0569",
+      "active": true,
+      "revision": 3
+    },
+    {
+      "id": "npv-33569",
+      "pattern": "33569",
+      "active": true,
+      "revision": 3
+    },
+    {
+      "id": "npv-0948",
+      "pattern": "0948",
+      "active": true,
+      "revision": 3
+    },
+    {
+      "id": "npv-33948",
+      "pattern": "33948",
+      "active": true,
+      "revision": 3
+    },
+    {
+      "id": "npv-0949",
+      "pattern": "0949",
+      "active": true,
+      "revision": 3
+    },
+    {
+      "id": "npv-33949",
+      "pattern": "33949",
+      "active": true,
+      "revision": 3
+    },
+    {
+      "id": "npv-09475",
+      "pattern": "09475",
+      "active": true,
+      "revision": 3
+    },
+    {
+      "id": "npv-339475",
+      "pattern": "339475",
+      "active": true,
+      "revision": 3
+    },
+    {
+      "id": "npv-09476",
+      "pattern": "09476",
+      "active": true,
+      "revision": 3
+    },
+    {
+      "id": "npv-339476",
+      "pattern": "339476",
+      "active": true,
+      "revision": 3
+    },
+    {
+      "id": "npv-09477",
+      "pattern": "09477",
+      "active": true,
+      "revision": 3
+    },
+    {
+      "id": "npv-339477",
+      "pattern": "339477",
+      "active": true,
+      "revision": 3
+    },
+    {
+      "id": "npv-09478",
+      "pattern": "09478",
+      "active": true,
+      "revision": 3
+    },
+    {
+      "id": "npv-339478",
+      "pattern": "339478",
+      "active": true,
+      "revision": 3
+    },
+    {
+      "id": "npv-09479",
+      "pattern": "09479",
+      "active": true,
+      "revision": 3
+    },
+    {
+      "id": "npv-339479",
+      "pattern": "339479",
+      "active": true,
+      "revision": 3
+    },
+    {
+      "id": "sva-0892",
+      "pattern": "0892",
+      "active": true,
+      "revision": 3
+    },
+    {
+      "id": "sva-33892",
+      "pattern": "33892",
+      "active": true,
+      "revision": 3
+    }
+  ]
+}

@@ -16,37 +16,36 @@ import java.time.Instant
 class LocalRuleStore(private val prefs: AppPrefs) {
 
     suspend fun loadListEntries(): List<ListEntry> {
-        val arr = JSONArray(prefs.getListJson())
-        return buildList {
-            for (i in 0 until arr.length()) {
-                val o = arr.getJSONObject(i)
-                if (!o.optBoolean("active", true)) continue
-                add(ListEntry(pattern = o.getString("pattern"), active = true))
-            }
-        }
+        return loadAllListEntries()
+            .filter { it.active }
+            .map { ListEntry(pattern = it.pattern, active = true) }
+    }
+
+    suspend fun loadAllListEntries(): List<SyncListEntry> = decodeList(prefs.getListJson())
+
+    suspend fun setListEntryActive(id: String, active: Boolean) {
+        val updated = loadAllListEntries().map { if (it.id == id) it.copy(active = active) else it }
+        prefs.setListSnapshot(prefs.getListRevision(), encodeList(updated))
     }
 
     suspend fun loadPersonalRules(nowEpochMs: Long = System.currentTimeMillis()): List<PersonalRule> {
-        val arr = JSONArray(prefs.getRulesJson())
-        return buildList {
-            for (i in 0 until arr.length()) {
-                val o = arr.getJSONObject(i)
-                val expires = if (o.isNull("expiresAt")) null else parseIso(o.getString("expiresAt"))
-                add(
-                    PersonalRule(
-                        pattern = o.getString("pattern"),
-                        matchType = if (o.getString("matchType").equals("exact", true)) {
-                            MatchType.EXACT
-                        } else {
-                            MatchType.PREFIX
-                        },
-                        expiresAtEpochMs = expires,
-                    ),
+        return loadSyncRules()
+            .filter { it.active }
+            .map { rule ->
+                PersonalRule(
+                    pattern = rule.pattern,
+                    matchType = rule.matchType,
+                    expiresAtEpochMs = rule.expiresAt?.let { parseIso(it) },
                 )
             }
-        }.filter { rule ->
-            rule.expiresAtEpochMs == null || rule.expiresAtEpochMs > nowEpochMs
-        }
+            .filter { rule ->
+                val expires = rule.expiresAtEpochMs
+                expires == null || expires > nowEpochMs
+            }
+    }
+
+    suspend fun setPersonalRuleActive(id: String, active: Boolean) {
+        saveRules(loadSyncRules().map { if (it.id == id) it.copy(active = active) else it })
     }
 
     suspend fun applyListSync(revision: Long, since: Long, incoming: List<SyncListEntry>) {
@@ -76,6 +75,47 @@ class LocalRuleStore(private val prefs: AppPrefs) {
             )
         }
         prefs.setRulesJson(arr.toString())
+    }
+
+    /** Offline personal rule(s) — no API. TTL presets match server ADR-007. */
+    suspend fun addLocalRule(pattern: String, matchType: String, ttlPreset: String) {
+        addLocalRules(listOf(pattern), matchType, ttlPreset)
+    }
+
+    suspend fun addLocalRules(patterns: List<String>, matchType: String, ttlPreset: String) {
+        require(patterns.isNotEmpty()) { "No patterns" }
+        val expiresAt = expiresIsoFor(ttlPreset)
+        val type = if (matchType.equals("exact", true)) MatchType.EXACT else MatchType.PREFIX
+        val existing = loadSyncRules().toMutableList()
+        val existingPatterns = existing.map { it.pattern }.toHashSet()
+        val now = System.currentTimeMillis()
+        patterns.forEachIndexed { index, pattern ->
+            val digits = pattern.filter { it.isDigit() }
+            require(digits.length in 2..15) { "Pattern must be 2–15 digits" }
+            if (digits in existingPatterns) return@forEachIndexed
+            existing += SyncRule(
+                id = "local-${now + index}",
+                pattern = digits,
+                matchType = type,
+                ttlPreset = ttlPreset,
+                expiresAt = expiresAt,
+                active = true,
+            )
+            existingPatterns += digits
+        }
+        saveRules(existing)
+    }
+
+    private fun expiresIsoFor(ttlPreset: String): String? {
+        val now = Instant.now()
+        val until = when (ttlPreset) {
+            "1h" -> now.plusSeconds(3600)
+            "24h" -> now.plusSeconds(86_400)
+            "7d" -> now.plusSeconds(7 * 86_400L)
+            "30d" -> now.plusSeconds(30 * 86_400L)
+            else -> return null
+        }
+        return until.toString()
     }
 
     suspend fun loadSyncRules(): List<SyncRule> {

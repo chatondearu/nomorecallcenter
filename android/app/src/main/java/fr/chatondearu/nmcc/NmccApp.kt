@@ -2,6 +2,7 @@ package fr.chatondearu.nmcc
 
 import android.app.Application
 import fr.chatondearu.nmcc.store.LocalRuleStore
+import fr.chatondearu.nmcc.store.OfflineBootstrap
 import fr.chatondearu.nmcc.network.ApiClient
 import fr.chatondearu.nmcc.prefs.AppPrefs
 import fr.chatondearu.nmcc.sync.EventReporter
@@ -9,6 +10,7 @@ import fr.chatondearu.nmcc.sync.SyncCoordinator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 
 class NmccApp : Application() {
     val appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
@@ -32,6 +34,9 @@ class NmccApp : Application() {
         store = LocalRuleStore(prefs)
         sync = SyncCoordinator(api, prefs, store)
         events = EventReporter(api, prefs, appScope)
+        appScope.launch {
+            OfflineBootstrap.ensureBundledList(this@NmccApp, prefs)
+        }
     }
 
     companion object {
