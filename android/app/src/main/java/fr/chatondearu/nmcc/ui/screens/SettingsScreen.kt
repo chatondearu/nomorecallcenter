@@ -148,7 +148,7 @@ fun SettingsScreen(onOpenLogin: () -> Unit, onSignedOut: () -> Unit) {
             },
         )
         Text(
-            "Facultatif : connectez une instance plus tard. Le filtrage fonctionne hors ligne sans compte.",
+            "Facultatif : indiquez l’URL d’une instance pour synchroniser règles et statistiques.",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )

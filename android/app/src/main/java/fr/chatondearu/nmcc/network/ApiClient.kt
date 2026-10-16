@@ -38,6 +38,8 @@ data class SyncRule(
     val effect: RuleEffect = RuleEffect.BLOCK,
 )
 
+data class PrefixCount(val prefix: String, val count: Int)
+
 data class StatsBundle(
     val scope: String,
     val screened7d: Int,
@@ -46,6 +48,7 @@ data class StatsBundle(
     val screened30d: Int,
     val blocked30d: Int,
     val allowed30d: Int,
+    val topPrefixes: List<PrefixCount> = emptyList(),
     val recent: List<RecentEvent>,
 )
 
@@ -264,6 +267,14 @@ class ApiClient(
         val c7 = root.getJSONObject("counters").getJSONObject("7d")
         val c30 = root.getJSONObject("counters").getJSONObject("30d")
         val recentArr = root.optJSONArray("recent") ?: JSONArray()
+        val topArr = root.optJSONArray("topPrefixes") ?: JSONArray()
+        val topPrefixes = buildList {
+            for (i in 0 until topArr.length()) {
+                val e = topArr.getJSONObject(i)
+                val prefix = e.optString("prefix")
+                if (prefix.isNotBlank()) add(PrefixCount(prefix, e.optInt("count")))
+            }
+        }
         val recent = buildList {
             for (i in 0 until recentArr.length()) {
                 val e = recentArr.getJSONObject(i)
@@ -285,6 +296,7 @@ class ApiClient(
             screened30d = c30.optInt("screened"),
             blocked30d = c30.optInt("blocked"),
             allowed30d = c30.optInt("allowed"),
+            topPrefixes = topPrefixes,
             recent = recent,
         )
     }

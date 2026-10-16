@@ -12,11 +12,16 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -30,6 +35,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
@@ -42,12 +48,16 @@ import fr.chatondearu.nmcc.matcher.ScreenAction
 import fr.chatondearu.nmcc.screening.ScreeningRole
 import fr.chatondearu.nmcc.screening.decideIncoming
 import fr.chatondearu.nmcc.store.OfflineBootstrap
+import fr.chatondearu.nmcc.ui.components.ActivityRow
+import fr.chatondearu.nmcc.ui.components.formatActivityTime
 import fr.chatondearu.nmcc.ui.theme.NmccColors
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
 import java.time.Instant
+
+private data class JournalEntry(val number: String, val pattern: String, val at: String)
 
 private val smsPermissions = arrayOf(
     Manifest.permission.RECEIVE_SMS,
@@ -79,7 +89,7 @@ fun HomeScreen(activity: Activity) {
     var smsGranted by remember { mutableStateOf(activity.hasSmsAccess()) }
     var smsDeniedHard by remember { mutableStateOf(false) }
     var lastScreen by remember { mutableStateOf<String?>(null) }
-    var journal by remember { mutableStateOf<List<String>>(emptyList()) }
+    var journal by remember { mutableStateOf<List<JournalEntry>>(emptyList()) }
     var testNumber by remember { mutableStateOf("0783123456") }
     var testResult by remember { mutableStateOf<String?>(null) }
     var testBlocked by remember { mutableStateOf(false) }
@@ -128,15 +138,12 @@ fun HomeScreen(activity: Activity) {
                 buildList {
                     for (i in arr.length() - 1 downTo 0) {
                         val o = arr.getJSONObject(i)
-                        val number = o.optString("number")
-                        val pattern = o.optString("pattern")
-                        val at = o.optString("at")
                         add(
-                            buildString {
-                                append(number.ifBlank { "Numéro masqué" })
-                                if (pattern.isNotBlank()) append(" · $pattern")
-                                if (at.isNotBlank()) append(" · $at")
-                            },
+                            JournalEntry(
+                                number = o.optString("number").ifBlank { "Numéro masqué" },
+                                pattern = o.optString("pattern"),
+                                at = o.optString("at"),
+                            ),
                         )
                     }
                 }
@@ -232,18 +239,26 @@ fun HomeScreen(activity: Activity) {
                 modifier = Modifier.padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                Text(
-                    if (holdsRole) "Protection active" else "Protection inactive",
-                    style = MaterialTheme.typography.titleLarge,
-                )
-                Text(
-                    if (holdsRole) {
-                        "Cette application détient le rôle de filtrage des appels."
-                    } else {
-                        "Les appels ne sont pas filtrés."
-                    },
-                    style = MaterialTheme.typography.bodyMedium,
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                ) {
+                    Icon(
+                        Icons.Filled.Shield,
+                        contentDescription = null,
+                        modifier = Modifier.size(40.dp),
+                    )
+                    Column {
+                        Text(
+                            if (holdsRole) "Protection active" else "Protection inactive",
+                            style = MaterialTheme.typography.titleLarge,
+                        )
+                        Text(
+                            if (holdsRole) "Rejet silencieux" else "Les appels ne sont pas filtrés.",
+                            style = MaterialTheme.typography.bodyMedium,
+                        )
+                    }
+                }
                 if (!holdsRole && !roleAvailable) {
                     Text(
                         "Le rôle de filtrage des appels n’est pas disponible sur cet appareil.",
@@ -293,7 +308,7 @@ fun HomeScreen(activity: Activity) {
             Text(lastScreen!!, style = MaterialTheme.typography.bodyMedium)
         }
 
-        Text("Journal des appels bloqués", style = MaterialTheme.typography.titleMedium)
+        Text("Activité récente", style = MaterialTheme.typography.titleMedium)
         if (journal.isEmpty()) {
             Text(
                 "Aucun appel bloqué enregistré sur cet appareil.",
@@ -301,19 +316,14 @@ fun HomeScreen(activity: Activity) {
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         } else {
-            journal.take(20).forEach { line ->
-                Card(
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-                    ),
+            journal.take(20).forEach { entry ->
+                ActivityRow(
+                    number = entry.number,
+                    reason = entry.pattern.ifBlank { "Rejet silencieux" },
+                    time = formatActivityTime(entry.at),
+                    status = "Rejeté",
                     modifier = Modifier.fillMaxWidth(),
-                ) {
-                    Text(
-                        line,
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.padding(12.dp),
-                    )
-                }
+                )
             }
         }
 

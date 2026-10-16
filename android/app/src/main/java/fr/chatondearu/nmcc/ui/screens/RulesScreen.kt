@@ -19,7 +19,6 @@ import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -36,6 +35,8 @@ import fr.chatondearu.nmcc.matcher.RuleEffect
 import fr.chatondearu.nmcc.matcher.expandCountryPrefixPatterns
 import fr.chatondearu.nmcc.network.SyncListEntry
 import fr.chatondearu.nmcc.network.SyncRule
+import fr.chatondearu.nmcc.ui.components.TtlChipRow
+import fr.chatondearu.nmcc.ui.components.ttlChipLabel
 import kotlinx.coroutines.launch
 
 private data class CountryOption(val callingCode: String, val label: String)
@@ -48,15 +49,6 @@ private val countryOptions = listOf(
 )
 
 private enum class RulesTab { DEFAULT, PERSONAL }
-
-private fun ttlChipLabel(preset: String): String = when (preset) {
-    "1h" -> "1 h"
-    "24h" -> "24 h"
-    "7d" -> "7 j"
-    "30d" -> "30 j"
-    "permanent" -> "Permanent"
-    else -> preset
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -207,24 +199,7 @@ fun RulesScreen() {
 
             item {
                 Text("Durée", style = MaterialTheme.typography.labelLarge)
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    modifier = Modifier.padding(top = 4.dp),
-                ) {
-                    listOf(
-                        "1h" to "1 h",
-                        "24h" to "24 h",
-                        "7d" to "7 j",
-                        "30d" to "30 j",
-                        "permanent" to "Permanent",
-                    ).forEach { (value, label) ->
-                        FilterChip(
-                            selected = ttl == value,
-                            onClick = { ttl = value },
-                            label = { Text(label) },
-                        )
-                    }
-                }
+                TtlChipRow(selected = ttl, onSelect = { ttl = it })
             }
 
             item {
@@ -262,7 +237,7 @@ fun RulesScreen() {
                 }
             }
 
-            items(personalRules, key = { it.id }) { rule ->
+            items(personalRules.filter { it.ttlPreset == ttl }, key = { it.id }) { rule ->
                 RuleToggleRow(
                     title = rule.pattern,
                     subtitle = "${if (rule.effect == RuleEffect.ALLOW) "autoriser" else "bloquer"} · " +
@@ -275,30 +250,12 @@ fun RulesScreen() {
                             reload()
                         }
                     },
-                    trailing = if (rule.effect == RuleEffect.BLOCK) {
-                        {
-                            TextButton(
-                                onClick = {
-                                    scope.launch {
-                                        message = app.sync.proposeToGlobal(rule.id).fold(
-                                            onSuccess = { "Proposée pour la liste globale (modération en attente)" },
-                                            onFailure = { it.message ?: "Échec de la proposition" },
-                                        )
-                                    }
-                                },
-                            ) {
-                                Text("Proposer")
-                            }
-                        }
-                    } else {
-                        null
-                    },
                 )
             }
 
-            if (personalRules.isEmpty()) {
+            if (personalRules.none { it.ttlPreset == ttl }) {
                 item {
-                    Text("Aucune règle personnelle", style = MaterialTheme.typography.bodySmall)
+                    Text("Aucune règle pour cette durée", style = MaterialTheme.typography.bodySmall)
                 }
             }
         } else {
@@ -337,7 +294,6 @@ private fun RuleToggleRow(
     subtitle: String,
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
-    trailing: (@Composable () -> Unit)? = null,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -348,7 +304,6 @@ private fun RuleToggleRow(
             Text(title, style = MaterialTheme.typography.titleMedium)
             Text(subtitle, style = MaterialTheme.typography.bodySmall)
         }
-        trailing?.invoke()
         Switch(checked = checked, onCheckedChange = onCheckedChange)
     }
 }
