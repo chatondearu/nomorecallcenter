@@ -18,6 +18,15 @@ const error = ref<string | null>(null)
 const loading = ref(true)
 const busyId = ref<string | null>(null)
 
+const queueSummary = computed(() => {
+  const action = 'Approuver applique le motif à la liste partagée.'
+  if (loading.value)
+    return action
+  const n = proposals.value.length
+  const label = n === 1 ? 'proposition' : 'propositions'
+  return `${n} ${label} en attente. ${action}`
+})
+
 async function load() {
   loading.value = true
   try {
@@ -66,11 +75,11 @@ function formatTime(iso: string) {
   <div class="flex flex-col gap-lg max-w-3xl">
     <header class="flex items-start justify-between gap-md">
       <div>
-        <h1 class="text-2xl font-bold">
-          Propositions
+        <h1 class="text-2xl font-bold text-system-on-surface">
+          Modération
         </h1>
         <p class="text-system-on-surface-variant text-sm mt-xs">
-          File d’attente — approuver applique le motif à la liste partagée.
+          {{ queueSummary }}
         </p>
       </div>
       <FilledButton :disabled="loading" @click="load">
@@ -90,7 +99,7 @@ function formatTime(iso: string) {
       <li
         v-for="p in proposals"
         :key="p.id"
-        class="rounded-lg bg-system-surface p-md flex flex-col sm:flex-row sm:items-center gap-md justify-between"
+        class="rounded-lg border border-system-outline-variant bg-system-surface-container p-md flex flex-col sm:flex-row sm:items-center gap-md justify-between"
       >
         <div>
           <p class="font-mono text-lg tabular-nums text-primary">

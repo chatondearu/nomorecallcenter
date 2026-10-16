@@ -125,7 +125,7 @@ Local (API already up on port 3000):
 
 ```bash
 pnpm dev:admin
-# http://127.0.0.1:3001 — login as bootstrap admin → Propositions → Approuver
+# http://127.0.0.1:3001 — login as bootstrap admin → Modération → Approuver
 ```
 
 Acceptance (alternate ports; wipes compose volumes): `pnpm admin:acceptance`.
