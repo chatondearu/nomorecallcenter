@@ -1,7 +1,9 @@
 import {
   callEvents,
   db,
+  hashCallerNumber,
   isEventAction,
+  normalizeCallerNumber,
   normalizeEventHash,
   normalizeEventPrefix,
 } from '@nmcc/db'
@@ -14,8 +16,9 @@ interface IngestBody {
   numberHash?: string
   action?: string
   occurredAt?: string
-  /** Forbidden clear-number fields — presence → 400 */
+  /** Clear caller number; stored, never returned on this route (ADR-010). */
   number?: unknown
+  /** Forbidden aliases — presence → 400 */
   phone?: unknown
   fullNumber?: unknown
 }
@@ -32,16 +35,18 @@ function serializeEvent(row: typeof callEvents.$inferSelect) {
 }
 
 /**
- * Ingest a call screening event (prefix/hash only — ADR-001).
+ * Ingest a call screening event.
+ * When `number` is set, store the clear normalized digits and a SHA-256 display hash.
+ * The response never includes the clear number (ADR-010).
  */
 export default defineEventHandler(async (event) => {
   const session = await requireAuthSession(event)
   const body = await readBody<IngestBody>(event).catch(() => ({} as IngestBody))
 
-  if (body.number != null || body.phone != null || body.fullNumber != null) {
+  if (body.phone != null || body.fullNumber != null) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Clear phone numbers are not accepted; send prefix and/or hash only',
+      statusMessage: 'Use number for the clear caller; phone and fullNumber are not accepted',
     })
   }
 
@@ -62,11 +67,22 @@ export default defineEventHandler(async (event) => {
     })
   }
 
+  let callerNumber: string | null = null
+  if (body.number != null && body.number !== '') {
+    callerNumber = normalizeCallerNumber(body.number)
+    if (callerNumber == null) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: 'Invalid number (expected 2–15 digits)',
+      })
+    }
+  }
+
   const hashRaw = body.hash ?? body.numberHash
-  const numberHash = hashRaw != null && hashRaw !== ''
-    ? normalizeEventHash(hashRaw)
-    : null
-  if (hashRaw != null && hashRaw !== '' && numberHash == null) {
+  const numberHash = callerNumber != null
+    ? hashCallerNumber(callerNumber)
+    : (hashRaw != null && hashRaw !== '' ? normalizeEventHash(hashRaw) : null)
+  if (callerNumber == null && hashRaw != null && hashRaw !== '' && numberHash == null) {
     throw createError({
       statusCode: 400,
       statusMessage: 'Invalid hash (expected SHA-256 hex)',
@@ -76,7 +92,7 @@ export default defineEventHandler(async (event) => {
   if (prefix == null && numberHash == null) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Provide prefix and/or hash',
+      statusMessage: 'Provide prefix, hash, and/or number',
     })
   }
 
@@ -95,6 +111,7 @@ export default defineEventHandler(async (event) => {
     userId: session.user.id,
     prefix,
     numberHash,
+    callerNumber,
     action: body.action,
     occurredAt,
   }).returning()

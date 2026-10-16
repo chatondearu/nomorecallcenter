@@ -34,17 +34,18 @@ class SyncCoordinator(
         matchType: String,
         ttlPreset: String,
         countryCallingCode: String = "33",
+        effect: String = "block",
     ): Result<Unit> =
         withContext(Dispatchers.IO) {
             runCatching {
                 val patterns = expandCountryPrefixPatterns(countryCallingCode, pattern)
                 val base = prefs.getBaseUrl()
                 if (base.isBlank() || !api.hasSessionCookie(base)) {
-                    store.addLocalRules(patterns, matchType, ttlPreset)
+                    store.addLocalRules(patterns, matchType, ttlPreset, effect)
                     return@runCatching
                 }
                 for (p in patterns) {
-                    api.createRule(base, p, matchType, ttlPreset)
+                    api.createRule(base, p, matchType, ttlPreset, effect)
                 }
                 val rules = api.syncRules(base)
                 store.saveRules(rules)

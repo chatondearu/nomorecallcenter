@@ -13,10 +13,15 @@ enum class MatchType {
     PREFIX,
 }
 
-enum class ScreenAction {
-    /** Number matched a shared list entry or an active personal rule → silent reject. */
+enum class RuleEffect {
+    ALLOW,
     BLOCK,
-    /** No match → allow the call through. */
+}
+
+enum class ScreenAction {
+    /** Silent reject: disallow, reject, skip call log, skip system notification. */
+    BLOCK,
+    /** Let the call through. */
     ALLOW,
 }
 
@@ -30,6 +35,7 @@ data class PersonalRule(
     val matchType: MatchType,
     /** Null means permanent (ADR-007). */
     val expiresAtEpochMs: Long? = null,
+    val effect: RuleEffect = RuleEffect.BLOCK,
 )
 
 data class ScreenDecision(
@@ -102,18 +108,41 @@ fun expandCountryPrefixPatterns(countryCallingCode: String, rawLocal: String): L
 }
 
 /**
- * Decide whether to silently reject [rawNumber] given shared list + personal rules.
- * Shared list entries are treated as prefix matches (ARCEP / list sync contract).
- * Default product stance: match → BLOCK (silent reject); no match → ALLOW.
+ * Screening order (PRD-28):
+ * 1. No caller number → block only if hidden-number blocking or contacts-only is on.
+ * 2. Active personal allow wins over shared-list blocks, personal blocks, and contacts-only.
+ * 3. Contacts-only and the number is not a device contact → block.
+ * 4. Shared list or active personal block → silent reject.
+ * 5. Otherwise allow.
+ * Shared list entries are prefix matches. Contacts are not uploaded; [isDeviceContact] is local.
  */
 fun decideScreen(
     rawNumber: String?,
     listEntries: Iterable<ListEntry>,
     personalRules: Iterable<PersonalRule>,
     nowEpochMs: Long = System.currentTimeMillis(),
+    blockHiddenNumbers: Boolean = false,
+    contactsOnly: Boolean = false,
+    isDeviceContact: Boolean = false,
 ): ScreenDecision {
     val number = normalizeNumber(rawNumber)
-        ?: return ScreenDecision(ScreenAction.ALLOW, normalizedNumber = null)
+    if (number == null) {
+        val block = blockHiddenNumbers || contactsOnly
+        return ScreenDecision(if (block) ScreenAction.BLOCK else ScreenAction.ALLOW, null)
+    }
+
+    for (rule in personalRules) {
+        if (rule.effect != RuleEffect.ALLOW) continue
+        if (!isRuleActive(rule.expiresAtEpochMs, nowEpochMs)) continue
+        val pattern = normalizeNumber(rule.pattern) ?: continue
+        if (matchesPattern(number, pattern, rule.matchType)) {
+            return ScreenDecision(ScreenAction.ALLOW, number, pattern)
+        }
+    }
+
+    if (contactsOnly && !isDeviceContact) {
+        return ScreenDecision(ScreenAction.BLOCK, number)
+    }
 
     for (entry in listEntries) {
         if (!entry.active) continue
@@ -124,6 +153,7 @@ fun decideScreen(
     }
 
     for (rule in personalRules) {
+        if (rule.effect != RuleEffect.BLOCK) continue
         if (!isRuleActive(rule.expiresAtEpochMs, nowEpochMs)) continue
         val pattern = normalizeNumber(rule.pattern) ?: continue
         if (matchesPattern(number, pattern, rule.matchType)) {

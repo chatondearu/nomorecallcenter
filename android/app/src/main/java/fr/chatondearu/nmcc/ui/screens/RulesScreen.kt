@@ -32,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import fr.chatondearu.nmcc.NmccApp
 import fr.chatondearu.nmcc.matcher.MatchType
+import fr.chatondearu.nmcc.matcher.RuleEffect
 import fr.chatondearu.nmcc.matcher.expandCountryPrefixPatterns
 import fr.chatondearu.nmcc.network.SyncListEntry
 import fr.chatondearu.nmcc.network.SyncRule
@@ -60,6 +61,7 @@ fun RulesScreen() {
     var countryExpanded by remember { mutableStateOf(false) }
     var pattern by remember { mutableStateOf("") }
     var matchType by remember { mutableStateOf("prefix") }
+    var effect by remember { mutableStateOf("block") }
     var ttl by remember { mutableStateOf("7d") }
     var message by remember { mutableStateOf<String?>(null) }
 
@@ -179,6 +181,22 @@ fun RulesScreen() {
             }
 
             item {
+                Text("Effet", style = MaterialTheme.typography.labelLarge)
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.padding(top = 4.dp),
+                ) {
+                    listOf("block" to "Bloquer", "allow" to "Autoriser").forEach { (value, label) ->
+                        FilterChip(
+                            selected = effect == value,
+                            onClick = { effect = value },
+                            label = { Text(label) },
+                        )
+                    }
+                }
+            }
+
+            item {
                 Text("TTL", style = MaterialTheme.typography.labelLarge)
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -203,6 +221,7 @@ fun RulesScreen() {
                                 matchType = matchType,
                                 ttlPreset = ttl,
                                 countryCallingCode = countryCode,
+                                effect = effect,
                             ).fold(
                                 onSuccess = {
                                     val saved = preview.joinToString(", ")
@@ -231,7 +250,8 @@ fun RulesScreen() {
             items(personalRules, key = { it.id }) { rule ->
                 RuleToggleRow(
                     title = rule.pattern,
-                    subtitle = "${if (rule.matchType == MatchType.EXACT) "exact" else "prefix"} · ${rule.ttlPreset}" +
+                    subtitle = "${if (rule.effect == RuleEffect.ALLOW) "autoriser" else "bloquer"} · " +
+                        "${if (rule.matchType == MatchType.EXACT) "exact" else "prefix"} · ${rule.ttlPreset}" +
                         (rule.expiresAt?.let { " · expires $it" } ?: " · permanent"),
                     checked = rule.active,
                     onCheckedChange = { enabled ->
@@ -240,19 +260,23 @@ fun RulesScreen() {
                             reload()
                         }
                     },
-                    trailing = {
-                        TextButton(
-                            onClick = {
-                                scope.launch {
-                                    message = app.sync.proposeToGlobal(rule.id).fold(
-                                        onSuccess = { "Proposed to global (pending moderation)" },
-                                        onFailure = { it.message ?: "Propose failed" },
-                                    )
-                                }
-                            },
-                        ) {
-                            Text("Propose")
+                    trailing = if (rule.effect == RuleEffect.BLOCK) {
+                        {
+                            TextButton(
+                                onClick = {
+                                    scope.launch {
+                                        message = app.sync.proposeToGlobal(rule.id).fold(
+                                            onSuccess = { "Proposed to global (pending moderation)" },
+                                            onFailure = { it.message ?: "Propose failed" },
+                                        )
+                                    }
+                                },
+                            ) {
+                                Text("Propose")
+                            }
                         }
+                    } else {
+                        null
                     },
                 )
             }

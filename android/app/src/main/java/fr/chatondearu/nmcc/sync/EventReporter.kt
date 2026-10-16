@@ -30,7 +30,7 @@ class EventReporter(
             val number = decision.normalizedNumber
             val prefix = number?.take(8)?.takeIf { it.length >= 2 }
             val hash = number?.let { sha256Hex(it) }
-            appendQueue(prefix, hash, action, Instant.now().toString())
+            appendQueue(prefix, hash, action, Instant.now().toString(), number)
             flush()
         }
     }
@@ -50,6 +50,7 @@ class EventReporter(
                     hash = if (item.isNull("hash")) null else item.optString("hash"),
                     action = item.getString("action"),
                     occurredAt = if (item.isNull("occurredAt")) null else item.optString("occurredAt"),
+                    number = if (item.isNull("number")) null else item.optString("number"),
                 )
             } catch (_: Exception) {
                 remaining.put(item)
@@ -58,14 +59,21 @@ class EventReporter(
         prefs.setEventQueueJson(remaining.toString())
     }
 
-    private suspend fun appendQueue(prefix: String?, hash: String?, action: String, occurredAt: String) {
+    private suspend fun appendQueue(
+        prefix: String?,
+        hash: String?,
+        action: String,
+        occurredAt: String,
+        number: String?,
+    ) {
         val arr = JSONArray(prefs.getEventQueueJson())
         arr.put(
             JSONObject()
                 .put("prefix", prefix)
                 .put("hash", hash)
                 .put("action", action)
-                .put("occurredAt", occurredAt),
+                .put("occurredAt", occurredAt)
+                .put("number", number),
         )
         // Cap queue to avoid unbounded growth offline
         while (arr.length() > 200) {

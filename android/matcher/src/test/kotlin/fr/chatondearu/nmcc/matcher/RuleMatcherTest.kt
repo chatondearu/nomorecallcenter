@@ -150,6 +150,91 @@ class RuleMatcherTest {
     }
 
     @Test
+    fun allowWinsOverSharedListAndPersonalBlock() {
+        val decision = decideScreen(
+            rawNumber = "0612345678",
+            listEntries = listOf(ListEntry("336")),
+            personalRules = listOf(
+                PersonalRule("0612", MatchType.PREFIX, effect = RuleEffect.BLOCK),
+                PersonalRule("0612345678", MatchType.EXACT, effect = RuleEffect.ALLOW),
+            ),
+            nowEpochMs = now,
+            contactsOnly = true,
+            isDeviceContact = false,
+        )
+        assertEquals(ScreenAction.ALLOW, decision.action)
+        assertEquals("33612345678", decision.matchedPattern)
+    }
+
+    @Test
+    fun expiredAllow_doesNotWin() {
+        val decision = decideScreen(
+            rawNumber = "0612345678",
+            listEntries = listOf(ListEntry("336")),
+            personalRules = listOf(
+                PersonalRule("0612345678", MatchType.EXACT, expiresAtEpochMs = now - 1, effect = RuleEffect.ALLOW),
+            ),
+            nowEpochMs = now,
+        )
+        assertEquals(ScreenAction.BLOCK, decision.action)
+    }
+
+    @Test
+    fun contactsOnly_blocksUnknownUnlessAllow() {
+        val blocked = decideScreen(
+            rawNumber = "0102030405",
+            listEntries = emptyList(),
+            personalRules = emptyList(),
+            nowEpochMs = now,
+            contactsOnly = true,
+            isDeviceContact = false,
+        )
+        assertEquals(ScreenAction.BLOCK, blocked.action)
+        assertNull(blocked.matchedPattern)
+
+        val contact = decideScreen(
+            rawNumber = "0102030405",
+            listEntries = emptyList(),
+            personalRules = emptyList(),
+            nowEpochMs = now,
+            contactsOnly = true,
+            isDeviceContact = true,
+        )
+        assertEquals(ScreenAction.ALLOW, contact.action)
+    }
+
+    @Test
+    fun hiddenNumber_blocksOnlyWhenSettingOn() {
+        val open = decideScreen(
+            rawNumber = null,
+            listEntries = listOf(ListEntry("0892")),
+            personalRules = emptyList(),
+            nowEpochMs = now,
+            blockHiddenNumbers = false,
+        )
+        assertEquals(ScreenAction.ALLOW, open.action)
+
+        val hidden = decideScreen(
+            rawNumber = "",
+            listEntries = emptyList(),
+            personalRules = emptyList(),
+            nowEpochMs = now,
+            blockHiddenNumbers = true,
+        )
+        assertEquals(ScreenAction.BLOCK, hidden.action)
+        assertNull(hidden.normalizedNumber)
+
+        val contactsOnlyHidden = decideScreen(
+            rawNumber = null,
+            listEntries = emptyList(),
+            personalRules = emptyList(),
+            nowEpochMs = now,
+            contactsOnly = true,
+        )
+        assertEquals(ScreenAction.BLOCK, contactsOnlyHidden.action)
+    }
+
+    @Test
     fun expandCountryPrefixPatterns_otherCountryInternationalOnly() {
         assertEquals(listOf("324712"), expandCountryPrefixPatterns("32", "04712"))
         assertEquals(listOf("324712"), expandCountryPrefixPatterns("32", "4712"))

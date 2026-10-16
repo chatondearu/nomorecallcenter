@@ -11,3 +11,4 @@
 | [[ADR-007-block-ttl-model\|ADR-007]] | Temporary vs permanent personal blocks (MVP) | accepted | 2026-10-13 |
 | [[ADR-008-distribution-channels\|ADR-008]] | Distribution channels for MVP | accepted | 2026-10-13 |
 | [[ADR-009-design-system\|ADR-009]] | Design system MD3 web + Android | accepted | 2026-10-14 |
+| [[ADR-010-caller-number-storage\|ADR-010]] | Caller number storage and admin reveal | accepted | 2026-10-16 |

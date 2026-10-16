@@ -3,6 +3,7 @@ package fr.chatondearu.nmcc.store
 import fr.chatondearu.nmcc.matcher.ListEntry
 import fr.chatondearu.nmcc.matcher.MatchType
 import fr.chatondearu.nmcc.matcher.PersonalRule
+import fr.chatondearu.nmcc.matcher.RuleEffect
 import fr.chatondearu.nmcc.network.SyncListEntry
 import fr.chatondearu.nmcc.network.SyncRule
 import fr.chatondearu.nmcc.prefs.AppPrefs
@@ -36,6 +37,7 @@ class LocalRuleStore(private val prefs: AppPrefs) {
                     pattern = rule.pattern,
                     matchType = rule.matchType,
                     expiresAtEpochMs = rule.expiresAt?.let { parseIso(it) },
+                    effect = rule.effect,
                 )
             }
             .filter { rule ->
@@ -71,28 +73,36 @@ class LocalRuleStore(private val prefs: AppPrefs) {
                     .put("matchType", if (r.matchType == MatchType.EXACT) "exact" else "prefix")
                     .put("ttlPreset", r.ttlPreset)
                     .put("expiresAt", r.expiresAt)
-                    .put("active", r.active),
+                    .put("active", r.active)
+                    .put("effect", if (r.effect == RuleEffect.ALLOW) "allow" else "block"),
             )
         }
         prefs.setRulesJson(arr.toString())
     }
 
     /** Offline personal rule(s) — no API. TTL presets match server ADR-007. */
-    suspend fun addLocalRule(pattern: String, matchType: String, ttlPreset: String) {
-        addLocalRules(listOf(pattern), matchType, ttlPreset)
+    suspend fun addLocalRule(pattern: String, matchType: String, ttlPreset: String, effect: String = "block") {
+        addLocalRules(listOf(pattern), matchType, ttlPreset, effect)
     }
 
-    suspend fun addLocalRules(patterns: List<String>, matchType: String, ttlPreset: String) {
+    suspend fun addLocalRules(
+        patterns: List<String>,
+        matchType: String,
+        ttlPreset: String,
+        effect: String = "block",
+    ) {
         require(patterns.isNotEmpty()) { "No patterns" }
         val expiresAt = expiresIsoFor(ttlPreset)
         val type = if (matchType.equals("exact", true)) MatchType.EXACT else MatchType.PREFIX
+        val ruleEffect = if (effect.equals("allow", true)) RuleEffect.ALLOW else RuleEffect.BLOCK
         val existing = loadSyncRules().toMutableList()
-        val existingPatterns = existing.map { it.pattern }.toHashSet()
+        val existingKeys = existing.map { ruleKey(it.pattern, it.matchType, it.effect) }.toHashSet()
         val now = System.currentTimeMillis()
         patterns.forEachIndexed { index, pattern ->
             val digits = pattern.filter { it.isDigit() }
             require(digits.length in 2..15) { "Pattern must be 2–15 digits" }
-            if (digits in existingPatterns) return@forEachIndexed
+            val key = ruleKey(digits, type, ruleEffect)
+            if (key in existingKeys) return@forEachIndexed
             existing += SyncRule(
                 id = "local-${now + index}",
                 pattern = digits,
@@ -100,8 +110,9 @@ class LocalRuleStore(private val prefs: AppPrefs) {
                 ttlPreset = ttlPreset,
                 expiresAt = expiresAt,
                 active = true,
+                effect = ruleEffect,
             )
-            existingPatterns += digits
+            existingKeys += key
         }
         saveRules(existing)
     }
@@ -135,6 +146,11 @@ class LocalRuleStore(private val prefs: AppPrefs) {
                         ttlPreset = o.optString("ttlPreset", "permanent"),
                         expiresAt = if (o.isNull("expiresAt")) null else o.optString("expiresAt"),
                         active = o.optBoolean("active", true),
+                        effect = if (o.optString("effect", "block").equals("allow", true)) {
+                            RuleEffect.ALLOW
+                        } else {
+                            RuleEffect.BLOCK
+                        },
                     ),
                 )
             }
@@ -171,6 +187,9 @@ class LocalRuleStore(private val prefs: AppPrefs) {
             }
         }
     }
+
+    private fun ruleKey(pattern: String, matchType: MatchType, effect: RuleEffect): String =
+        "$pattern|$matchType|$effect"
 
     private fun parseIso(iso: String): Long? = runCatching {
         Instant.parse(iso).toEpochMilli()

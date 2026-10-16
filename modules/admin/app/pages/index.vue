@@ -29,8 +29,20 @@ interface FeedEvent {
 const { apiFetch } = useApi()
 const stats = ref<InstanceStats | null>(null)
 const events = ref<FeedEvent[]>([])
+const revealed = ref<Record<string, string>>({})
 const error = ref<string | null>(null)
 const loading = ref(true)
+
+async function reveal(id: string) {
+  try {
+    const body = await apiFetch<{ number: string }>(`/api/admin/events/${id}/reveal`, { method: 'POST' })
+    revealed.value = { ...revealed.value, [id]: body.number || '(vide)' }
+  }
+  catch (e: unknown) {
+    const err = e as { statusMessage?: string }
+    error.value = err?.statusMessage || 'Révélation refusée.'
+  }
+}
 
 async function load() {
   try {
@@ -140,6 +152,10 @@ function formatTime(iso: string) {
             >{{ ev.action }}</span>
             <span class="text-system-on-surface-variant">{{ formatTime(ev.occurredAt) }}</span>
             <span class="text-system-on-surface-variant font-mono text-xs truncate max-w-40">{{ ev.userId }}</span>
+            <button type="button" class="text-primary underline" @click="reveal(ev.id)">
+              Révéler
+            </button>
+            <span v-if="revealed[ev.id]" class="font-mono">{{ revealed[ev.id] }}</span>
           </li>
         </ul>
         <p v-else class="text-system-on-surface-variant text-sm">

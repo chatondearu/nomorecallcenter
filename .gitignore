@@ -1,3 +1,4 @@
+.orch/
 node_modules
 .nuxt
 .output

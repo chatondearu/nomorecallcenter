@@ -49,6 +49,13 @@ export default defineEventHandler(async (event) => {
       throw createError({ statusCode: 404, statusMessage: 'Personal rule not found' })
     }
 
+    if (rule.effect === 'allow') {
+      throw createError({
+        statusCode: 400,
+        statusMessage: 'Allow rules stay personal; shared lists are block-only',
+      })
+    }
+
     pattern = rule.pattern
     matchType = rule.matchType
     personalRuleId = rule.id

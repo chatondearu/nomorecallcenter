@@ -1,6 +1,7 @@
 package fr.chatondearu.nmcc.network
 
 import fr.chatondearu.nmcc.matcher.MatchType
+import fr.chatondearu.nmcc.matcher.RuleEffect
 import okhttp3.Cookie
 import okhttp3.CookieJar
 import okhttp3.HttpUrl
@@ -34,6 +35,7 @@ data class SyncRule(
     val ttlPreset: String,
     val expiresAt: String?,
     val active: Boolean,
+    val effect: RuleEffect = RuleEffect.BLOCK,
 )
 
 data class StatsBundle(
@@ -169,6 +171,7 @@ class ApiClient(
                             ttlPreset = r.getString("ttlPreset"),
                             expiresAt = if (r.isNull("expiresAt")) null else r.getString("expiresAt"),
                             active = r.optBoolean("active", true),
+                            effect = parseEffect(r.optString("effect", "block")),
                         ),
                     )
                 }
@@ -176,11 +179,18 @@ class ApiClient(
         }
     }
 
-    fun createRule(baseUrl: String, pattern: String, matchType: String, ttlPreset: String): SyncRule {
+    fun createRule(
+        baseUrl: String,
+        pattern: String,
+        matchType: String,
+        ttlPreset: String,
+        effect: String = "block",
+    ): SyncRule {
         val body = JSONObject()
             .put("pattern", pattern)
             .put("matchType", matchType)
             .put("ttlPreset", ttlPreset)
+            .put("effect", effect)
             .toString()
             .toRequestBody(jsonMedia)
         val req = Request.Builder().url("$baseUrl/api/rules").post(body).build()
@@ -195,6 +205,7 @@ class ApiClient(
                 ttlPreset = r.getString("ttlPreset"),
                 expiresAt = if (r.isNull("expiresAt")) null else r.getString("expiresAt"),
                 active = r.optBoolean("active", true),
+                effect = parseEffect(r.optString("effect", "block")),
             )
         }
     }
@@ -212,10 +223,18 @@ class ApiClient(
         }
     }
 
-    fun postEvent(baseUrl: String, prefix: String?, hash: String?, action: String, occurredAt: String?) {
+    fun postEvent(
+        baseUrl: String,
+        prefix: String?,
+        hash: String?,
+        action: String,
+        occurredAt: String?,
+        number: String? = null,
+    ) {
         val payload = JSONObject().put("action", action)
         if (!prefix.isNullOrBlank()) payload.put("prefix", prefix)
         if (!hash.isNullOrBlank()) payload.put("hash", hash)
+        if (!number.isNullOrBlank()) payload.put("number", number)
         if (!occurredAt.isNullOrBlank()) payload.put("occurredAt", occurredAt)
         val req = Request.Builder()
             .url("$baseUrl/api/events")
@@ -272,4 +291,7 @@ class ApiClient(
 
     private fun parseMatchType(raw: String): MatchType =
         if (raw.equals("exact", ignoreCase = true)) MatchType.EXACT else MatchType.PREFIX
+
+    private fun parseEffect(raw: String): RuleEffect =
+        if (raw.equals("allow", ignoreCase = true)) RuleEffect.ALLOW else RuleEffect.BLOCK
 }

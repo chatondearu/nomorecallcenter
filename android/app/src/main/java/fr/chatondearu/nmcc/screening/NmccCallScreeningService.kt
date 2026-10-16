@@ -4,7 +4,6 @@ import android.telecom.Call
 import android.telecom.CallScreeningService
 import fr.chatondearu.nmcc.NmccApp
 import fr.chatondearu.nmcc.matcher.ScreenAction
-import fr.chatondearu.nmcc.matcher.decideScreen
 import fr.chatondearu.nmcc.store.OfflineBootstrap
 import kotlinx.coroutines.runBlocking
 import org.json.JSONObject
@@ -18,11 +17,10 @@ class NmccCallScreeningService : CallScreeningService() {
     override fun onScreenCall(callDetails: Call.Details) {
         val app = NmccApp.instance
         val raw = callDetails.handle?.schemeSpecificPart
-        val (list, rules) = runBlocking {
+        val decision = runBlocking {
             OfflineBootstrap.ensureBundledList(app, app.prefs)
-            app.store.loadListEntries() to app.store.loadPersonalRules()
+            decideIncoming(this@NmccCallScreeningService, app.prefs, app.store, raw)
         }
-        val decision = decideScreen(raw, list, rules)
         val block = decision.action == ScreenAction.BLOCK
         val response = CallResponse.Builder()
             .setDisallowCall(block)
@@ -32,6 +30,7 @@ class NmccCallScreeningService : CallScreeningService() {
             .build()
         respondToCall(callDetails, response)
 
+        val at = Instant.now().toString()
         runBlocking {
             app.prefs.setLastScreenJson(
                 JSONObject()
@@ -39,9 +38,16 @@ class NmccCallScreeningService : CallScreeningService() {
                     .put("raw", raw ?: "")
                     .put("normalized", decision.normalizedNumber ?: "")
                     .put("matched", decision.matchedPattern ?: "")
-                    .put("at", Instant.now().toString())
+                    .put("at", at)
                     .toString(),
             )
+            if (block) {
+                val shown = decision.normalizedNumber ?: "Numéro masqué"
+                app.prefs.appendBlockedJournal(shown, decision.matchedPattern, at)
+                if (app.prefs.getNotifyBlocked()) {
+                    postBlockedCallNotification(this@NmccCallScreeningService, shown, decision.matchedPattern)
+                }
+            }
         }
         app.events.enqueueAfterScreen(decision)
     }
