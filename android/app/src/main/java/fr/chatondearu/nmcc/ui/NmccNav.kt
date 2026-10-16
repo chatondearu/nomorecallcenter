@@ -37,7 +37,7 @@ fun NmccNav(activity: Activity) {
     val tabs = listOf(
         Tab("home", "Accueil", Icons.Filled.Home),
         Tab("rules", "Règles", Icons.AutoMirrored.Filled.Rule),
-        Tab("stats", "Stats", Icons.Filled.BarChart),
+        Tab("stats", "Statistiques", Icons.Filled.BarChart),
         Tab("settings", "Paramètres", Icons.Filled.Settings),
     )
 
