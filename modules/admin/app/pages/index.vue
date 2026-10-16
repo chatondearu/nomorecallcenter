@@ -21,6 +21,8 @@ const { apiFetch } = useApi()
 const stats = ref<InstanceStats | null>(null)
 const error = ref<string | null>(null)
 const loading = ref(true)
+const statsStatus = ref('')
+let statsSignature = ''
 
 const funnelTiles = computed(() => [
   { label: 'Propositions en attente', value: stats.value?.proposalFunnel?.pending ?? 0 },
@@ -47,6 +49,10 @@ async function load() {
   try {
     stats.value = await apiFetch<InstanceStats>('/api/stats/instance')
     error.value = null
+    const nextSignature = JSON.stringify(stats.value)
+    if (statsSignature && nextSignature !== statsSignature)
+      statsStatus.value = 'Compteurs mis à jour.'
+    statsSignature = nextSignature
   }
   catch (e: unknown) {
     const err = e as { statusMessage?: string }
@@ -82,6 +88,9 @@ onUnmounted(() => {
       </p>
     </header>
 
+    <p class="sr-only" aria-live="polite">
+      {{ statsStatus }}
+    </p>
     <p v-if="error" class="text-error text-sm" role="alert">
       {{ error }}
     </p>
@@ -110,7 +119,7 @@ onUnmounted(() => {
 
       <NuxtLink
         to="/proposals"
-        class="text-sm font-medium text-system-primary hover:underline w-fit"
+        class="text-sm font-medium text-system-primary hover:underline w-fit focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-system-primary"
       >
         Examiner la file
       </NuxtLink>

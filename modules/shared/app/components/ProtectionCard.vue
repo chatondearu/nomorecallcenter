@@ -13,7 +13,7 @@
       </svg>
     </span>
     <div class="flex min-w-0 flex-col items-start gap-xs">
-      <h2 class="text-base font-bold tracking-wide">
+      <h2 class="text-balance text-base font-bold tracking-wide">
         Protection active
       </h2>
       <p class="rounded-full bg-system-primary px-sm py-xs text-xs font-semibold text-system-on-primary">

@@ -1,7 +1,14 @@
 <script setup lang="ts">
-defineProps<{
+withDefaults(defineProps<{
   label: string
-}>()
+  type?: 'text' | 'email' | 'url' | 'number' | 'password'
+  name?: string
+  autocomplete?: string
+  inputmode?: 'text' | 'numeric' | 'email' | 'url' | 'decimal'
+  spellcheck?: boolean
+}>(), {
+  type: 'text',
+})
 
 const model = defineModel<string>({ required: true })
 
@@ -22,7 +29,12 @@ function onInput(event: Event) {
     <input
       :id="id"
       :value="model"
-      class="rounded-lg border border-system-outline-variant bg-system-surface-container-low px-md py-sm text-sm text-system-on-surface outline-none focus:border-system-primary"
+      :type="type"
+      :name="name"
+      :autocomplete="autocomplete"
+      :inputmode="inputmode"
+      :spellcheck="spellcheck"
+      class="rounded-lg border border-system-outline-variant bg-system-surface-container-low px-md py-sm text-sm text-system-on-surface focus-visible:border-system-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-system-primary"
       @input="onInput"
     >
   </div>
