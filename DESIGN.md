@@ -16,7 +16,7 @@ Stitch mocks sometimes invent offline-only / P2P / SIP / “cluster” stories. 
 
 - Android Call Screening + **self-hosted multi-user** server (invite-only, Better Auth)
 - Shared lists moderated; personal TTL rules synced
-- Privacy: **prefix / hash**, not clear full numbers in stats
+- Privacy: members see **prefix / hash**. The phone journal shows the caller number. An instance admin can reveal one clear number (ADR-010).
 - Default block: **silent reject**
 
 ## Surfaces
@@ -108,6 +108,29 @@ Under `design/stitch-reference/`:
 | `…_admin_file_de_mod_*` | Proposals queue |
 
 Missing vs PRD (still to design in-product): onboarding Call Screening role, settings/instance URL, invites UI, admin live feed page.
+
+## UI pass (prepared, not built)
+
+Stitch HTML stays reference. Reka UI and Histoire are named in ADR-009 and are **not installed**. First visual pass uses the shared Uno preset (now loaded by admin and the public app) and native controls. Add Reka only when a dialog, menu, or tabs primitive is actually needed.
+
+Build these in the shared layer before restyling pages:
+
+1. Protection card (role held / not held)
+2. Stat tile
+3. Event row (hash for server surfaces, caller number only on the device journal)
+4. Chips: TTL `1h` `24h` `7j` `30j` `Permanent`, effect `Bloquer` / `Autoriser`
+5. Filled button and outlined field
+6. App bottom nav and admin sidebar (same tokens, different shell)
+
+Then apply, in this order:
+
+| Surface | Now | Target structure |
+| ------- | --- | ---------------- |
+| Admin | Sidebar + raw lists, tokens working after the Uno fix | Overview density from Stitch, proposal queue with Approuver / Rejeter, invite form, feed row with hash and an explicit Révéler for admins |
+| Public site | One unstyled API sentence in `@nmcc/app` | Landing: hero, 3 steps, self-host + F-Droid. No SQLite, federation, or open signup |
+| Android | Compose screens, much of the copy still English | French. Home protection card, rules with allow/block + TTL, stats, settings (instance URL, contacts-only, hidden numbers, notification off by default) |
+
+Do not copy Stitch Inter, page-specific nav, or portrait images.
 
 ## Related
 
