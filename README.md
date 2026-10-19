@@ -9,7 +9,8 @@ Product docs: [`prd/PRD-1-mvp-and-vision.md`](prd/PRD-1-mvp-and-vision.md) ·
 [`plans/PLAN-1-mvp-and-vision.md`](plans/PLAN-1-mvp-and-vision.md) ·
 [`DESIGN.md`](DESIGN.md)
 
-Full documentation: [`doc/README.md`](doc/README.md)
+Full documentation: [`doc/README.md`](doc/README.md) ·
+**Local dev:** [`doc/local-development.md`](doc/local-development.md)
 
 ## Monorepo layout
 
@@ -46,6 +47,10 @@ can see the flake. Debug APK:
 
 Without Nix: install the prerequisites above yourself and keep
 `JAVA_HOME` / `ANDROID_HOME` set (see [`android/README.md`](android/README.md)).
+
+Copy [`.env.example`](.env.example) to `.env` (gitignored). If host port **5432** is
+busy, set `POSTGRES_PORT` and `DATABASE_URL` there — see
+[`doc/local-development.md`](doc/local-development.md).
 
 ## Self-host smoke path
 
@@ -91,7 +96,8 @@ pnpm stats:acceptance
 pnpm admin:acceptance
 ```
 
-Busy ports: `API_PORT=3017 POSTGRES_PORT=5437 pnpm …`. Stop: `pnpm compose:down` (`-v` wipes DB).
+Busy ports: set `API_PORT` / `POSTGRES_PORT` in `.env` or
+`API_PORT=3017 POSTGRES_PORT=5437 pnpm …`. Stop: `pnpm compose:down` (`-v` wipes DB).
 
 Pre-built API image (GHCR): set `DOCKER_IMAGE_API=ghcr.io/<owner>/nmcc-api:<tag>` and
 `docker compose up -d` without `--build`. Details: [`doc/deployment.md`](doc/deployment.md).
@@ -122,10 +128,11 @@ F-Droid-oriented notes (no Play-only deps): [`android/README.md`](android/README
 ## Local web (optional)
 
 ```bash
-pnpm install
-pnpm dev:api     # http://localhost:3000 — French landing and API
-pnpm dev:admin   # http://localhost:3001
+pnpm dev:admin   # http://localhost:3001 — needs API on 3000 (compose or dev:api)
+pnpm dev:api     # landing + API in Node; do not run with compose API on the same port
 ```
+
+Details: [`doc/local-development.md`](doc/local-development.md).
 
 ## License
 

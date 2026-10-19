@@ -1,5 +1,9 @@
 # Deployment
 
+**Contributors:** day-to-day local setup (ports, `.env`, admin dev, Android) is in
+[local-development.md](local-development.md). This page focuses on operator smoke and
+OCI.
+
 Self-host path for operators (ADR-008): **OCI + docker compose** for the API;
 admin is a separate Nuxt app run next to the API (not a second compose service
 in MVP). Android: GitHub Releases / F-Droid — see [`android/README.md`](../android/README.md).

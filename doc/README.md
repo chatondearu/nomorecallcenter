@@ -4,6 +4,7 @@ English docs for operators and integrators.
 
 | Page | Contents |
 | ---- | -------- |
+| [local-development.md](local-development.md) | **Contributors:** Nix/direnv, compose, admin dev, Android, ports, `.env` |
 | [api.md](api.md) | REST API contracts |
 | [configuration.md](configuration.md) | Environment variables |
 | [deployment.md](deployment.md) | Compose / OCI (GHCR) / full self-host smoke |

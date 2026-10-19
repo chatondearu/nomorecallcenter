@@ -44,6 +44,7 @@ Index: [[decisions/index|All ADRs]]
 | --- | ------ |
 | [[../prd/PRD-1-mvp-and-vision\|PRD-1]] MVP + vision | approved |
 | [[../plans/PLAN-1-mvp-and-vision\|PLAN-1]] MVP + vision | draft |
+| [[../plans/PLAN-2-local-dev-and-device-acceptance\|PLAN-2]] Local dev + device acceptance | in-progress |
 | [[../prd/PRD-28-android-allow-and-screening-modes\|PRD-28]] Allow rules + screening modes | approved |
 | [[../plans/PLAN-28-android-allow-and-screening-modes\|PLAN-28]] Allow rules + screening modes | draft |
 | [[../prd/PRD-31-md3-ui-pass\|PRD-31]] MD3 UI pass | approved |

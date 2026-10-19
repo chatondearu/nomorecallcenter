@@ -1,6 +1,8 @@
 # Configuration
 
-Values consumed by the stack (see also `.env.example`).
+Values consumed by the stack (see also `.env.example`). Copy to `.env` for local
+Compose; see [local-development.md](local-development.md) for port conflicts and
+`BETTER_AUTH_URL` when testing Android on Wi‑Fi.
 
 | Variable | Used by | Notes |
 | -------- | ------- | ----- |
@@ -9,7 +11,7 @@ Values consumed by the stack (see also `.env.example`).
 | `API_PORT` | Compose / scripts | Host port for the API (default `3000`) |
 | `DOCKER_IMAGE_API` | Compose | API image name/tag (default `nmcc-api`; GHCR e.g. `ghcr.io/<owner>/nmcc-api:main`) |
 | `BETTER_AUTH_SECRET` | API | Required in real deployments |
-| `BETTER_AUTH_URL` | API | Public base URL for Better Auth |
+| `BETTER_AUTH_URL` | API | Public base URL for Better Auth; on a phone use your LAN URL (e.g. `http://192.168.x.x:3000`), then `docker compose up -d --force-recreate api` |
 | `BOOTSTRAP_ADMIN_EMAIL` | API | Optional; restrict first admin email |
 | `ARCEP_MAJNUM_URL` | `pnpm lists:seed` | Override MAJNUM CSV URL (default ARCEP extranet) |
 | `ARCEP_SEED_FIXTURE` | `pnpm lists:seed` | Set `1` to seed a single `0892` fixture without network |
