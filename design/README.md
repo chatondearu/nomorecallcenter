@@ -8,7 +8,7 @@ Visual review targets for [`cda-design-loop`](../../AGENTS.md) and Playwright ca
 | [../DESIGN.md](../DESIGN.md) | Brief (MD3, typography, anti-slop) |
 | [../design/tokens/](../design/tokens/) | Color tokens |
 
-**Not in scope (yet):** Android Compose — see [android-emulator.md](android-emulator.md).
+**Android (emulator / device):** [android-emulator.md](android-emulator.md) — `pnpm android:emulator:daemon` + `pnpm android:design:capture`.
 
 ```bash
 pnpm install && npx playwright install chromium   # once (inside nix develop on Linux)

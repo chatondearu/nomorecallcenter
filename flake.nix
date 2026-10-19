@@ -28,8 +28,8 @@
             "35.0.0"
           ];
           platformVersions = [ "35" ];
-          includeEmulator = false;
-          includeSystemImages = false;
+          includeEmulator = true;
+          includeSystemImages = true;
           includeNDK = false;
         };
         androidSdk = androidComposition.androidsdk;

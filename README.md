@@ -144,6 +144,8 @@ pnpm dev:design && pnpm design:auth && pnpm design:capture
 
 See [`design/README.md`](design/README.md).
 
+**Android UI (emulator):** `pnpm android:emulator:daemon` then `pnpm android:design:capture` — [`design/android-emulator.md`](design/android-emulator.md).
+
 ## License
 
 Copyright (C) 2026 nomorecallcenter contributors.

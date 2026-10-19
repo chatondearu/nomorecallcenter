@@ -78,7 +78,7 @@ question) — not a product gate.
 
 ## Manual path (device)
 
-Local stack, LAN `BETTER_AUTH_URL`, and `adb installDebug`: [`doc/local-development.md`](../doc/local-development.md).
+Local stack, LAN `BETTER_AUTH_URL`, and `adb installDebug`: [`doc/local-development.md`](../doc/local-development.md). Emulator screenshots: [`design/android-emulator.md`](../design/android-emulator.md).
 
 1. Point the app at your instance base URL (emulator → `http://10.0.2.2:3000`).
 2. Sign in with email/password (Better Auth session cookie).

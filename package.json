@@ -32,7 +32,10 @@
     "dev:design": "bash scripts/dev-design.sh",
     "design:auth": "node scripts/design-admin-auth.mjs",
     "design:capture": "node scripts/design-capture.mjs",
-    "design:shot": "bash scripts/cda-design-shot.sh"
+    "design:shot": "bash scripts/cda-design-shot.sh",
+    "android:emulator": "bash scripts/android-emulator.sh",
+    "android:emulator:daemon": "ANDROID_EMULATOR_DAEMON=1 bash scripts/android-emulator.sh",
+    "android:design:capture": "bash scripts/android-design-capture.sh"
   },
   "devDependencies": {
     "@types/node": "catalog:",

@@ -13,6 +13,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
@@ -28,9 +29,18 @@ import fr.chatondearu.nmcc.ui.screens.StatsScreen
 private data class Tab(val route: String, val label: String, val icon: androidx.compose.ui.graphics.vector.ImageVector)
 
 @Composable
-fun NmccNav(activity: Activity) {
+fun NmccNav(activity: Activity, designRoute: String? = null) {
     val nav = rememberNavController()
     val entry by nav.currentBackStackEntryAsState()
+
+    LaunchedEffect(designRoute) {
+        val route = designRoute ?: return@LaunchedEffect
+        if (route !in setOf("home", "rules", "stats", "settings", "login"))
+            return@LaunchedEffect
+        nav.navigate(route) {
+            launchSingleTop = true
+        }
+    }
     val route = entry?.destination?.route
     val showBar = route in setOf("home", "rules", "stats", "settings")
 

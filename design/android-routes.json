@@ -1,0 +1,14 @@
+{
+  "package": "fr.chatondearu.nmcc",
+  "activity": "fr.chatondearu.nmcc.MainActivity",
+  "intentExtra": "NMCC_DESIGN_ROUTE",
+  "outDir": "design/shots-android",
+  "settleMs": 2500,
+  "routes": [
+    { "id": "home", "route": "home" },
+    { "id": "rules", "route": "rules" },
+    { "id": "stats", "route": "stats" },
+    { "id": "settings", "route": "settings" },
+    { "id": "login", "route": "login" }
+  ]
+}

@@ -215,6 +215,15 @@ pnpm design:shot http://127.0.0.1:3001/proposals /tmp/nmcc-admin-shot .playwrigh
 
 See [`design/README.md`](../design/README.md).
 
+### Android UI captures (emulator)
+
+```bash
+pnpm android:emulator:daemon      # once per session
+pnpm android:design:capture       # design/shots-android/*.png
+```
+
+Details: [`design/android-emulator.md`](../design/android-emulator.md). Emulator API uses `http://10.0.2.2:3000` for the host API.
+
 ## Checklist (device acceptance)
 
 Tracked in [plans/PLAN-2-local-dev-and-device-acceptance.md](../plans/PLAN-2-local-dev-and-device-acceptance.md):
