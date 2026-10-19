@@ -80,5 +80,7 @@ Tracer bullets — finish each slice before the next.
 ## Verification
 
 - [x] Contributor docs: [doc/local-development.md](../doc/local-development.md) (+ README / `.env.example` cross-links)
+- [x] Web design loop: [design/README.md](../design/README.md), `pnpm dev:design`, Playwright captures
+- [ ] Android emulator eyes (screenshots / Maestro) — follow-up after web loop
 - [ ] PLAN-1 manual path checkbox marked done with evidence (date, device, commit `cc63940` or later)
 - [ ] No new ADR unless LAN auth needs a product change (env-only is enough for dev)

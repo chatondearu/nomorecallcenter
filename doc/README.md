@@ -5,6 +5,8 @@ English docs for operators and integrators.
 | Page | Contents |
 | ---- | -------- |
 | [local-development.md](local-development.md) | **Contributors:** Nix/direnv, compose, admin dev, Android, ports, `.env` |
+| [../design/README.md](../design/README.md) | **Design loop:** routes, Playwright captures (`cda-design-loop`) |
+| [../design/android-emulator.md](../design/android-emulator.md) | **Planned:** emulator screenshots for the APK |
 | [api.md](api.md) | REST API contracts |
 | [configuration.md](configuration.md) | Environment variables |
 | [deployment.md](deployment.md) | Compose / OCI (GHCR) / full self-host smoke |

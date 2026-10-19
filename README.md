@@ -134,6 +134,16 @@ pnpm dev:api     # landing + API in Node; do not run with compose API on the sam
 
 Details: [`doc/local-development.md`](doc/local-development.md).
 
+## Design loop (web UI)
+
+Playwright captures for [`cda-design-loop`](https://github.com/chatondearu/nomorecallcenter/blob/main/design/README.md) — site + admin, not the Android APK:
+
+```bash
+pnpm dev:design && pnpm design:auth && pnpm design:capture
+```
+
+See [`design/README.md`](design/README.md).
+
 ## License
 
 Copyright (C) 2026 nomorecallcenter contributors.

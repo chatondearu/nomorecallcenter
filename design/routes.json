@@ -1,0 +1,13 @@
+{
+  "site": {
+    "baseEnv": "DEV_URL_SITE",
+    "baseDefault": "http://127.0.0.1:3000",
+    "paths": ["/"]
+  },
+  "admin": {
+    "baseEnv": "DEV_URL_ADMIN",
+    "baseDefault": "http://127.0.0.1:3001",
+    "storageState": ".playwright/admin.json",
+    "paths": ["/login", "/", "/proposals", "/invites", "/events"]
+  }
+}

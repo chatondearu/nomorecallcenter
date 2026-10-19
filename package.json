@@ -28,16 +28,22 @@
     "lists:acceptance": "bash scripts/lists-acceptance.sh",
     "rules:acceptance": "bash scripts/rules-acceptance.sh",
     "stats:acceptance": "bash scripts/stats-acceptance.sh",
-    "admin:acceptance": "bash scripts/admin-acceptance.sh"
+    "admin:acceptance": "bash scripts/admin-acceptance.sh",
+    "dev:design": "bash scripts/dev-design.sh",
+    "design:auth": "node scripts/design-admin-auth.mjs",
+    "design:capture": "node scripts/design-capture.mjs",
+    "design:shot": "bash scripts/cda-design-shot.sh"
   },
   "devDependencies": {
     "@types/node": "catalog:",
+    "playwright": "1.55.1",
     "typescript": "catalog:"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
       "esbuild",
-      "@parcel/watcher"
+      "@parcel/watcher",
+      "playwright"
     ]
   }
 }

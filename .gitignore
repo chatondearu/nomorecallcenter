@@ -13,6 +13,9 @@ dist
 .direnv
 .pnpm
 .DS_Store
+.playwright/
+design/shots/
+
 coverage
 *.tsbuildinfo
 data/

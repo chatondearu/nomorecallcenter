@@ -189,6 +189,32 @@ pnpm compose:down -v     # wipe DB volume — next up is empty instance
 
 Stop `pnpm dev:admin` / `pnpm dev:api` with Ctrl+C in their terminals.
 
+## Design loop (`cda-design-loop`)
+
+Visual review for the **public site** and **admin** (not the Android APK). Brief:
+[`DESIGN.md`](../DESIGN.md). Route list: [`design/routes.json`](../design/routes.json).
+
+```bash
+pnpm install
+# Nix shell sets PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH (no download). Else: npx playwright install chromium
+
+pnpm dev:design                    # Postgres + Nuxt @nmcc/app + @nmcc/admin (stops compose API if it was on :3000)
+# In another terminal, after a fresh DB:
+pnpm auth:acceptance               # optional once — creates admin@example.com / AdminPass123!
+pnpm design:auth                   # writes .playwright/admin.json
+pnpm design:capture                # design/shots/{site,admin}/…/w375.png …
+```
+
+Environment (optional in `.env`): `DEV_URL_SITE`, `DEV_URL_ADMIN`, `DESIGN_ADMIN_EMAIL`,
+`DESIGN_ADMIN_PASSWORD`. Single-route capture:
+
+```bash
+pnpm design:shot http://127.0.0.1:3000/ /tmp/nmcc-site-shot
+pnpm design:shot http://127.0.0.1:3001/proposals /tmp/nmcc-admin-shot .playwright/admin.json
+```
+
+See [`design/README.md`](../design/README.md).
+
 ## Checklist (device acceptance)
 
 Tracked in [plans/PLAN-2-local-dev-and-device-acceptance.md](../plans/PLAN-2-local-dev-and-device-acceptance.md):

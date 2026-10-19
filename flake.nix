@@ -45,6 +45,7 @@
             docker-compose
             android-tools
             androidSdk
+            chromium
           ];
 
           ANDROID_HOME = androidHome;
@@ -59,9 +60,10 @@
             export JAVA_HOME="${pkgs.jdk17}"
             export ANDROID_HOME="${androidHome}"
             export ANDROID_SDK_ROOT="$ANDROID_HOME"
+            export PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH="${pkgs.chromium}/bin/chromium"
             echo "[nix develop] node=$(node --version) pnpm=$(pnpm --version) java=$(java -version 2>&1 | head -1)"
             echo "[nix develop] ANDROID_HOME=$ANDROID_HOME"
-            echo "[nix develop] next: pnpm install | cd android && ./gradlew :matcher:test :app:assembleDebug"
+            echo "[nix develop] next: pnpm install | pnpm dev:design | cd android && ./gradlew :matcher:test :app:assembleDebug"
           '';
         };
       }
