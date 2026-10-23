@@ -182,6 +182,18 @@ class ApiClient(
         }
     }
 
+    fun deleteRule(baseUrl: String, ruleId: String) {
+        val req = Request.Builder()
+            .url("$baseUrl/api/rules/$ruleId")
+            .delete()
+            .build()
+        client.newCall(req).execute().use { resp ->
+            if (!resp.isSuccessful) {
+                throw ApiException(resp.code, resp.body?.string().orEmpty())
+            }
+        }
+    }
+
     fun createRule(
         baseUrl: String,
         pattern: String,

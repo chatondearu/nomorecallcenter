@@ -50,6 +50,10 @@ class LocalRuleStore(private val prefs: AppPrefs) {
         saveRules(loadSyncRules().map { if (it.id == id) it.copy(active = active) else it })
     }
 
+    suspend fun removePersonalRule(id: String) {
+        saveRules(loadSyncRules().filter { it.id != id })
+    }
+
     suspend fun applyListSync(revision: Long, since: Long, incoming: List<SyncListEntry>) {
         if (since == 0L) {
             val active = incoming.filter { it.active }

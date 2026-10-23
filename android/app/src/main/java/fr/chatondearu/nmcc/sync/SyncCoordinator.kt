@@ -52,6 +52,19 @@ class SyncCoordinator(
             }
         }
 
+    suspend fun deletePersonalRule(ruleId: String): Result<Unit> = withContext(Dispatchers.IO) {
+        runCatching {
+            val base = prefs.getBaseUrl()
+            if (base.isNotBlank() && api.hasSessionCookie(base) && !ruleId.startsWith("local-")) {
+                api.deleteRule(base, ruleId)
+                val rules = api.syncRules(base)
+                store.saveRules(rules)
+            } else {
+                store.removePersonalRule(ruleId)
+            }
+        }
+    }
+
     suspend fun proposeToGlobal(personalRuleId: String): Result<Unit> = withContext(Dispatchers.IO) {
         runCatching {
             val base = prefs.getBaseUrl()

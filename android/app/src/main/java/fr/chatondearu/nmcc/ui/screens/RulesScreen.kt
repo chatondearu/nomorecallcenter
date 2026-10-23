@@ -6,10 +6,17 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
@@ -65,6 +72,7 @@ fun RulesScreen() {
     var effect by remember { mutableStateOf("block") }
     var ttl by remember { mutableStateOf("7d") }
     var message by remember { mutableStateOf<String?>(null) }
+    var rulePendingDelete by remember { mutableStateOf<SyncRule?>(null) }
 
     val selectedCountry = countryOptions.firstOrNull { it.callingCode == countryCode } ?: countryOptions.first()
     val preview = remember(countryCode, pattern) {
@@ -79,6 +87,44 @@ fun RulesScreen() {
     }
 
     LaunchedEffect(Unit) { reload() }
+
+    rulePendingDelete?.let { rule ->
+        AlertDialog(
+            onDismissRequest = { rulePendingDelete = null },
+            title = { Text("Supprimer la règle ?") },
+            text = {
+                Text(
+                    "Le motif ${rule.pattern} sera retiré de vos règles personnelles. " +
+                        "Cette action est irréversible.",
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        scope.launch {
+                            app.sync.deletePersonalRule(rule.id).fold(
+                                onSuccess = {
+                                    rulePendingDelete = null
+                                    reload()
+                                },
+                                onFailure = {
+                                    message = it.message ?: "Échec de la suppression"
+                                    rulePendingDelete = null
+                                },
+                            )
+                        }
+                    },
+                ) {
+                    Text("Supprimer")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { rulePendingDelete = null }) {
+                    Text("Annuler")
+                }
+            },
+        )
+    }
 
     LazyColumn(
         modifier = Modifier
@@ -250,6 +296,7 @@ fun RulesScreen() {
                             reload()
                         }
                     },
+                    onDelete = { rulePendingDelete = rule },
                 )
             }
 
@@ -294,6 +341,7 @@ private fun RuleToggleRow(
     subtitle: String,
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
+    onDelete: (() -> Unit)? = null,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -303,6 +351,18 @@ private fun RuleToggleRow(
         Column(modifier = Modifier.weight(1f)) {
             Text(title, style = MaterialTheme.typography.titleMedium)
             Text(subtitle, style = MaterialTheme.typography.bodySmall)
+        }
+        if (onDelete != null) {
+            IconButton(
+                onClick = onDelete,
+                modifier = Modifier.size(48.dp),
+            ) {
+                Icon(
+                    Icons.Default.Delete,
+                    contentDescription = "Supprimer",
+                    tint = MaterialTheme.colorScheme.error,
+                )
+            }
         }
         Switch(checked = checked, onCheckedChange = onCheckedChange)
     }
