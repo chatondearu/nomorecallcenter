@@ -36,6 +36,7 @@
         androidHome = "${androidSdk}/libexec/android-sdk";
       in
       {
+        # Daily Node/pnpm: prefer Mise (mise.toml, ADR-013). This flake is the hermetic fallback.
         devShells.default = pkgs.mkShell {
           packages = with pkgs; [
             nodejs_22
