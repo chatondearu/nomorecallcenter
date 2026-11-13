@@ -65,7 +65,7 @@ Cursor rule (if present): `.cursor/rules/product-memory.mdc`.
 ## Project-specific notes
 
 - Stack (ADR-004): pnpm workspaces under `modules/*` — `@nmcc/db`, `@nmcc/shared`, `@nmcc/app`, `@nmcc/admin`; Android under `android/`.
-- Nix/direnv: `flake.nix` + `.envrc` — Node 22, pnpm, JDK 17, Android SDK 35, docker-compose. After clone: `direnv allow`. Agent commands: `nix develop -c …`.
+- Nix/direnv: `flake.nix` + `.envrc` — Node 22, pnpm, JDK 17, Android SDK 35, docker-compose. After clone: `direnv allow`. Daily Node/pnpm: Mise (`mise.toml`, ADR-013) — `mise install` then `mise exec -- …`; keep the flake; `nix develop -c …` only as hermetic fallback.
 - Design (ADR-009): `DESIGN.md` + `design/tokens/md3-colors.json` seed `#1A6352`; UnoCSS MD3 in `@nmcc/shared`.
 - Verify: `pnpm install` → `pnpm smoke` (compose up → `GET /api/health` → drizzle migrate). Auth: `pnpm auth:acceptance`. Lists: `pnpm lists:acceptance`. Rules: `pnpm rules:acceptance`. Stats: `pnpm stats:acceptance`. Admin UI: `pnpm admin:acceptance`. **Local dev:** `doc/local-development.md`. **Design loop (`cda-design-loop`):** `pnpm dev:design` → `pnpm design:auth` → `pnpm design:capture` (`design/routes.json`). **Android eyes:** `pnpm android:emulator:daemon` → `pnpm android:design:capture` (`design/android-emulator.md`). Android: `cd android && ./gradlew :matcher:test :app:assembleDebug`.
 - License: AGPL-3.0-only (`LICENSE`); list attribution `NOTICE` (ARCEP LO 2.0 → CC BY-SA).
